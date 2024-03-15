@@ -10,30 +10,31 @@ This endpoint provides data on the top 10 products within various categories and
 #### Example Response
 ```json
 {
-    'most-selling' | 'sale' | 'new-arrivals':
+    'most_selling' | 'on_sale' | 'new_arrivals':
     [
         {
-            'id': 1,
-            'quantity': 3,
-            'reviews_count': 15,
-            'sold_count': 80,
-            'category_id': 1,
-            'rating': 4.7,
-            'price': 700.00,
-            'sale': 15,
-            'image': 1-1.png
-            'name': 'فستان اسود طويل',
-            'description': '',
+            "id": "18",
+            "name": "Syrup - Chocolate",
+            "description": "",
+            "image_url": products/images/product_{id}.png",
+            "price": "£505.59",
+            "discount": 15,
+            "quantity": 12,
+            "rating": 4.6,
+            "reviews_count": 3923,
+            "sold_count": 61,
+            "category_id": "2"
         },
         .....
     ],
-    'banner-products':
+    'banners':
     [
         {
-            'id': 3,
+            'id': 1,
             'product_id': 12,
-            'banner_image': 12-2.jpg,
+            'image_url': products/images/banner_{id}.png,
         },
         .....
     ]
 }
+```
