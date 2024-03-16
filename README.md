@@ -34,6 +34,14 @@ This endpoint provides data on the top 10 products within various categories and
             'image_url': products/images/banner_{id}.png,
         },
         .....
+    ],
+    'categories':
+    [
+        {
+            'id': 1,
+            'name': 'فستان',
+        },
+        .....
     ]
 }
 ```
