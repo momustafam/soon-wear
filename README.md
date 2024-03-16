@@ -22,7 +22,6 @@ This endpoint provides data on the top 10 products within various categories and
             "quantity": 12,
             "rating": 4.6,
             "reviews_count": 3923,
-            "sold_count": 61,
             "category_id": "2"
         },
         .....
