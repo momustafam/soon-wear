@@ -48,26 +48,23 @@ function Header() {
 
   return (
     <header id="page-header">
-      <nav className="bg-mainColor border-gray-200 dark:bg-gray-900">
-        <div className="max-w-screen-xl flex flex-row-reverse flex-wrap items-center justify-between mx-auto p-4">
+      <nav className="text-white border-gray-200 dark:bg-gray-900 pl-10 pb-0">
+        <div className="max-w-screen-xl flex flex-row-reverse flex-wrap items-center justify-between mx-auto p-0">
           <Link
             to="/"
             className="flex flex-col items-center space-x-3 rtl:space-x-reverse"
           >
             <img
               src={pageLogo}
-              className="h-[5rem] w-[6rem]"
+              className="h-[10rem] w-[10rem]"
               alt="Flowbite Logo"
             />
-            <span className="self-center text-xl font-semibold whitespace-nowrap text-white dark:text-white">
-              Soon Wear
-            </span>
           </Link>
           <div className="flex lg:order-2">
             <div className="relative hidden lg:block">
               <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                  className="w-4 h-4"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -86,15 +83,15 @@ function Header() {
               <input
                 type="text"
                 id="search-navbar"
-                className="block w-full mt-2 p-2 ps-10 text-sm text-gray-900  text-end border border-darkWhite rounded-lg bg-darkWhite focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="ابحثي عن ما تريدين..."
+                className="block w-full mt-2 p-2 ps-10 text-sm text-end rounded-lg bg-mainColor placeholder-white"
+                placeholder="...ابحثي عن ما تريدين"
               />
             </div>
             <button
               id="btn-hamburger"
               data-collapse-toggle="navbar-search"
               type="button"
-              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg lg:hidden hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg lg:hidden bg-mainColor hover:bg-darkWhite hover:text-mainColor focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               aria-controls="navbar-search"
               aria-expanded="false"
             >
@@ -151,27 +148,43 @@ function Header() {
               />
             </div>
             <div className="flex flex-col">
-              <ul className="flex flex-col mb-3 p-4 lg:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-mainColor lg:space-x-8 lg:flex-row-reverse lg:mt-0 lg:border-0">
+              <ul className="flex flex-col mb-3 p-4 lg:p-0 mt-4 font-medium border border-gray-100 rounded-lg lg:space-x-4 lg:flex-row-reverse lg:mt-5 lg:border-0">
+                <li className="m-auto">
+                  <Menu open={openMenu} handler={setOpenMenu} allowHover>
+                    <MenuHandler className="flex justify-center items-center text-white text-xl bg-mainColor hover:text-mainColor border-none ml-4">
+                      <Button
+                        variant="text"
+                        className="flex items-center text-base font-normal tracking-normal group-hover:text-mainColor"
+                      >
+                        كل الفئات
+                        <ChevronDownIcon
+                          strokeWidth={2.5}
+                          className={`h-3.5 w-3.5 transition-transform ${openMenu ? "rotate-180" : ""
+                            }`}
+                        />
+                      </Button>
+                    </MenuHandler>
+
+                    {categories && (
+                      <MenuList className="w-[10rem] overflow-visible">
+                        {categories.map((category) => (
+                          <MenuItem className="text-right text-lg" key={category.id}>{category.name}</MenuItem>
+                        ))}
+                      </MenuList>
+                    )}
+                  </Menu>
+                </li>
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-white text-end rounded hover:bg-gray-100 hover:text-blue-700 lg:p-0 lg:ms-5"
-                  >
+                    className="block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4">
                     الرئيسية
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-white text-end rounded hover:bg-gray-100 hover:text-blue-700 lg:p-0 "
-                  >
-                    الأعلى مبيعا
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="#"
-                    className="block py-2 px-3 text-white text-end rounded hover:bg-gray-100 hover:text-blue-700 lg:p-0 "
+                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
                   >
                     التخفيضات
                   </Link>
@@ -179,44 +192,28 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-white text-end rounded hover:bg-gray-100 hover:text-blue-700 lg:p-0 "
+                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
                   >
-                    وصل حديثا
+                    الأعلى مبيعاً
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-white text-end rounded hover:bg-gray-100 hover:text-blue-700 lg:p-0 "
+                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
+                  >
+                    وصل حديثاً
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
                   >
                     تواصل معنا
                   </Link>
                 </li>
               </ul>
-              <Menu open={openMenu} handler={setOpenMenu} allowHover>
-                <MenuHandler className="flex justify-center items-center text-white text-2xl  hover:text-blue-700 hover:bg-gray-100 border-none">
-                  <Button
-                    variant="text"
-                    className="flex items-center w-full gap-3 text-base font-normal capitalize tracking-normal text-white group-hover:text-blue-700 hover:bg-gray-100"
-                  >
-                    الفئات
-                    <ChevronDownIcon
-                      strokeWidth={2.5}
-                      className={`h-3.5 w-3.5 transition-transform ${
-                        openMenu ? "rotate-180" : ""
-                      }`}
-                    />
-                  </Button>
-                </MenuHandler>
-
-                {categories && (
-                  <MenuList className="w-[10rem] overflow-visible">
-                    {categories.map((category) => (
-                      <MenuItem key={category.id}>{category.name}</MenuItem>
-                    ))}
-                  </MenuList>
-                )}
-              </Menu>
             </div>
           </div>
         </div>

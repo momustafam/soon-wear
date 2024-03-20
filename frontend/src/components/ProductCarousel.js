@@ -5,7 +5,7 @@ import image2 from "../images/banner2.jpg";
 
 function ProductCarousel() {
   return (
-    <div className="xl:h-80 my-5">
+    <div className="h-screen my-0">
       <Carousel
         loop
         autoplay

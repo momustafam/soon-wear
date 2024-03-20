@@ -7,6 +7,7 @@ const products = [
     id: 1,
     name: "Throwback Hip Bag",
     href: "#",
+    size: 'xxl',
     color: "Salmon",
     price: "$90.00",
     quantity: 1,
@@ -18,6 +19,7 @@ const products = [
   {
     id: 2,
     name: "Medium Stuff Satchel",
+    size: 'xl',
     href: "#",
     color: "Blue",
     price: "$32.00",
@@ -101,7 +103,7 @@ export default function ShoppingCart() {
                                     <div className="flex justify-between text-base font-medium text-gray-900">
                                       <h3>
                                         <a href={product.href}>
-                                          {product.name}
+                                          {product.name} {product.size}
                                         </a>
                                       </h3>
                                       <p className="ml-4">{product.price}</p>
