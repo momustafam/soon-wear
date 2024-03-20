@@ -1,11 +1,11 @@
 import React from "react";
-import pageLogo from "../images/page-logo.jpg";
+import product_1 from "../images/products/product_1.jpg";
 
 function Product() {
   return (
     <div className="sm:w-auto lg:w-auto bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <a href="#">
-        <img className="p-8 rounded-t-lg" src={pageLogo} alt="product image" />
+        <img className="p-8 rounded-t-lg" src={product_1} alt="product image" />
       </a>
       <div className="px-5 pb-5">
         <a href="#">

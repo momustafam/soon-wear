@@ -7,8 +7,11 @@ import { Link } from "react-router-dom";
 function HomeScreen() {
   return (
     <div>
+      <h1 className="flex flex-row-reverse text-white bg-mainColor font-bold text-3xl p-3 my-3">
+        الرئيسية
+      </h1>
       <ProductCarousel />
-      <h1 className="flex flex-row-reverse text-white bg-mainColor font-bold text-3xl p-5 my-3">
+      <h1 className="flex flex-row-reverse text-white bg-mainColor font-bold text-3xl p-3 my-3">
         التخفيضات
         <Link to="#" className="pr-3 font-normal hover:underline">
           (مشاهدة الكل)
@@ -19,7 +22,7 @@ function HomeScreen() {
         <Product />
         <Product />
       </div>
-      <h1 className="flex flex-row-reverse text-white bg-mainColor font-bold text-3xl p-5 my-3">
+      <h1 className="flex flex-row-reverse text-white bg-mainColor font-bold text-3xl p-3 my-3">
         الأعلى مبيعاً
         <Link to="#" className="pr-3 font-normal hover:underline">
           (مشاهدة الكل)
@@ -30,7 +33,7 @@ function HomeScreen() {
         <Product />
         <Product />
       </div>
-      <h1 className="flex flex-row-reverse text-white bg-mainColor font-bold text-3xl p-5 my-3">
+      <h1 className="flex flex-row-reverse text-white bg-mainColor font-bold text-3xl p-3 my-3">
         وصل حديثاً
         <Link to="#" className="pr-3 font-normal hover:underline">
           (مشاهدة الكل)

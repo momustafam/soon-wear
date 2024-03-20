@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { createRoot } from "react-dom/client";
-import pageLogo from "../images/page-logo.jpg";
+import headerLogo from "../images/header-logo.jpg";
 import ShoppingCart from "./ShoppingCart";
 import { Collapse } from "flowbite";
 import {
@@ -55,9 +55,9 @@ function Header() {
             className="flex flex-col items-center space-x-3 rtl:space-x-reverse"
           >
             <img
-              src={pageLogo}
-              className="h-[10rem] w-[10rem]"
-              alt="Flowbite Logo"
+              src={headerLogo}
+              className="h-[7rem] w-[10rem]"
+              alt="Soon Wear Logo"
             />
           </Link>
           <div className="flex lg:order-2">
@@ -177,7 +177,7 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4">
+                    className="block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor border-b-2 border-b-mainColor lg:pt-4 lg:pb-4">
                     الرئيسية
                   </Link>
                 </li>

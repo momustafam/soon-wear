@@ -1,5 +1,5 @@
 import React from "react";
-import pageLogo from "../images/page-logo.jpg";
+import pageLogo from "../images/footer-logo.jpg";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -11,10 +11,7 @@ function Footer() {
         <div className="flex flex-row-reverse justify-between flex-wrap">
           <div className="mb-6 md:mb-0">
             <Link to="/" className="flex items-center">
-              <img src={pageLogo} className="h-8 me-3" alt="FlowBite Logo" />
-              <span className="self-center text-2xl font-semibold whitespace-nowrap text-white dark:text-white">
-                Soon Wear
-              </span>
+              <img src={pageLogo} className="h-[7rem] w-[10rem] me-3" alt="FlowBite Logo" />
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-10 sm:gap-6 sm:grid-cols-3">

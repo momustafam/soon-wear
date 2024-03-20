@@ -35,7 +35,7 @@ export const getCategories = createAsyncThunk("categorys/get", async () => {
       },
     };
     const data = axios.get(
-      "https://65f42ad7f54db27bc020adb1.mockapi.io/api/v1/categories",
+      "https://65f42ad7f54db27bc020adb1.mockapi.io/api/v1/landing-page",
       config
     );
     return data;
