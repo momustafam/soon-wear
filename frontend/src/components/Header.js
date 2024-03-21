@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import headerLogo from "../images/header-logo.jpg";
 import ShoppingCart from "./ShoppingCart";
-import { Collapse } from "flowbite";
 import {
   Menu,
   MenuHandler,
@@ -11,39 +10,41 @@ import {
   MenuItem,
   Button,
   IconButton,
+  Badge,
 } from "@material-tailwind/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useDispatch, useSelector } from "react-redux";
-import { getCategories } from "../slices/categorySlice";
+import { useSelector, Provider } from "react-redux";
+import store from "../store";
 
 function Header() {
-  const dispatch = useDispatch();
+  const [openMenu, setOpenMenu] = useState(false);
 
-  const [openMenu, setOpenMenu] = React.useState(false);
-
-  const categories = useSelector((state) => state.category.categories);
-
-  useEffect(() => {
-    // add event listener
-    document.addEventListener("DOMContentLoaded", () => {
-      // set the target element that will be collapsed or expanded (navbar menu)
-      const targetEl = document.getElementById("navbar-search");
-
-      // set the trigger element (hamburger icon)
-      const triggerEl = document.getElementById("btn-hamburger");
-      // make a collapse object to handle the event
-      const collapse = new Collapse(targetEl, triggerEl);
-    });
-    dispatch(getCategories());
-  }, []);
+  const categories = useSelector((state) => state.landingPage.categories);
+  const { cartItems } = useSelector((state) => state.cart);
 
   const handleClick = () => {
     const header = document.getElementById("page-header");
 
     const container = document.createElement("div");
-    // Create a root and render the ShoppingCart component into the container
-    createRoot(container).render(<ShoppingCart />);
+
+    // Wrap the ShoppingCart component with a Provider component
+    createRoot(container).render(
+      <Provider store={store}>
+        <ShoppingCart />
+      </Provider>
+    );
+
     header.appendChild(container);
+  };
+
+  const handleMenuClick = () => {
+    const navbarSearch = document.getElementById("navbar-search");
+
+    // Toggle visibility of navbar-search div
+    const display = navbarSearch.style.display;
+    navbarSearch.style.display = display === "none" ? "block" : "none";
+
+    console.log("EVENTS", display, navbarSearch.style.display);
   };
 
   return (
@@ -89,11 +90,9 @@ function Header() {
             </div>
             <button
               id="btn-hamburger"
-              data-collapse-toggle="navbar-search"
               type="button"
-              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg lg:hidden bg-mainColor hover:bg-darkWhite hover:text-mainColor focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-              aria-controls="navbar-search"
-              aria-expanded="false"
+              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg lg:hidden bg-mainColor hover:bg-darkWhite hover:text-mainColor focus:outline-none focus:ring-2 focus:ring-gray-200"
+              onClick={handleMenuClick}
             >
               <span className="sr-only">Open main menu</span>
               <svg
@@ -113,9 +112,11 @@ function Header() {
               </svg>
             </button>
             <div className="flex items-center gap-4">
-              <IconButton variant="text" size="lg" onClick={handleClick}>
-                <i className="fa-solid fa-cart-shopping"></i>
-              </IconButton>
+              <Badge content={cartItems.length}>
+                <IconButton variant="text" size="lg" onClick={handleClick}>
+                  <i className="fa-solid fa-cart-shopping "></i>
+                </IconButton>
+              </Badge>
             </div>
           </div>
           <div
@@ -143,7 +144,7 @@ function Header() {
               <input
                 type="text"
                 id="search-navbar"
-                className="block w-full mt-2 p-2 ps-10 text-sm text-gray-900  text-end border border-darkWhite rounded-lg bg-darkWhite focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="block w-full mt-2 p-2 ps-10 text-sm text-white text-end border bg-mainColor border-darkWhite rounded-lg  focus:ring-blue-500 focus:border-blue-500 placeholder-white"
                 placeholder="ابحثي عن ما تريدين..."
               />
             </div>
@@ -159,8 +160,9 @@ function Header() {
                         كل الفئات
                         <ChevronDownIcon
                           strokeWidth={2.5}
-                          className={`h-3.5 w-3.5 transition-transform ${openMenu ? "rotate-180" : ""
-                            }`}
+                          className={`h-3.5 w-3.5 transition-transform ${
+                            openMenu ? "rotate-180" : ""
+                          }`}
                         />
                       </Button>
                     </MenuHandler>
@@ -168,7 +170,12 @@ function Header() {
                     {categories && (
                       <MenuList className="w-[10rem] overflow-visible">
                         {categories.map((category) => (
-                          <MenuItem className="text-right text-lg" key={category.id}>{category.name}</MenuItem>
+                          <MenuItem
+                            className="text-right text-lg"
+                            key={category.id}
+                          >
+                            {category.name}
+                          </MenuItem>
                         ))}
                       </MenuList>
                     )}
@@ -177,7 +184,8 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor border-b-2 border-b-mainColor lg:pt-4 lg:pb-4">
+                    className="block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor border-b-2 border-b-mainColor lg:pt-4 lg:pb-4"
+                  >
                     الرئيسية
                   </Link>
                 </li>
