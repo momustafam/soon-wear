@@ -41,11 +41,8 @@ function Header() {
   const handleMenuClick = () => {
     const navbarSearch = document.getElementById("navbar-search");
 
-    // Toggle visibility of navbar-search div
-    const display = navbarSearch.style.display;
-    navbarSearch.style.display = display === "none" ? "block" : "none";
-
-    console.log("EVENTS", display, navbarSearch.style.display);
+    // Toggle the 'active' class to control visibility
+    navbarSearch.classList.toggle("active");
   };
 
   const handleLiClick = (index) => {
@@ -96,12 +93,12 @@ function Header() {
             <button
               id="btn-hamburger"
               type="button"
-              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg lg:hidden bg-mainColor hover:bg-darkWhite hover:text-mainColor focus:outline-none focus:ring-2 focus:ring-gray-200"
+              className="inline-flex items-center p-2 w-15 h-10 justify-center text-lg text-white rounded-lg lg:hidden bg-mainColor hover:bg-darkWhite hover:text-mainColor focus:outline-none focus:ring-2 focus:ring-gray-200"
               onClick={handleMenuClick}
             >
               <span className="sr-only">Open main menu</span>
               <svg
-                className="w-5 h-5"
+                className="w-10 h-6"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
