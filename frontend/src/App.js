@@ -1,19 +1,12 @@
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import Product from "./components/Product";
-import ProductCarousel from "./components/ProductCarousel";
-import ShoppingCart from "./components/ShoppingCart";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  BrowserRouter,
-} from "react-router-dom";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Header />
       <main>
         <Routes>
@@ -21,7 +14,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
-    </BrowserRouter>
+    </Router>
   );
 }
 
