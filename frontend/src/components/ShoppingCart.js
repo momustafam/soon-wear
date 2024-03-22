@@ -1,8 +1,8 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart, addKeyToCart, addToCart } from "../slices/cartSlice";
+import { removeFromCart, addKeyToCart } from "../slices/cartSlice";
 import { Alert, Select, Option } from "@material-tailwind/react";
 
 export default function ShoppingCart() {
@@ -79,13 +79,13 @@ export default function ShoppingCart() {
                       {cartItems.length === 0 ? (
                         <Alert
                           className="flex flex-row-reverse mt-5"
-                          color="blue"
+                          color=""
                           icon={<Icon />}
                         >
                           السلة فارغة
                         </Alert>
                       ) : (
-                        <div className="mt-8">
+                        <div className="mt-5">
                           <div className="flow-root">
                             <ul className="-my-6 divide-y divide-gray-200">
                               {cartItems.map((product) => (
@@ -93,7 +93,7 @@ export default function ShoppingCart() {
                                   key={`${product.id}-${product.size}`}
                                   className="flex py-6"
                                 >
-                                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                  <div className="h-30 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                     <img
                                       src={require(`../images/products/product_${product.id}.jpg`)}
                                       alt="Product"
@@ -106,10 +106,7 @@ export default function ShoppingCart() {
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
                                           <a href={`/product/${product.id}`}>
-                                            {product.name}{" "}
-                                            <span className="ms-4 text-blue-800">
-                                              {product.size.toUpperCase()}
-                                            </span>
+                                            {product.name}
                                           </a>
                                         </h3>
                                         <p className="ml-4">
@@ -130,14 +127,37 @@ export default function ShoppingCart() {
                                           )}
                                         </p>
                                       </div>
-                                      <p className="mt-1 text-sm text-gray-500">
-                                        {product.color}
+                                    </div>
+                                    <span className="m0 text-black text-sm">
+                                      size: {product.size.toUpperCase()}
+                                    </span>
+                                    <div className="flex flex-1 items-center h-auto justify-between text-sm">
+                                      <p className="text-black">
+                                        الكمية: {product.qty}
                                       </p>
+                                      <div className="flex">
+                                        <button
+                                          type="button"
+                                          className="font-medium text-red-900 hover:text-red-500"
+                                          onClick={() =>
+                                            handleRemoveFromCart(
+                                              product.id,
+                                              product.size
+                                            )
+                                          }
+                                        >
+                                          <XMarkIcon
+                                            className="h-6 w-6"
+                                            aria-hidden="true"
+                                          />
+                                        </button>
+                                      </div>
+
                                     </div>
                                     <div className="w-1 mt-5">
                                       <Select
                                         size="md"
-                                        label="اختار الكمية"
+                                        label="اضغط هنا لتعديل الكمية"
                                         value={product.qty}
                                         onChange={(val) => {
                                           handleChangeQty(
@@ -158,29 +178,6 @@ export default function ShoppingCart() {
                                           </Option>
                                         ))}
                                       </Select>
-                                    </div>
-                                    <div className="flex flex-1 items-end justify-between text-sm">
-                                      <p className="text-gray-500">
-                                        الكمية {product.qty}
-                                      </p>
-
-                                      <div className="flex">
-                                        <button
-                                          type="button"
-                                          className="font-medium text-red-900 hover:text-red-500"
-                                          onClick={() =>
-                                            handleRemoveFromCart(
-                                              product.id,
-                                              product.size
-                                            )
-                                          }
-                                        >
-                                          <XMarkIcon
-                                            className="h-6 w-6"
-                                            aria-hidden="true"
-                                          />
-                                        </button>
-                                      </div>
                                     </div>
                                   </div>
                                 </li>
@@ -213,7 +210,7 @@ export default function ShoppingCart() {
                           تأكيد الطلب
                         </button>
                       </div>
-                      <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
+                      <div className="mt-3 flex justify-center text-center text-sm text-gray-500">
                         <p>
                           <button
                             type="button"

@@ -6,10 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLandingPageData } from "../slices/landingPageSlice";
 import { Spinner } from "@material-tailwind/react";
 
+
 function HomeScreen() {
   const dispatch = useDispatch();
-
-  const categories = useSelector((state) => state.landingPage.categories);
 
   const top_selling = useSelector((state) => state.landingPage.top_selling);
 
@@ -28,6 +27,7 @@ function HomeScreen() {
   }, []);
 
   return loading ? (
+
     <div className="flex justify-center items-center">
       <Spinner className="h-[250px] w-[250px] mt-[3rem]" />
     </div>
@@ -40,7 +40,7 @@ function HomeScreen() {
       <h1 className="flex flex-row-reverse text-white bg-mainColor font-bold text-3xl p-3 my-3">
         التخفيضات
         <Link to="#" className="pr-3 me-auto font-normal hover:underline">
-          (مشاهدة الكل)
+          &laquo; مشاهدة المزيد
         </Link>
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 m-5">
@@ -52,7 +52,7 @@ function HomeScreen() {
       <h1 className="flex flex-row-reverse text-white bg-mainColor font-bold text-3xl p-3 my-3">
         الأعلى مبيعاً
         <Link to="#" className="pr-3 me-auto font-normal hover:underline">
-          (مشاهدة الكل)
+          &laquo; مشاهدة المزيد
         </Link>
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 m-5">
@@ -64,7 +64,7 @@ function HomeScreen() {
       <h1 className="flex flex-row-reverse text-white bg-mainColor font-bold text-3xl p-3 my-3">
         وصل حديثاً
         <Link to="#" className="pr-3 me-auto font-normal hover:underline">
-          (مشاهدة الكل)
+          &laquo; مشاهدة المزيد
         </Link>
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 m-5">

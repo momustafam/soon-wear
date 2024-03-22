@@ -1,5 +1,4 @@
 import {
-  Rating,
   Button,
   ButtonGroup,
   Typography,
@@ -8,17 +7,34 @@ import { addToCart } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { createRoot } from "react-dom/client";
+import store from "../store";
+import { Provider } from "react-redux";
+import ShoppingCart from "./ShoppingCart";
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+
 
 function Product({ product }) {
   const dispatch = useDispatch();
 
   const [size, setSize] = useState("");
   const [countInStock, setCountInStock] = useState(0);
+  const [selectedSize, setSelectedSize] = useState(null);
 
   const handleAddToCart = () => {
     if (size === "") {
       window.alert("الرجاء اختيار مقاس");
     } else {
+      const header = document.getElementById("page-header");
+      const container = document.createElement("div");
+      // Wrap the ShoppingCart component with a Provider component
+      createRoot(container).render(
+        <Provider store={store}>
+          <ShoppingCart />
+        </Provider>
+      );
+      header.appendChild(container);
       dispatch(addToCart({ product, size, countInStock }));
       setSize("");
     }
@@ -43,11 +59,12 @@ function Product({ product }) {
             {Object.entries(product.quantity).map(([size, count]) =>
               count > 0 ? (
                 <Button
-                  className="text-black"
+                  className={selectedSize === size ? 'text-white bg-mainColor' : 'text-black'}
                   key={size}
                   onClick={() => {
                     setSize(size);
                     setCountInStock(count);
+                    setSelectedSize(size);
                   }}
                 >
                   {size}
@@ -66,10 +83,9 @@ function Product({ product }) {
         </div>
         <div className="flex items-center mt-2.5 mb-5">
           <div className="flex items-center gap-2 font-bold text-blue-gray-500">
-            <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">
-              {product.rating}
-            </span>
-            <Rating value={Math.floor(product.rating)} readonly />
+            <Stack spacing={1}>
+              <Rating name="half-rating" defaultValue={product.rating} precision={0.5} readOnly />
+            </Stack>
             <Typography
               color="blue-gray"
               className="font-bold text-blue-gray-500"
@@ -92,8 +108,11 @@ function Product({ product }) {
             </span>
           )}
           <button
-            className="text-white font-bold bg-mainColor hover:bg-mainColor/50  focus:outline-none focus:bg-mainColor  rounded-lg text-lg px-6 py-4 text-center"
-            onClick={handleAddToCart}
+            className="text-white font-bold bg-mainColor focus:outline-none focus:bg-mainColor  rounded-lg text-lg px-6 py-4 text-center"
+            onClick={() => {
+              handleAddToCart();
+              setSelectedSize('');
+            }}
           >
             اضف الى السلة
           </button>

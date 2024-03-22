@@ -73,14 +73,14 @@ function Header() {
   return (
     <header id="page-header">
       <nav className="text-white border-gray-200 dark:bg-gray-900 pl-10 pb-0">
-        <div className="max-w-screen-xl flex flex-row-reverse flex-wrap items-center justify-between mx-auto p-0">
+        <div className="max-w-screen-xl mt-1  flex flex-row-reverse flex-wrap items-center justify-between mx-auto p-0">
           <Link
             to="/"
             className="flex flex-col items-center space-x-3 rtl:space-x-reverse"
           >
             <img
               src={headerLogo}
-              className="h-[7rem] w-[10rem]"
+              className="h-[5rem] w-[8rem] lg:h-[7rem] lg:w-[10rem]"
               alt="Soon Wear Logo"
             />
           </Link>
@@ -114,7 +114,7 @@ function Header() {
             <button
               id="btn-hamburger"
               type="button"
-              className="inline-flex items-center p-2 w-15 h-10 justify-center text-lg text-white rounded-lg lg:hidden bg-mainColor hover:bg-darkWhite hover:text-mainColor focus:outline-none focus:ring-2 focus:ring-gray-200"
+              className="inline-flex items-center p-2 w-15 h-10 justify-center text-lg text-white rounded-lg lg:hidden bg-mainColor focus:outline-none focus:ring-2 focus:ring-gray-200"
               onClick={handleMenuClick}
             >
               <span className="sr-only">Open main menu</span>
@@ -134,10 +134,10 @@ function Header() {
                 />
               </svg>
             </button>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 fixed left-24 z-10">
               <Badge content={cartItems.length}>
                 <IconButton variant="text" size="lg" onClick={handleClick}>
-                  <i className="fa-solid fa-cart-shopping "></i>
+                  <i className="fa-solid fa-shopping-cart text-lg text-[#6f3e42]"></i>
                 </IconButton>
               </Badge>
             </div>
@@ -183,9 +183,8 @@ function Header() {
                         كل الفئات
                         <ChevronDownIcon
                           strokeWidth={2.5}
-                          className={`h-3.5 w-3.5 transition-transform ${
-                            openMenu ? "rotate-180" : ""
-                          }`}
+                          className={`h-3.5 w-3.5 transition-transform ${openMenu ? "rotate-180" : ""
+                            }`}
                         />
                       </Button>
                     </MenuHandler>
@@ -207,9 +206,8 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
-                      clickedIndex === 0 ? "border-b-2 border-b-mainColor" : ""
-                    } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 0 ? "border-b-2 border-b-mainColor" : ""
+                      } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(0)}
                   >
                     الرئيسية
@@ -218,9 +216,8 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
-                      clickedIndex === 1 ? "border-b-2 border-b-mainColor" : ""
-                    } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 1 ? "border-b-2 border-b-mainColor" : ""
+                      } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(1)}
                   >
                     التخفيضات
@@ -229,9 +226,8 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
-                      clickedIndex === 2 ? "border-b-2 border-b-mainColor" : ""
-                    } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 2 ? "border-b-2 border-b-mainColor" : ""
+                      } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(2)}
                   >
                     الأعلى مبيعاً
@@ -240,9 +236,8 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
-                      clickedIndex === 3 ? "border-b-2 border-b-mainColor" : ""
-                    } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 3 ? "border-b-2 border-b-mainColor" : ""
+                      } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(3)}
                   >
                     وصل حديثاً
@@ -251,9 +246,8 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
-                      clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
-                    } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
+                      } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(4)}
                   >
                     تواصل معنا
@@ -269,16 +263,3 @@ function Header() {
 }
 
 export default Header;
-
-// <Menu>
-//                 <MenuHandler>
-//                   <Button className="bg-transparent outline-none border-none p-0 group-hover:text-blue-700 text-xl">
-//                     الفئات
-//                   </Button>
-//                 </MenuHandler>
-//                 <MenuList>
-//                   <MenuItem>Menu Item 1</MenuItem>
-//                   <MenuItem>Menu Item 2</MenuItem>
-//                   <MenuItem>Menu Item 3</MenuItem>
-//                 </MenuList>
-//               </Menu>
