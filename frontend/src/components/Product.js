@@ -1,4 +1,9 @@
-import { Rating, Button, ButtonGroup } from "@material-tailwind/react";
+import {
+  Rating,
+  Button,
+  ButtonGroup,
+  Typography,
+} from "@material-tailwind/react";
 import { addToCart } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -8,13 +13,13 @@ function Product({ product }) {
   const dispatch = useDispatch();
 
   const [size, setSize] = useState("");
-  const [qty, setQty] = useState(0);
+  const [countInStock, setCountInStock] = useState(0);
 
   const handleAddToCart = () => {
     if (size === "") {
       window.alert("الرجاء اختيار مقاس");
     } else {
-      dispatch(addToCart({ product, size, qty }));
+      dispatch(addToCart({ product, size, countInStock }));
       setSize("");
     }
   };
@@ -42,7 +47,7 @@ function Product({ product }) {
                   key={size}
                   onClick={() => {
                     setSize(size);
-                    setQty(count);
+                    setCountInStock(count);
                   }}
                 >
                   {size}
@@ -60,17 +65,32 @@ function Product({ product }) {
           </ButtonGroup>
         </div>
         <div className="flex items-center mt-2.5 mb-5">
-          <div className="flex items-center space-x-1 rtl:space-x-reverse">
+          <div className="flex items-center gap-2 font-bold text-blue-gray-500">
+            <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">
+              {product.rating}
+            </span>
             <Rating value={Math.floor(product.rating)} readonly />
+            <Typography
+              color="blue-gray"
+              className="font-bold text-blue-gray-500"
+            >
+              {product.reviews_count} Reviews
+            </Typography>
           </div>
-          <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">
-            {product.rating}
-          </span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-3xl font-bold text-gray-900 dark:text-white">
-            {product.price}
-          </span>
+          {product.discount > 0 ? (
+            <span className="text-3xl font-bold text-gray-90">
+              £{product.price - product.discount}
+              <span className="text-lg font-bold text-gray-900 line-through decoration-red-900 decoration-2 decoration-solid ms-4">
+                £{product.price}
+              </span>
+            </span>
+          ) : (
+            <span className="text-3xl font-bold text-gray-90">
+              £{product.price}
+            </span>
+          )}
           <button
             className="text-white font-bold bg-mainColor hover:bg-mainColor/50  focus:outline-none focus:bg-mainColor  rounded-lg text-lg px-6 py-4 text-center"
             onClick={handleAddToCart}

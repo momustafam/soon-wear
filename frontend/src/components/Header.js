@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import headerLogo from "../images/header-logo.jpg";
@@ -18,9 +18,31 @@ import store from "../store";
 
 function Header() {
   const [openMenu, setOpenMenu] = useState(false);
-
+  const [clickedIndex, setClickedIndex] = useState(0);
   const categories = useSelector((state) => state.landingPage.categories);
   const { cartItems } = useSelector((state) => state.cart);
+  const navbarSearch = document.getElementById("navbar-search");
+
+  console.log(window.innerWidth);
+
+  useEffect(() => {
+    if (navbarSearch) {
+      navbarSearch.classList.add("active");
+    }
+    const handleResize = () => {
+      if (navbarSearch) {
+        if (window.innerWidth > 1024) {
+          console.log("inside");
+
+          navbarSearch.classList.remove("active");
+          navbarSearch.classList.add("active");
+        } else {
+          navbarSearch.classList.remove("active");
+        }
+      }
+    };
+    window.addEventListener("resize", handleResize);
+  }, [navbarSearch]);
 
   const handleClick = () => {
     const header = document.getElementById("page-header");
@@ -38,13 +60,14 @@ function Header() {
   };
 
   const handleMenuClick = () => {
-    const navbarSearch = document.getElementById("navbar-search");
+    // Toggle the 'active' class to control visibility
+    if (navbarSearch) {
+      navbarSearch.classList.toggle("active");
+    }
+  };
 
-    // Toggle visibility of navbar-search div
-    const display = navbarSearch.style.display;
-    navbarSearch.style.display = display === "none" ? "block" : "none";
-
-    console.log("EVENTS", display, navbarSearch.style.display);
+  const handleLiClick = (index) => {
+    setClickedIndex(index);
   };
 
   return (
@@ -91,12 +114,12 @@ function Header() {
             <button
               id="btn-hamburger"
               type="button"
-              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg lg:hidden bg-mainColor hover:bg-darkWhite hover:text-mainColor focus:outline-none focus:ring-2 focus:ring-gray-200"
+              className="inline-flex items-center p-2 w-15 h-10 justify-center text-lg text-white rounded-lg lg:hidden bg-mainColor hover:bg-darkWhite hover:text-mainColor focus:outline-none focus:ring-2 focus:ring-gray-200"
               onClick={handleMenuClick}
             >
               <span className="sr-only">Open main menu</span>
               <svg
-                className="w-5 h-5"
+                className="w-10 h-6"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -120,7 +143,7 @@ function Header() {
             </div>
           </div>
           <div
-            className="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1"
+            className="items-center justify-between w-full lg:flex lg:w-auto lg:order-1"
             id="navbar-search"
           >
             <div className="relative mt-3 lg:hidden">
@@ -184,7 +207,10 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor border-b-2 border-b-mainColor lg:pt-4 lg:pb-4"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 0 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
+                    onClick={() => handleLiClick(0)}
                   >
                     الرئيسية
                   </Link>
@@ -192,7 +218,10 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 1 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
+                    onClick={() => handleLiClick(1)}
                   >
                     التخفيضات
                   </Link>
@@ -200,7 +229,10 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 2 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
+                    onClick={() => handleLiClick(2)}
                   >
                     الأعلى مبيعاً
                   </Link>
@@ -208,7 +240,10 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 3 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
+                    onClick={() => handleLiClick(3)}
                   >
                     وصل حديثاً
                   </Link>
@@ -216,7 +251,10 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
+                    onClick={() => handleLiClick(4)}
                   >
                     تواصل معنا
                   </Link>

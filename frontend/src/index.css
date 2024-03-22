@@ -6,13 +6,10 @@ main {
   min-height: 80vh;
 }
 
+#navbar-search {
+  display: none; /* Initially hidden */
+}
 
-.carousel {
-  display:block;
-  height: 10%;
-  padding: 30px;
-  margin: 40px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+#navbar-search.active {
+  display: block; /* Visible when 'active' class is present */
 }
