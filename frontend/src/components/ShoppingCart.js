@@ -43,7 +43,7 @@ export default function ShoppingCart() {
   const [qty, setQty] = useState(1);
 
   const total = cartItems.reduce(
-    (acc, item) => acc + parseFloat(item.price),
+    (acc, item) => acc + qty * parseFloat(item.price),
     0
   );
   const handleRemoveFromCart = (id) => {
@@ -130,7 +130,9 @@ export default function ShoppingCart() {
                                             </span>
                                           </a>
                                         </h3>
-                                        <p className="ml-4">£{product.price}</p>
+                                        <p className="ml-4">
+                                          £{product.price * qty}
+                                        </p>
                                       </div>
                                       <p className="mt-1 text-sm text-gray-500">
                                         {product.color}
@@ -145,7 +147,10 @@ export default function ShoppingCart() {
                                       >
                                         {[...Array(product.qty).keys()].map(
                                           (i) => (
-                                            <Option key={i + 1} value={i + 1}>
+                                            <Option
+                                              key={i + 1}
+                                              value={(i + 1).toString()}
+                                            >
                                               {i + 1}
                                             </Option>
                                           )

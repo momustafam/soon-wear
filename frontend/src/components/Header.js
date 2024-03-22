@@ -18,6 +18,7 @@ import store from "../store";
 
 function Header() {
   const [openMenu, setOpenMenu] = useState(false);
+  const [clickedIndex, setClickedIndex] = useState(0);
 
   const categories = useSelector((state) => state.landingPage.categories);
   const { cartItems } = useSelector((state) => state.cart);
@@ -45,6 +46,10 @@ function Header() {
     navbarSearch.style.display = display === "none" ? "block" : "none";
 
     console.log("EVENTS", display, navbarSearch.style.display);
+  };
+
+  const handleLiClick = (index) => {
+    setClickedIndex(index);
   };
 
   return (
@@ -184,7 +189,10 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor border-b-2 border-b-mainColor lg:pt-4 lg:pb-4"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 0 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
+                    onClick={() => handleLiClick(0)}
                   >
                     الرئيسية
                   </Link>
@@ -192,7 +200,10 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 1 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
+                    onClick={() => handleLiClick(1)}
                   >
                     التخفيضات
                   </Link>
@@ -200,7 +211,10 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 2 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
+                    onClick={() => handleLiClick(2)}
                   >
                     الأعلى مبيعاً
                   </Link>
@@ -208,7 +222,10 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 3 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
+                    onClick={() => handleLiClick(3)}
                   >
                     وصل حديثاً
                   </Link>
@@ -216,7 +233,10 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className="block py-2 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor lg:pt-4 lg:pb-4"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
+                    onClick={() => handleLiClick(4)}
                   >
                     تواصل معنا
                   </Link>
