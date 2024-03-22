@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import headerLogo from "../images/header-logo.jpg";
@@ -19,9 +19,30 @@ import store from "../store";
 function Header() {
   const [openMenu, setOpenMenu] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(0);
-
   const categories = useSelector((state) => state.landingPage.categories);
   const { cartItems } = useSelector((state) => state.cart);
+  const navbarSearch = document.getElementById("navbar-search");
+
+  console.log(window.innerWidth);
+
+  useEffect(() => {
+    if (navbarSearch) {
+      navbarSearch.classList.add("active");
+    }
+    const handleResize = () => {
+      if (navbarSearch) {
+        if (window.innerWidth > 1024) {
+          console.log("inside");
+
+          navbarSearch.classList.remove("active");
+          navbarSearch.classList.add("active");
+        } else {
+          navbarSearch.classList.remove("active");
+        }
+      }
+    };
+    window.addEventListener("resize", handleResize);
+  }, [navbarSearch]);
 
   const handleClick = () => {
     const header = document.getElementById("page-header");
@@ -39,10 +60,10 @@ function Header() {
   };
 
   const handleMenuClick = () => {
-    const navbarSearch = document.getElementById("navbar-search");
-
     // Toggle the 'active' class to control visibility
-    navbarSearch.classList.toggle("active");
+    if (navbarSearch) {
+      navbarSearch.classList.toggle("active");
+    }
   };
 
   const handleLiClick = (index) => {
@@ -122,7 +143,7 @@ function Header() {
             </div>
           </div>
           <div
-            className="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1"
+            className="items-center justify-between w-full lg:flex lg:w-auto lg:order-1"
             id="navbar-search"
           >
             <div className="relative mt-3 lg:hidden">
