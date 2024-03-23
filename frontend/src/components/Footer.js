@@ -1,19 +1,26 @@
-import React from "react";
-import pageLogo from "../images/footer-logo.jpg";
-import { Link } from "react-router-dom";
+import footerLogo from "../images/logos/footer-logo.jpg";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import React from "react";
 
+
+/**
+ * @returns The standard footer of all pages of soon wear website 
+ */
 function Footer() {
+  // get the available products categories
   const categories = useSelector((state) => state.landingPage.categories);
   return (
     <footer className="bg-mainColor dark:bg-gray-900">
       <div className="mx-auto w-full max-w-screen-xl pr-3 py-6 lg:py-8">
+
+        {/* Start the footer logo and brand contact information column */}
         <div className="flex flex-row-reverse justify-between flex-wrap">
           <div className="mb-6">
             <div className="flex justify-end">
               <Link to="/" >
                 <img
-                  src={pageLogo}
+                  src={footerLogo}
                   className="h-[7rem] w-[10rem] me-3"
                   alt="Soon Wear Logo"
                 />
@@ -24,19 +31,16 @@ function Footer() {
                 العنوان: <span>الأسكندرية - سيدى بشر قبلى</span> <i className="fa-solid fa-location-dot"></i>
               </li>
               <li className="text-right text-lg text-white">
-                {" "}
                 <span>cs@soonwear.com</span> :البريد <i className="fa-solid fa-envelope"></i>
               </li>
               <li className="text-right text-lg text-white">
                 التليفون: <span>01200488281</span> <i className="fa-solid fa-phone"></i>
               </li>
-
               <li className="text-right text-2xl text-white mt-4">
                 <div>
                   <Link className="m-5" to="https://www.facebook.com/Soonwear" target="_blank" rel="noopener noreferrer">
                     <i className="fa-brands fa-facebook"></i>
                   </Link>
-
                   <Link to="https://www.instagram.com/soonweareg/" target="_blank" rel="noopener noreferrer">
                     <i className="fa-brands fa-instagram"></i>
                   </Link>
@@ -44,9 +48,12 @@ function Footer() {
               </li>
             </ul>
           </div>
+          {/* End the footer logo and brand contact information column */}
+
+          {/* Start categories column */}
           <div className="mb-5">
-            <h2 className="mb-2 text-right text-xl  font-semibold text-white uppercase ">
-              كل الفئات
+            <h2 className="mb-6 text-right text-xl font-semibold text-white uppercase dark:text-white">
+              التصنيفات
             </h2>
             <ul className="grid grid-cols-2 gap-2 text-white text-right font-medium">
               {categories &&
@@ -59,53 +66,38 @@ function Footer() {
                 ))}
             </ul>
           </div>
+          {/* End categories column */}
+
+          {/* Start useful linkes column */}
           <div>
             <h2 className="mb-6 text-right text-xl font-semibold text-white uppercase dark:text-white">
-              روابط سريعة
+              روابط مفيدة
             </h2>
             <ul className="text-white text-right dark:text-gray-400 font-medium">
-              <li className="mb-4">
-                <Link to="https://flowbite.com/" className="hover:underline">
-                  حسابي
-                </Link>
-              </li>
               <li className="mb-4">
                 <Link to="https://tailwindcss.com/" className="hover:underline">
                   طلباتي
                 </Link>
               </li>
-              <li>
-                <Link to="https://tailwindcss.com/" className="hover:underline">
-                  تتبعي طلبك
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h2 className="mb-6 text-right text-xl font-semibold text-white uppercase dark:text-white">
-              معلومات
-            </h2>
-            <ul className="text-white text-right dark:text-gray-400 font-medium">
               <li className="mb-4">
                 <Link to="#" className="hover:underline">
-                  معلومات عنا{" "}
+                  معلومات عنا
                 </Link>
               </li>
               <li className="mb-4">
                 <Link to="#" className="hover:underline">
-                  تواصلى معانا
+                  تواصلى معنا
                 </Link>
               </li>
               <li>
                 <Link to="#" className="hover:underline">
-                  الاستبدال و الاسترجاع
+                  سياسة الاستبدال و الاسترجاع
                 </Link>
               </li>
             </ul>
           </div>
         </div>
-        <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <div className="text-right">
+        <div className="text-center pb-10">
           <span className="text-sm text-white sm:text-center dark:text-gray-400">
             .كل الحقوق محفوظة
             <Link
@@ -118,8 +110,9 @@ function Footer() {
             {new Date().getFullYear()} حقوق النشر ©
           </span>
         </div>
+        {/* End useful linkes column */}
       </div>
-    </footer>
+    </footer >
   );
 }
 

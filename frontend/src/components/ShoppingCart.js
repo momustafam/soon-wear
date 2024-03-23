@@ -78,7 +78,7 @@ export default function ShoppingCart() {
 
                       {cartItems.length === 0 ? (
                         <Alert
-                          className="flex flex-row-reverse mt-5"
+                          className="flex flex-row-reverse mt-5 bg-mainColor"
                           color=""
                           icon={<Icon />}
                         >

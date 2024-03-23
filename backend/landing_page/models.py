@@ -34,10 +34,7 @@ class Product(models.Model):
     )
     price = models.PositiveIntegerField()
     reviews_count = models.PositiveBigIntegerField(default=0, verbose_name='number of reviews')
-    discount = models.PositiveIntegerField(
-        default=0,
-        validators=[MaxValueValidator(100)]
-    )
+    discount = models.PositiveIntegerField(default=0)
     rating = models.DecimalField(
         default=0,
         max_digits=2,
@@ -56,8 +53,7 @@ class Product(models.Model):
         before delete the `Product` object from the database.
         '''
         for img_obj in self.images.all():
-            if os.path.isfile(img_obj.image.path):
-                os.remove(img_obj.image.path)
+            os.remove(img_obj.image.path)
         super().delete(*args, **kwargs)
 
 class ProductSize(models.Model):
@@ -72,7 +68,6 @@ class Image(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
     
     def __str__(self):
-        from .models import Product
         return str(self.image).split('/')[1]
 
     def delete(self, *args, **kwargs):

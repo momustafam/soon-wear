@@ -1,22 +1,24 @@
 import React from "react";
 import { Carousel } from "@material-tailwind/react";
 
-function ProductCarousel({ banners }) {
+
+function BannersCarousel({ banners }) {
   return (
-    <div className="h-screen my-0">
+    <div className="w-full">
       <Carousel
         loop
         autoplay
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 1 }}
         className="rounded-xl"
       >
         {banners &&
           banners.map((banner) => (
             <img
               key={banner.id}
-              src={require(`../images/banners/banner_${banner.id}.jpg`)}
-              alt={`banner image ${banner.id}`}
-              className="h-full w-full object-fill"
+              src={require(`../images/banners/${banner}`)}
+              alt={`banner image`}
+              className="w-full h-full object-fit rounded-xl"
+              style={{ maxHeight: "70vh" }}
             />
           ))}
       </Carousel>
@@ -24,4 +26,4 @@ function ProductCarousel({ banners }) {
   );
 }
 
-export default ProductCarousel;
+export default BannersCarousel;
