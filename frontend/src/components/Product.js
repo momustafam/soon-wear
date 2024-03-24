@@ -1,47 +1,33 @@
-import {
-  Button,
-  ButtonGroup,
-  Typography,
-} from "@material-tailwind/react";
+import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
 import { addToCart } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { createRoot } from "react-dom/client";
-import store from "../store";
-import { Provider } from "react-redux";
-import ShoppingCart from "./ShoppingCart";
-import Rating from '@mui/material/Rating';
-import Stack from '@mui/material/Stack';
+import { Rating, Stack } from "@mui/material";
+import Alert from "./AlertError";
 
-
-function Product({ product }) {
+function Product({ product, toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
 
   const [size, setSize] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [noSizeSelected, setNoSizeSelected] = useState(false);
 
   const handleAddToCart = () => {
     if (size === "") {
-      window.alert("الرجاء اختيار مقاس");
+      setNoSizeSelected(true);
     } else {
-      const header = document.getElementById("page-header");
-      const container = document.createElement("div");
-      // Wrap the ShoppingCart component with a Provider component
-      createRoot(container).render(
-        <Provider store={store}>
-          <ShoppingCart />
-        </Provider>
-      );
-      header.appendChild(container);
+      toggleShoppingCartVisibility();
       dispatch(addToCart({ product, size, countInStock }));
       setSize("");
+      setNoSizeSelected(false);
     }
   };
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <Link href="#" className="m-auto">
+      <Link to="#" className="m-auto">
         <img
           className="h-[35rem] w-full object-cover p-4 pb-1 rounded-2xl"
           src={require(`../images/products/product_${product.id}.jpg`)}
@@ -49,7 +35,7 @@ function Product({ product }) {
         />
       </Link>
       <div className="px-5 pb-5">
-        <Link href="#">
+        <Link to="#">
           <h5 className="text-l text-right font-semibold tracking-tight text-gray-900 dark:text-white">
             {product.name}
           </h5>
@@ -59,7 +45,11 @@ function Product({ product }) {
             {Object.entries(product.quantity).map(([size, count]) =>
               count > 0 ? (
                 <Button
-                  className={selectedSize === size ? 'text-white bg-mainColor' : 'text-black'}
+                  className={
+                    selectedSize === size
+                      ? "text-white bg-mainColor"
+                      : "text-black"
+                  }
                   key={size}
                   onClick={() => {
                     setSize(size);
@@ -84,7 +74,12 @@ function Product({ product }) {
         <div className="flex items-center mt-2.5 mb-5">
           <div className="flex items-center gap-2 font-bold text-blue-gray-500">
             <Stack spacing={1}>
-              <Rating name="half-rating" defaultValue={product.rating} precision={0.5} readOnly />
+              <Rating
+                name="half-rating"
+                defaultValue={product.rating}
+                precision={0.5}
+                readOnly
+              />
             </Stack>
             <Typography
               color="blue-gray"
@@ -94,6 +89,16 @@ function Product({ product }) {
             </Typography>
           </div>
         </div>
+        <div className="my-3">
+          {noSizeSelected && (
+            <Alert
+              className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
+              color=""
+              message="الرجاء اختيار مقاس"
+            />
+          )}
+        </div>
+        ;
         <div className="flex items-center justify-between">
           {product.discount > 0 ? (
             <span className="text-2xl font-bold text-gray-90">
@@ -111,7 +116,7 @@ function Product({ product }) {
             className="text-white font-bold bg-mainColor focus:outline-none focus:bg-mainColor  rounded-lg text-l px-3 py-3 text-center"
             onClick={() => {
               handleAddToCart();
-              setSelectedSize('');
+              setSelectedSize("");
             }}
           >
             اضف الى السلة

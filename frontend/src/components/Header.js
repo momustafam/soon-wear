@@ -1,11 +1,9 @@
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import headerLogo from "../images/logos/header-logo.jpg";
-import { useSelector, Provider } from "react-redux";
-import { createRoot } from "react-dom/client";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import ShoppingCart from "./ShoppingCart";
 import { Link } from "react-router-dom";
-import store from "../store";
+
 import {
   Menu,
   MenuHandler,
@@ -15,11 +13,13 @@ import {
   IconButton,
   Badge,
 } from "@material-tailwind/react";
+import { getLandingPageData } from "../slices/landingPageSlice";
 
-
-function Header() {
+function Header({ toggleShoppingCartVisibility }) {
+  const dispatch = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(0);
+
   const categories = useSelector((state) => state.landingPage.categories);
   const { cartItems } = useSelector((state) => state.cart);
   const navbarSearch = document.getElementById("navbar-search");
@@ -31,8 +31,6 @@ function Header() {
     const handleResize = () => {
       if (navbarSearch) {
         if (window.innerWidth > 1024) {
-          console.log("inside");
-
           navbarSearch.classList.remove("active");
           navbarSearch.classList.add("active");
         } else {
@@ -43,20 +41,12 @@ function Header() {
     window.addEventListener("resize", handleResize);
   }, [navbarSearch]);
 
-  const handleClick = () => {
-    const header = document.getElementById("page-header");
-
-    const container = document.createElement("div");
-
-    // Wrap the ShoppingCart component with a Provider component
-    createRoot(container).render(
-      <Provider store={store}>
-        <ShoppingCart />
-      </Provider>
-    );
-
-    header.appendChild(container);
-  };
+  useEffect(() => {
+    // if categories is none
+    if (categories.length === 0) {
+      dispatch(getLandingPageData());
+    }
+  }, [dispatch, categories]);
 
   const handleMenuClick = () => {
     // Toggle the 'active' class to control visibility
@@ -67,6 +57,10 @@ function Header() {
 
   const handleLiClick = (index) => {
     setClickedIndex(index);
+  };
+
+  const handleClick = () => {
+    toggleShoppingCartVisibility();
   };
 
   return (
@@ -182,8 +176,9 @@ function Header() {
                         التصنيفات
                         <ChevronDownIcon
                           strokeWidth={2.5}
-                          className={`h-3.5 w-3.5 transition-transform ${openMenu ? "rotate-180" : ""
-                            }`}
+                          className={`h-3.5 w-3.5 transition-transform ${
+                            openMenu ? "rotate-180" : ""
+                          }`}
                         />
                       </Button>
                     </MenuHandler>
@@ -191,12 +186,17 @@ function Header() {
                     {categories && (
                       <MenuList className="w-[10rem] overflow-visible">
                         {categories.map((category) => (
-                          <MenuItem
-                            className="text-right text-lg"
+                          <Link
+                            to={`/products?category=${category.name}`}
                             key={category.id}
                           >
-                            {category.name}
-                          </MenuItem>
+                            <MenuItem
+                              className="text-right text-lg"
+                              key={category.id}
+                            >
+                              {category.name}
+                            </MenuItem>
+                          </Link>
                         ))}
                       </MenuList>
                     )}
@@ -204,9 +204,10 @@ function Header() {
                 </li>
                 <li>
                   <Link
-                    to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 0 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    to="/"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 0 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(0)}
                   >
                     الرئيسية
@@ -214,9 +215,10 @@ function Header() {
                 </li>
                 <li>
                   <Link
-                    to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 1 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    to="/products?category=التخفيضات"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 1 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(1)}
                   >
                     التخفيضات
@@ -224,9 +226,10 @@ function Header() {
                 </li>
                 <li>
                   <Link
-                    to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 2 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    to="/products?category=لأعلى-مبيعاً"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 2 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(2)}
                   >
                     الأعلى مبيعاً
@@ -234,9 +237,10 @@ function Header() {
                 </li>
                 <li>
                   <Link
-                    to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 3 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    to="/products?category=وصل-حديثاً"
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 3 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(3)}
                   >
                     وصل حديثاً
@@ -245,8 +249,9 @@ function Header() {
                 <li>
                   <Link
                     to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(4)}
                   >
                     تواصل معنا
@@ -259,20 +264,42 @@ function Header() {
       </nav>
 
       {/* Start Bottom fixed navigation bar for small screens */}
-      <div class="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 lg:hidden xl:hidden 2xl:hidden">
-        <div class="grid h-full max-w-lg grid-cols-4 mx-auto font-medium">
-          <button type="button" class="inline-flex flex-col items-center justify-center px-5 border-gray-200 border-x hover:bg-gray-50 dark:hover:bg-gray-800 group dark:border-gray-600">
-            <svg class="w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+      <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 lg:hidden xl:hidden 2xl:hidden">
+        <div className="grid h-full max-w-lg grid-cols-4 mx-auto font-medium">
+          <button
+            type="button"
+            className="inline-flex flex-col items-center justify-center px-5 border-gray-200 border-x hover:bg-gray-50 dark:hover:bg-gray-800 group dark:border-gray-600"
+          >
+            <svg
+              className="w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
               <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
             </svg>
-            <span class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-mainColor">الرئيسية</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-mainColor">
+              الرئيسية
+            </span>
           </button>
-          <button type="button" class="inline-flex flex-col items-center justify-center px-5 border-e border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 group dark:border-gray-600">
-            <svg class="w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <button
+            type="button"
+            className="inline-flex flex-col items-center justify-center px-5 border-e border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 group dark:border-gray-600"
+          >
+            <svg
+              className="w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
               <path d="M11.074 4 8.442.408A.95.95 0 0 0 7.014.254L2.926 4h8.148ZM9 13v-1a4 4 0 0 1 4-4h6V6a1 1 0 0 0-1-1H1a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h17a1 1 0 0 0 1-1v-2h-6a4 4 0 0 1-4-4Z" />
               <path d="M19 10h-6a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1Zm-4.5 3.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2ZM12.62 4h2.78L12.539.41a1.086 1.086 0 1 0-1.7 1.352L12.62 4Z" />
             </svg>
-            <span class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor">محفظتى</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor">
+              محفظتى
+            </span>
           </button>
           <div className="inline-flex flex-col items-center justify-center px-5 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 group border-x dark:border-gray-600">
             <Badge content={cartItems.length}>
@@ -284,20 +311,31 @@ function Header() {
                 <i className="fa-solid fa-shopping-cart w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor"></i>
               </button>
             </Badge>
-            <span className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor">سلتى</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor">
+              سلتى
+            </span>
           </div>
-          <button type="button" class="inline-flex flex-col items-center justify-center px-5 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 group border-x dark:border-gray-600">
-            <svg class="w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <button
+            type="button"
+            className="inline-flex flex-col items-center justify-center px-5 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 group border-x dark:border-gray-600"
+          >
+            <svg
+              className="w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
               <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
             </svg>
-            <span class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor">حسابى</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor">
+              حسابى
+            </span>
           </button>
         </div>
       </div>
       {/* End Bottom fixed navigation bar for small screens */}
-
-    </header >
-
+    </header>
   );
 }
 
