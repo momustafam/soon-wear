@@ -54,7 +54,7 @@ function HomeScreen() {
           return (
             <div>
               <h1 className="text-center bg-darkWhite text-black font-bold text-3xl p-3 pt-6 pb-6 mt-10 mb-5" >
-                %تخفيضات تصل الى 50
+                تخفيضات تصل الى %50
               </h1>
               <div>
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 m-5">
