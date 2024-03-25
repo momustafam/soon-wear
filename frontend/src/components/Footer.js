@@ -3,9 +3,8 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import React from "react";
 
-
 /**
- * @returns The standard footer of all pages of soon wear website 
+ * @returns The standard footer of all pages of soon wear website
  */
 function Footer() {
   // get the available products categories
@@ -13,12 +12,11 @@ function Footer() {
   return (
     <footer className="bg-mainColor dark:bg-gray-900">
       <div className="mx-auto w-full max-w-screen-xl pr-3 py-6 lg:py-8">
-
         {/* Start the footer logo and brand contact information column */}
         <div className="flex flex-row-reverse justify-between flex-wrap">
           <div className="mb-6">
             <div className="flex justify-end">
-              <Link to="/" >
+              <Link to="/">
                 <img
                   src={footerLogo}
                   className="h-[7rem] w-[10rem] me-3"
@@ -28,20 +26,32 @@ function Footer() {
             </div>
             <ul>
               <li className="text-right text-lg text-white">
-                العنوان: <span>الأسكندرية - سيدى بشر قبلى</span> <i className="fa-solid fa-location-dot"></i>
+                العنوان: <span>الأسكندرية - سيدى بشر قبلى</span>{" "}
+                <i className="fa-solid fa-location-dot"></i>
               </li>
               <li className="text-right text-lg text-white">
-                <span>cs@soonwear.com</span> :البريد <i className="fa-solid fa-envelope"></i>
+                <span>cs@soonwear.com</span> :البريد{" "}
+                <i className="fa-solid fa-envelope"></i>
               </li>
               <li className="text-right text-lg text-white">
-                التليفون: <span>01200488281</span> <i className="fa-solid fa-phone"></i>
+                التليفون: <span>01200488281</span>{" "}
+                <i className="fa-solid fa-phone"></i>
               </li>
               <li className="text-right text-2xl text-white mt-4">
                 <div>
-                  <Link className="m-5" to="https://www.facebook.com/Soonwear" target="_blank" rel="noopener noreferrer">
+                  <Link
+                    className="m-5"
+                    to="https://www.facebook.com/Soonwear"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <i className="fa-brands fa-facebook"></i>
                   </Link>
-                  <Link to="https://www.instagram.com/soonweareg/" target="_blank" rel="noopener noreferrer">
+                  <Link
+                    to="https://www.instagram.com/soonweareg/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <i className="fa-brands fa-instagram"></i>
                   </Link>
                 </div>
@@ -59,7 +69,10 @@ function Footer() {
               {categories &&
                 categories.map((category) => (
                   <li className="mt-1 mb-1" key={category.id}>
-                    <Link to="#" className="hover:underline">
+                    <Link
+                      to={`/products?category=${category.name}`}
+                      className="hover:underline"
+                    >
                       {category.name}
                     </Link>
                   </li>
@@ -75,7 +88,7 @@ function Footer() {
             </h2>
             <ul className="text-white text-right dark:text-gray-400 font-medium">
               <li className="mb-4">
-                <Link to="https://tailwindcss.com/" className="hover:underline">
+                <Link to="#" className="hover:underline">
                   طلباتي
                 </Link>
               </li>
@@ -100,10 +113,7 @@ function Footer() {
         <div className="text-center pb-10">
           <span className="text-sm text-white sm:text-center dark:text-gray-400">
             .كل الحقوق محفوظة
-            <Link
-              to="/"
-              className="hover:underline"
-            >
+            <Link to="/" className="hover:underline">
               {" ."}
               Soon Wear™{" "}
             </Link>
@@ -112,7 +122,7 @@ function Footer() {
         </div>
         {/* End useful linkes column */}
       </div>
-    </footer >
+    </footer>
   );
 }
 

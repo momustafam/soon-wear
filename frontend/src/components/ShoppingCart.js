@@ -4,8 +4,9 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, addKeyToCart } from "../slices/cartSlice";
 import { Alert, Select, Option } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
 
-export default function ShoppingCart() {
+export default function ShoppingCart({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
 
@@ -29,9 +30,14 @@ export default function ShoppingCart() {
     dispatch(addKeyToCart({ id, size, key: "qty", value: parseInt(val) }));
   };
 
+  const handleShoppingCart = (e) => {
+    setOpen(e);
+    toggleShoppingCartVisibility();
+  };
+
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={setOpen}>
+      <Dialog as="div" className="relative z-50" onClose={handleShoppingCart}>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -67,7 +73,10 @@ export default function ShoppingCart() {
                           <button
                             type="button"
                             className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => setOpen(false)}
+                            onClick={() => {
+                              setOpen(false);
+                              toggleShoppingCartVisibility();
+                            }}
                           >
                             <span className="absolute -inset-0.5" />
                             <span className="sr-only">Close panel</span>
@@ -94,20 +103,22 @@ export default function ShoppingCart() {
                                   className="flex py-6"
                                 >
                                   <div className="h-30 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                    <img
-                                      src={require(`../images/products/product_${product.id}.jpg`)}
-                                      alt="Product"
-                                      className="h-full w-full object-fill object-center"
-                                    />
+                                    <Link to={`/product/${product.id}`}>
+                                      <img
+                                        src={require(`../images/products/product_${product.id}.jpg`)}
+                                        alt="Product"
+                                        className="h-full w-full object-fill object-center"
+                                      />
+                                    </Link>
                                   </div>
 
                                   <div className="ml-4 flex flex-1 flex-col">
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
-                                          <a href={`/product/${product.id}`}>
+                                          <Link to={`/product/${product.id}`}>
                                             {product.name}
-                                          </a>
+                                          </Link>
                                         </h3>
                                         <p className="ml-4">
                                           {product.discount > 0 ? (
@@ -152,7 +163,6 @@ export default function ShoppingCart() {
                                           />
                                         </button>
                                       </div>
-
                                     </div>
                                     <div className="w-1 mt-5">
                                       <Select
@@ -206,9 +216,17 @@ export default function ShoppingCart() {
                         مصاريف الشحن تحسب عند تأكيد الطلب
                       </p>
                       <div className="mt-6">
-                        <button className="flex items-center justify-center rounded-md border border-transparent bg-mainColor px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-mainColor/90">
-                          تأكيد الطلب
-                        </button>
+                        <Link to="/placeorder">
+                          <button
+                            className="flex items-center justify-center rounded-md border border-transparent bg-mainColor px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-mainColor/90"
+                            onClick={() => {
+                              setOpen(false);
+                              toggleShoppingCartVisibility();
+                            }}
+                          >
+                            تأكيد الطلب
+                          </button>
+                        </Link>
                       </div>
                       <div className="mt-3 flex justify-center text-center text-sm text-gray-500">
                         <p>
