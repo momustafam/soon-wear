@@ -39,6 +39,7 @@ class Category(models.Model):
         verbose_name_plural = "الفئات"
     
 class Product(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, unique=True, verbose_name="الاسم")
     description = models.CharField(max_length=255, blank=True, verbose_name="الوصف")
     feature = models.CharField(
@@ -55,7 +56,7 @@ class Product(models.Model):
         default=0,
         max_digits=2,
         decimal_places = 1,
-        validators=[MaxValueValidator(5), MinValueValidator(1)],
+        validators=[MaxValueValidator(5), MinValueValidator(0)],
         verbose_name = "تقييم المنتج"
     )
     category = models.ForeignKey(Category, 
@@ -81,7 +82,7 @@ class Product(models.Model):
         super().clean()
         if self.discount > self.price:
             raise ValidationError({'discount': 'الخصم لا يمكن أن يكون أكبر من السعر.'})
-    
+
 class ProductSize(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="المنتج")
     size = models.ForeignKey(Size, on_delete=models.PROTECT, verbose_name="المقاس")
@@ -100,7 +101,7 @@ class Image(models.Model):
 
     def delete(self, *args, **kwargs):
         if os.path.exists(self.image.path):
-            os.remove(self.image.path)        
+            os.remove(self.image.path)       
         super().delete(*args, **kwargs)
     
     class Meta:

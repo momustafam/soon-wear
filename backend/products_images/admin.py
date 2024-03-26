@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib import admin
 from django.forms import TextInput
+from django.core.exceptions import ValidationError
 from products_images.models import Size, Image, Banner, Category, Product, ProductSize
 import os
 
@@ -37,16 +38,12 @@ class ProductAdmin(admin.ModelAdmin):
     available_quantity.short_description = 'الكمية المتاحة'
     
     def delete_selected(self, request, queryset):
-        print(queryset)
         for product in queryset:
-            print("here")
             for img_obj in product.images.all():
-                print(img_obj)
                 if os.path.exists(img_obj.image.path):
                     os.remove(img_obj.image.path)
         deleted = queryset.delete()
-
-    
+        
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (

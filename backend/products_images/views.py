@@ -1,27 +1,14 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics, status
+from rest_framework import status, viewsets
 from .models import Product, Category, Banner
 from .serializers import ProductSerializer, CategorySerializer, BannerSerializer
 
-class ProductListView(generics.ListAPIView):
-    serializer_class = ProductSerializer
-    
-    def get_queryset(self):
-        category = self.request.query_params.get('category')
-        feature = self.request.query_params.get('feature')
-        if category:
-            queryset = Product.objects.filter(category=category)
-        elif feature:
-            print(feature)
-            queryset = Product.objects.filter(feature=feature)
-        else:
-            return []
-        return queryset
-            
-class SingleProductView(generics.RetrieveAPIView):
+class ProductView(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    ordering_fields = ['price', 'discount', 'rating']
+    search_fields = ['feature', 'category__id']    
 
 class LandingPageView(APIView):
     def get(self, request):
@@ -38,6 +25,6 @@ class LandingPageView(APIView):
         data['categories'] = CategorySerializer(Category.objects.all(), many=True).data
         data['banners'] = BannerSerializer(Banner.objects.all(), many=True).data
         for feature in features:
-            data[feature] = ProductSerializer(Product.objects.filter(feature=feature)[:3], many=True).data
+            data[feature] = ProductSerializer(Product.objects.filter(feature=feature)[:4], many=True).data
 
         return Response(data, status.HTTP_200_OK)
