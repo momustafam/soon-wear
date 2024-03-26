@@ -15,7 +15,8 @@ const landingPageSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getLandingPageData.fulfilled, (state, { payload }) => {
-        const data = payload.data[0];
+        const data = payload.data;
+        console.log(data)
         state.categories = data.categories;
         state.banners = data.banners;
         state.discounts = data.top_discounts;
@@ -46,9 +47,10 @@ export const getLandingPageData = createAsyncThunk(
         },
       };
       const data = axios.get(
-        "https://65f42ad7f54db27bc020adb1.mockapi.io/api/v1/landing-page",
+        "http://192.168.1.9:8000/api/v1/landing-page?format=json",
         config
       );
+      console.log(data)
       return data;
     } catch (error) {
       console.log(error);

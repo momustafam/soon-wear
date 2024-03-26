@@ -27,13 +27,16 @@ function Product({ product, toggleShoppingCartVisibility }) {
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <Link to="#" className="m-auto">
-        <img
-          className="h-[35rem] w-full object-cover p-4 pb-1 rounded-2xl"
-          src={require(`../images/products/product_${product.id}.jpg`)}
-          alt="Product"
-        />
-      </Link>
+      {product.images.length > 0 && (
+        <Link to="#" className="m-auto">
+          <img
+            className="h-[35rem] w-full object-cover p-4 pb-1 rounded-2xl"
+            src={require(`../images${product.images[0]}`)}
+            alt="Product"
+          />
+        </Link>
+      )}
+
       <div className="px-5 pb-5">
         <Link to="#">
           <h5 className="text-l text-right font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -42,30 +45,30 @@ function Product({ product, toggleShoppingCartVisibility }) {
         </Link>
         <div className="flex w-max gap-4 mt-2 ms-auto">
           <ButtonGroup variant="outlined" color="black" size="sm">
-            {Object.entries(product.quantity).map(([size, count]) =>
-              count > 0 ? (
+            {product.sizes.map((size) =>
+              size.quantity > 0 ? (
                 <Button
                   className={
-                    selectedSize === size
+                    selectedSize === size.name
                       ? "text-white bg-mainColor"
                       : "text-black"
                   }
-                  key={size}
+                  key={size.name}
                   onClick={() => {
-                    setSize(size);
-                    setCountInStock(count);
-                    setSelectedSize(size);
+                    setSize(size.name);
+                    setCountInStock(size.quantity);
+                    setSelectedSize(size.name);
                   }}
                 >
-                  {size}
+                  {size.name}
                 </Button>
               ) : (
                 <Button
                   className="text-black line-through decoration-red-900 decoration-2 decoration-solid"
                   disabled
-                  key={size}
+                  key={size.name}
                 >
-                  {size}
+                  {size.name}
                 </Button>
               )
             )}
@@ -98,7 +101,6 @@ function Product({ product, toggleShoppingCartVisibility }) {
             />
           )}
         </div>
-        ;
         <div className="flex items-center justify-between">
           {product.discount > 0 ? (
             <span className="text-2xl font-bold text-gray-90">

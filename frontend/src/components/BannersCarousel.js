@@ -1,6 +1,6 @@
 import React from "react";
 import { Carousel } from "@material-tailwind/react";
-
+import { Link } from "react-router-dom";
 
 function BannersCarousel({ banners }) {
   return (
@@ -11,16 +11,16 @@ function BannersCarousel({ banners }) {
         transition={{ duration: 1 }}
         className="rounded-xl"
       >
-        {banners &&
-          banners.map((banner) => (
+        {banners.map((banner) => (
+          <Link to={banner.url} key={banner.id}>
             <img
-              key={banner.id}
-              src={require(`../images/banners/${banner}`)}
+              src={require(`../images${banner.image}`)}
               alt={`banner image`}
               className="w-full h-full object-fit rounded-xl"
               style={{ maxHeight: "70vh" }}
             />
-          ))}
+          </Link>
+        ))}
       </Carousel>
     </div>
   );

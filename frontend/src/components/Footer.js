@@ -14,7 +14,7 @@ function Footer() {
       <div className="mx-auto w-full max-w-screen-xl pr-3 py-6 lg:py-8">
         {/* Start the footer logo and brand contact information column */}
         <div className="flex flex-row-reverse justify-between flex-wrap">
-          <div className="mb-6">
+          <div className="mb-6 pl-20">
             <div className="flex justify-end">
               <Link to="/">
                 <img
@@ -61,11 +61,11 @@ function Footer() {
           {/* End the footer logo and brand contact information column */}
 
           {/* Start categories column */}
-          <div className="mb-5">
+          <div className="mb-5 pl-20">
             <h2 className="mb-6 text-right text-xl font-semibold text-white uppercase dark:text-white">
               التصنيفات
             </h2>
-            <ul className="grid grid-cols-2 gap-2 text-white text-right font-medium">
+            <ul className="grid grid-col-1 gap-1 text-white text-right font-medium">
               {categories &&
                 categories.map((category) => (
                   <li className="mt-1 mb-1" key={category.id}>
@@ -82,7 +82,7 @@ function Footer() {
           {/* End categories column */}
 
           {/* Start useful linkes column */}
-          <div>
+          <div className="pl-20">
             <h2 className="mb-6 text-right text-xl font-semibold text-white uppercase dark:text-white">
               روابط مفيدة
             </h2>

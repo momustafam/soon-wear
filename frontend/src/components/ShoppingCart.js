@@ -11,7 +11,6 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
   const { cartItems } = useSelector((state) => state.cart);
 
   const [open, setOpen] = useState(true);
-
   const discountTotal = cartItems
     .reduce(
       (acc, item) => acc + item.qty * parseFloat(item.price - item.discount),
@@ -102,15 +101,17 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                                   key={`${product.id}-${product.size}`}
                                   className="flex py-6"
                                 >
-                                  <div className="h-30 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                    <Link to={`/product/${product.id}`}>
-                                      <img
-                                        src={require(`../images/products/product_${product.id}.jpg`)}
-                                        alt="Product"
-                                        className="h-full w-full object-fill object-center"
-                                      />
-                                    </Link>
-                                  </div>
+                                  {product.images.length > 0 && (
+                                    <div className="h-30 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                      <Link to={`/product/${product.id}`}>
+                                        <img
+                                          src={require(`../images${product.images[0]}`)}
+                                          alt="Product"
+                                          className="h-full w-full object-fill object-center"
+                                        />
+                                      </Link>
+                                    </div>
+                                  )}
 
                                   <div className="ml-4 flex flex-1 flex-col">
                                     <div>

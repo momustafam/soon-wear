@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib import admin
 from django.forms import TextInput
-from landing_page.models import Size, Image, Banner, Category, Product, ProductSize
+from products_images.models import Size, Image, Banner, Category, Product, ProductSize
+import os
 
 class ProductSizeTable(admin.TabularInline):
     model = Product.sizes.through
@@ -9,15 +10,12 @@ class ProductSizeTable(admin.TabularInline):
 
 class ProductImageTable(admin.TabularInline):
     model = Image
-    list_display = ['image', 'delete_image']
     extra = 1
 
-    def delete_image(self, obj):
-        obj.delete()
-
+@admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    actions = ['delete_selected']
     exclude = ('reviews_count', 'rating')
-    inlines = [ProductSizeTable, ProductImageTable]
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': 50})},
     } 
@@ -30,14 +28,26 @@ class ProductAdmin(admin.ModelAdmin):
         'reviews_count',
         'available_quantity',
     )
+    inlines = [ProductSizeTable, ProductImageTable]
 
     def available_quantity(self, obj):
         '''Calculate the available quantity related to `obj` product.'''
         total_quantity = ProductSize.objects.filter(product=obj).aggregate(models.Sum('quantity'))['quantity__sum']
         return total_quantity if total_quantity is not None else 0
+    available_quantity.short_description = 'الكمية المتاحة'
     
-    available_quantity.short_description = 'available quantity'
+    def delete_selected(self, request, queryset):
+        print(queryset)
+        for product in queryset:
+            print("here")
+            for img_obj in product.images.all():
+                print(img_obj)
+                if os.path.exists(img_obj.image.path):
+                    os.remove(img_obj.image.path)
+        deleted = queryset.delete()
+
     
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
         'name', 
@@ -46,12 +56,18 @@ class CategoryAdmin(admin.ModelAdmin):
     
     def number_of_products(self, obj):
         '''Calculate the number of products related to the `obj` category.'''
-        nproducts = Category.objects.filter(pk=obj.pk).aggregate(models.Count('products'))['products__count']
-        return nproducts if nproducts is not None else 0
-    number_of_products.short_description = 'number of products'
+        return obj.products.count()
+    number_of_products.short_description = 'عدد المنتجات'
+    
+@admin.register(Banner)
+class BannerAdmin(admin.ModelAdmin):
+    actions = ['delete_selected']
+
+    def delete_selected(self, request, queryset):
+        for banner in queryset:
+            if os.path.exists(banner.image.path):
+                os.remove(banner.image.path)
+        deleted = queryset.delete()
 
 admin.site.register(Size)
 admin.site.register(Image)
-admin.site.register(Banner)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Product, ProductAdmin)

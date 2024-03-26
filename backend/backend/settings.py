@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 
 # The directory of uploaded media files of the project
-MEDIA_ROOT = r'D:\Work\Soon Wear\SoonWear\soon-wear\frontend\src\images'
+MEDIA_ROOT = r'D:\Work\Soon Wear\soon-wear\frontend\src\images'
 
 # The URL prefix for media files
 MEIDA_URL = '/media/'
@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-h!sc43$uz(_1+om_-$ge@5q&+y4m76de5bt#(_+ou$0v$--xmd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*", "127.0.0.1", "localhost", "192.168.1.9"]
 
 
 # Application definition
@@ -45,10 +45,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'landing_page',
+    'corsheaders',
+    'products_images',
+    'rest_framework',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -130,3 +136,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+INTERNAL_IPS = [
+    '127.0.0.1'
+]
