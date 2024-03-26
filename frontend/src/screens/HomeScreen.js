@@ -53,18 +53,20 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
     <div>
       {/* Start the upper banner */}
       <BannersCarousel banners={mainBannersDynamic} />
-      <div className="grid grid-cols-3 gap-5 mt-5 ml-2 mr-2 ">
-        {mainBannersStatic.map((banner) => (
-          <Link to={banner.url}>
-            <img
-              className="h-full w-full object-cover"
-              src={require(`../images${banner.image}`)}
-              alt="Banner Image"
-              style={{ maxHeight: "70vh" }}
-            />
-          </Link>
-        ))}
-      </div>
+      {mainBannersStatic.length > 0 && (
+        <div className="grid grid-cols-3 gap-5 mt-5 ml-2 mr-2 ">
+          {mainBannersStatic.map((banner) => (
+            <Link to={banner.url}>
+              <img
+                className="h-full w-full object-cover"
+                src={require(`../images${banner.image}`)}
+                alt="Banner Image"
+                style={{ maxHeight: "70vh" }}
+              />
+            </Link>
+          ))}
+        </div>
+      )}
       {/* End the upper banner */}
 
       {/* Start looping over featured products and display each one in a setion with an image or carousel*/}

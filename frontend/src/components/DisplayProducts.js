@@ -1,6 +1,6 @@
 import React from "react";
 import Product from "../components/Product";
-import { Link } from "react-router-dom";
+import SeeMoreButton from "./SeeMoreButton";
 
 function DisplayProducts(toggleShoppingCartVisibility, header, products, img) {
     return (
@@ -22,11 +22,7 @@ function DisplayProducts(toggleShoppingCartVisibility, header, products, img) {
                         />
                     ))}
                 </div>
-                <div className="text-center mb-5">
-                    <Link to="#" className="px-5 py-3 mt-3 mb-10 inline-block text-xl shadow-lg shadow-mainColor font-semibold rounded-full border border-mainColor hover:bg-mainColor hover:text-white">
-                        مشاهدة المزيد
-                    </Link>
-                </div>
+                <SeeMoreButton link="#" />
                 {img && (<img
                     className="h-full w-full object-cover"
                     src={require(`../images${img.image}`)}
