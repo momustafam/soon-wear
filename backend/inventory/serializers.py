@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from products_images.models import Product, Image, ProductSize, Category, Banner
+from .models import Product, ProductImage, Stock, Category, Banner
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Image
+        model = ProductImage
         fields = ['image']
     
     def to_representation(self, instance):
@@ -14,8 +14,8 @@ class ProductSizeSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source="size.name")
     
     class Meta:
-        model = ProductSize
-        fields = ['id', 'name', 'quantity']
+        model = Stock
+        fields = ['id', 'size', 'color', 'quantity']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,6 +43,6 @@ class ProductSerializer(serializers.ModelSerializer):
             'rating',
             'reviews_count',
             'category',
-            'sizes',
+            'stock',
             'images'
             ]

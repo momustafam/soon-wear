@@ -16,20 +16,14 @@ BANNER_TYPES = [
     ('top_selling_banner', 'فوق الأعلى مبيعاً'), 
     ('recently_arrived_banner', 'فوق وصل حديثاً'),
     ('customer_review', 'آراء العملاء')
-]
+    ]
 
-class Size(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name="الاسم")
-
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        verbose_name = "المقاس"
-        verbose_name_plural = "المقاسات"
-    
 class Category(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name="الاسم")
+    name = models.CharField(
+        max_length=50, 
+        unique=True, 
+        verbose_name="الاسم"
+        )
     
     def __str__(self):
         return self.name
@@ -37,33 +31,80 @@ class Category(models.Model):
     class Meta:
         verbose_name = "الفئة"
         verbose_name_plural = "الفئات"
+        
+class Size(models.Model):
+    name = models.CharField(
+        max_length=50, 
+        unique=True, 
+        verbose_name="الاسم"
+        )
+
+    def __str__(self):
+        return self.name
     
+    class Meta:
+        verbose_name = "المقاس"
+        verbose_name_plural = "المقاسات"
+
+class Color(models.Model):
+    name = models.CharField(
+        max_length=50, 
+        unique=True, 
+        verbose_name="الاسم"
+        )
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = 'اللون'
+        verbose_name_plural = 'الألوان'
+
 class Product(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50, unique=True, verbose_name="الاسم")
-    description = models.CharField(max_length=255, blank=True, verbose_name="الوصف")
+    name = models.CharField(
+        max_length=50,
+        unique=True,
+        verbose_name="الاسم",
+        db_index=True
+        )
+    description = models.CharField(
+        max_length=255, 
+        blank=True, 
+        verbose_name="الوصف"
+        )
     feature = models.CharField(
         max_length=20,
         choices=AVAILABLE_FEATURES,
         default='None',
-        verbose_name="الميزة"
-    )
-    price = models.PositiveIntegerField(default=0, verbose_name="السعر")
-    reviews_count = models.PositiveBigIntegerField(default=0, verbose_name='عدد المراجعات')
-    discount = models.PositiveIntegerField(default=0, 
-                                           verbose_name="الخصم بالجنية")
+        verbose_name="الميزة",
+        db_index=True
+        )
+    price = models.PositiveIntegerField(
+        default=0, 
+        verbose_name="السعر"
+        )
+    reviews_count = models.PositiveBigIntegerField(
+        default=0, 
+        verbose_name='عدد المراجعات'
+        )
+    discount = models.PositiveIntegerField(
+        default=0, 
+        verbose_name="الخصم بالجنية"
+        )
     rating = models.DecimalField(
         default=0,
         max_digits=2,
         decimal_places = 1,
         validators=[MaxValueValidator(5), MinValueValidator(0)],
         verbose_name = "تقييم المنتج"
-    )
-    category = models.ForeignKey(Category, 
-                                 on_delete=models.PROTECT, 
-                                 related_name='products', 
-                                 verbose_name="الفئة")
-    sizes = models.ManyToManyField(Size, through="ProductSize")
+        )
+    category = models.ForeignKey(
+        Category, 
+        on_delete=models.PROTECT, 
+        related_name='products', 
+        verbose_name="الفئة",
+        db_index=True
+        )
     
     class Meta:
         verbose_name = "المنتج"
@@ -83,18 +124,44 @@ class Product(models.Model):
         if self.discount > self.price:
             raise ValidationError({'discount': 'الخصم لا يمكن أن يكون أكبر من السعر.'})
 
-class ProductSize(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="المنتج")
-    size = models.ForeignKey(Size, on_delete=models.PROTECT, verbose_name="المقاس")
-    quantity = models.PositiveIntegerField(default=0, verbose_name="الكمية")
+
+class Stock(models.Model):
+    product = models.ForeignKey(
+        Product, 
+        on_delete=models.CASCADE, 
+        related_name="stock", 
+        verbose_name="مخزون"
+        )
+    size = models.OneToOneField(
+        Size, 
+        on_delete=models.PROTECT, 
+        verbose_name="المقاس"
+        )
+    color = models.OneToOneField(
+        Color, 
+        on_delete=models.PROTECT, 
+        verbose_name='اللون'
+        )
+    quantity = models.PositiveIntegerField(
+        default=0, 
+        verbose_name="الكمية"
+        )
 
     class Meta:
-        verbose_name = "مقاس"
-        verbose_name_plural = "مقاسات"
+        verbose_name = "مخزون"
+        verbose_name_plural = "مخزون المنتج"
 
-class Image(models.Model):
-    image = models.ImageField(upload_to='products/', verbose_name="الصورة")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images", verbose_name="المنتج")
+class ProductImage(models.Model):
+    image = models.ImageField(
+        upload_to='products/', 
+        verbose_name="الصورة"
+        )
+    product = models.ForeignKey(
+        Product, 
+        on_delete=models.CASCADE, 
+        related_name="images", 
+        verbose_name="المنتج"
+        )
     
     def __str__(self):
         return os.path.basename(self.image.name)
@@ -105,12 +172,12 @@ class Image(models.Model):
         super().delete(*args, **kwargs)
     
     class Meta:
-        verbose_name = "صورة"
-        verbose_name_plural = "صور"
+        verbose_name = "صورة المنتج"
+        verbose_name_plural = "صور المنتجات"
         
     def save(self, *args, **kwargs):
         try:
-            old_image = Image.objects.get(pk=self.pk)
+            old_image = ProductImage.objects.get(pk=self.pk)
             if self.image != old_image.image:
                 if os.path.exists(self.image.path):
                     os.remove(old_image.image.path)

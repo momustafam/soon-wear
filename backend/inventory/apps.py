@@ -3,5 +3,5 @@ from django.apps import AppConfig
 
 class LandingPageConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'products_images'
-    verbose_name = "المنتجات و الصور"
+    name = 'inventory'
+    verbose_name = "المخزن"

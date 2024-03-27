@@ -2,15 +2,15 @@ from django.db import models
 from django.contrib import admin
 from django.forms import TextInput
 from django.core.exceptions import ValidationError
-from products_images.models import Size, Image, Banner, Category, Product, ProductSize
+from .models import Size, ProductImage, Banner, Category, Product, Stock, Color
 import os
 
-class ProductSizeTable(admin.TabularInline):
-    model = Product.sizes.through
+class ProductStockTable(admin.TabularInline):
+    model = Stock
     extra = 1
 
 class ProductImageTable(admin.TabularInline):
-    model = Image
+    model = ProductImage
     extra = 1
 
 @admin.register(Product)
@@ -29,11 +29,11 @@ class ProductAdmin(admin.ModelAdmin):
         'reviews_count',
         'available_quantity',
     )
-    inlines = [ProductSizeTable, ProductImageTable]
+    inlines = [ProductStockTable, ProductImageTable]
 
     def available_quantity(self, obj):
         '''Calculate the available quantity related to `obj` product.'''
-        total_quantity = ProductSize.objects.filter(product=obj).aggregate(models.Sum('quantity'))['quantity__sum']
+        total_quantity = Stock.objects.filter(product=obj).aggregate(models.Sum('quantity'))['quantity__sum']
         return total_quantity if total_quantity is not None else 0
     available_quantity.short_description = 'الكمية المتاحة'
     
@@ -59,12 +59,14 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
     actions = ['delete_selected']
-
+    list_display = ['image_name', 'location']
+    
     def delete_selected(self, request, queryset):
         for banner in queryset:
             if os.path.exists(banner.image.path):
                 os.remove(banner.image.path)
         deleted = queryset.delete()
-
-admin.site.register(Size)
-admin.site.register(Image)
+        
+    def image_name(self, obj):
+        return str(obj)
+    image_name.short_description = 'الصورة'
