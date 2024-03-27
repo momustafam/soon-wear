@@ -1,0 +1,306 @@
+# Django E-commerce Inventory Management App
+
+This application is designed to:<br> 
+  - Help staff members who are working on the soon wear web application to efficiently manage the website product inventory using an admin panel.
+  - Allow soon wear front-end developers to access the needed data via APIs endpoints
+  
+
+## Features
+
+- Add, update, and delete products
+- Add, update, and delete banners
+- Track quantities, prices, discounts, rating, and number of reviews of each product
+- Categorize products for easy organization
+
+
+## Database Design
+
+Note!!! This diagram is for SQL implementation on MySQL DBMS, Django ORM has its syntax to imlement the same diagram.<br><br>
+![](./ERD.png)
+
+## API Documentation Guide
+
+The Inventory API allows users to manage products, categories, and inventory for an e-commerce platform.
+
+## Overview
+
+The Inventory API allows soon wear front-end developers to fetch or upload needed data.<br><br>
+
+Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
+
+### Endpoints:
+
+#### landing-page
+
+- URL: */landingpage
+- Allow: GET, HEAD, OPTIONS
+- Description: Retrieve banners and products data of the landing page.
+- Authentication: Not Required
+- Request Parameters: None
+- Response:
+```json
+{
+    "banners": {
+        "main_banner_dynamic": [
+            {
+                "image": "/banners/banner_1_aQuYD7y.jpg",
+                "url": null
+            },
+            {
+                "image": "/banners/banner_2_DIal7Qe.jpg",
+                "url": null
+            },
+            {
+                "image": "/banners/banner_3_HZqZPFo.jpg",
+                "url": null
+            }
+        ],
+        "main_banner_static": [
+            {
+                "image": "/banners/add1.jpg",
+                "url": null
+            },
+            {
+                "image": "/banners/add2.jpg",
+                "url": null
+            },
+            {
+                "image": "/banners/add3.jpg",
+                "url": null
+            },
+            {
+                "image": "/banners/adds1.jpg",
+                "url": null
+            },
+            {
+                "image": "/banners/adds2.jpg",
+                "url": null
+            },
+            {
+                "image": "/banners/adds3.jpg",
+                "url": null
+            }
+        ],
+        "top_selling_banner": [
+            {
+                "image": "/banners/banner_3.jpg",
+                "url": null
+            }
+        ],
+        "recently_arrived_banner": [
+            {
+                "image": "/banners/banner_2.jpg",
+                "url": null
+            }
+        ],
+        "customer_review": [
+            {
+                "image": "/banners/customers_reviews1.jpg",
+                "url": null
+            },
+            {
+                "image": "/banners/customers_reviews2.jpg",
+                "url": null
+            },
+            {
+                "image": "/banners/customers_reviews3.jpg",
+                "url": null
+            }
+        ]
+    },
+    "top_discounts": [
+        {
+            "id": 1,
+            "name": "ملحفة سوون",
+            "description": "قطعة قطن 100% معالجة ضد أي انكماش ،وكمان مميزة جدا وهتناسب معاكي لأي خروجة، وتعملي ليها استايلنج بكذا شكل مُختلف.😍❤️",
+            "feature": "top_discounts",
+            "price": 650,
+            "discount": 70,
+            "rating": "0.0",
+            "reviews_count": 0,
+            "category": 1,
+            "stocks": [
+                {
+                    "id": 1,
+                    "size_name": "من 60 ل 80 كيلو",
+                    "color_name": "أسود",
+                    "quantity": 29
+                },
+                {
+                    "id": 2,
+                    "size_name": "من 60 ل 80 كيلو",
+                    "color_name": "أحمر",
+                    "quantity": 14
+                },
+                {
+                    "id": 4,
+                    "size_name": "من 60 ل 80 كيلو",
+                    "color_name": "رمادى",
+                    "quantity": 0
+                },
+                {
+                    "id": 5,
+                    "size_name": "من 60 ل 80 كيلو",
+                    "color_name": "أبيض",
+                    "quantity": 3
+                },
+                {
+                    "id": 6,
+                    "size_name": "من 80 ل 100 ك",
+                    "color_name": "أحمر",
+                    "quantity": 5
+                },
+                {
+                    "id": 7,
+                    "size_name": "من 80 ل 100 ك",
+                    "color_name": "أسود",
+                    "quantity": 20
+                },
+                {
+                    "id": 8,
+                    "size_name": "من 120 ل 140 ك",
+                    "color_name": "أحمر",
+                    "quantity": 5
+                },
+                {
+                    "id": 9,
+                    "size_name": "من 120 ل 140 ك",
+                    "color_name": "أبيض",
+                    "quantity": 45
+                },
+                {
+                    "id": 10,
+                    "size_name": "من 120 ل 140 ك",
+                    "color_name": "رمادى",
+                    "quantity": 8
+                },
+                {
+                    "id": 11,
+                    "size_name": "من 120 ل 140 ك",
+                    "color_name": "أسود",
+                    "quantity": 0
+                }
+            ],
+            "images": {
+                "أسود": [
+                    "products/product_4.jpg",
+                    "products/header-logo.jpg",
+                    "products/adds1.jpg"
+                ],
+                "رمادى": [
+                    "products/product_6.jpg",
+                    "products/sweat-shirt-dress-sky.jpg"
+                ],
+                "أبيض": [
+                    "products/adds2.jpg",
+                    "products/product_12.jpg"
+                ]
+            }
+        }
+    ],
+    "top_selling": [
+        {
+            "id": 2,
+            "name": "سويت شيرت سوون",
+            "description": "قطعة قطن 100% معالجة ضد أي انكماش ،وكمان مميزة جدا وهتناسب معاكي لأي خروجة، وتعملي ليها استايلنج بكذا شكل مُختلف.😍❤️",
+            "feature": "top_selling",
+            "price": 760,
+            "discount": 250,
+            "rating": "0.0",
+            "reviews_count": 0,
+            "category": 2,
+            "stocks": [
+                {
+                    "id": 12,
+                    "size_name": "من 80 ل 100 ك",
+                    "color_name": "أسود",
+                    "quantity": 45
+                },
+                {
+                    "id": 13,
+                    "size_name": "من 80 ل 100 ك",
+                    "color_name": "رمادى",
+                    "quantity": 14
+                },
+                {
+                    "id": 14,
+                    "size_name": "من 60 ل 80 كيلو",
+                    "color_name": "أحمر",
+                    "quantity": 12
+                }
+            ],
+            "images": {
+                "أسود": [
+                    "products/adds1_DVRguzh.jpg",
+                    "products/product_10.jpg"
+                ],
+                "رمادى": [
+                    "products/product_6_wqHjnc8.jpg"
+                ],
+                "أحمر": [
+                    "products/product_3.jpg"
+                ]
+            }
+        }
+    ],
+    "recently_arrived": [
+        {
+            "id": 3,
+            "name": "فستان سوون",
+            "description": "خامة ميلتون مبطن تقيل .🥰 (معالج ضد الوبرة و بيدفي جدا )",
+            "feature": "recently_arrived",
+            "price": 490,
+            "discount": 90,
+            "rating": "0.0",
+            "reviews_count": 0,
+            "category": 3,
+            "stocks": [
+                {
+                    "id": 15,
+                    "size_name": "من 120 ل 140 ك",
+                    "color_name": "أبيض",
+                    "quantity": 20
+                }
+            ],
+            "images": {
+                "أبيض": [
+                    "products/product_6_Yl1K9wk.jpg"
+                ],
+                "أسود": [
+                    "products/product_10_d69u5SS.jpg"
+                ]
+            }
+        }
+    ]
+}
+```
+
+#### categories
+
+- URL: */categories
+- Allow: GET, HEAD, OPTIONS
+- Description: Retrieve data of all available categories (id, name).
+- Authentication: Not Required
+- Request Parameters: [ordering={categoryName}, search={categoryName}]
+- Response:
+```json
+[
+    {
+        "id": 1,
+        "name": "ملحفة"
+    },
+    {
+        "id": 2,
+        "name": "سويت شيرت"
+    },
+    {
+        "id": 3,
+        "name": "فستان"
+    },
+    {
+        "id": 4,
+        "name": "عباية"
+    }
+]
+```
+  
