@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
 import { addToCart } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Rating, Stack } from "@mui/material";
 import Alert from "./AlertError";
@@ -10,28 +10,36 @@ function Product({ product, toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
 
   const [size, setSize] = useState("");
+  const [color, setColor] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [selectedSize, setSelectedSize] = useState(null);
   const [noSizeSelected, setNoSizeSelected] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [noColorSelected, setNoColorSelected] = useState(false);
+
 
   const handleAddToCart = () => {
     if (size === "") {
       setNoSizeSelected(true);
+    } else if (color === "") {
+      setNoColorSelected(true)
     } else {
       toggleShoppingCartVisibility();
-      dispatch(addToCart({ product, size, countInStock }));
+      dispatch(addToCart({ product, size, color, countInStock }));
       setSize("");
+      setColor("");
       setNoSizeSelected(false);
+      setNoColorSelected(false);
     }
   };
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      {product.images.length > 0 && (
+      {product.images && (
         <Link to="#" className="m-auto">
           <img
             className="h-[35rem] w-full object-cover p-4 pb-1 rounded-2xl"
-            src={require(`../images${product.images[0]}`)}
+            src={require(`../images/${product.images['أسود'][0]}`)}
             alt="Product"
           />
         </Link>
@@ -45,33 +53,30 @@ function Product({ product, toggleShoppingCartVisibility }) {
         </Link>
         <div className="flex w-max gap-4 mt-2 ms-auto">
           <ButtonGroup variant="outlined" color="black" size="sm">
-            {product.sizes.map((size) =>
-              size.quantity > 0 ? (
+            {product.stocks.map((stock) => {
+              return stock.quantity > 0 ? (
                 <Button
                   className={
-                    selectedSize === size.name
-                      ? "text-white bg-mainColor"
-                      : "text-black"
+                    selectedSize === stock.size_name ? "text-white bg-mainColor" : "text-black"
                   }
-                  key={size.name}
+                  key={stock.size_name}
                   onClick={() => {
-                    setSize(size.name);
-                    setCountInStock(size.quantity);
-                    setSelectedSize(size.name);
+                    setSelectedSize(stock.size_name);
+                    setCountInStock(stock.quantity);
                   }}
                 >
-                  {size.name}
+                  {stock.size_name}
                 </Button>
               ) : (
                 <Button
                   className="text-black line-through decoration-red-900 decoration-2 decoration-solid"
                   disabled
-                  key={size.name}
+                  key={stock.size_name}
                 >
-                  {size.name}
+                  {stock.size_name}
                 </Button>
-              )
-            )}
+              );
+            })}
           </ButtonGroup>
         </div>
         <div className="flex items-center mt-2.5 mb-5">
@@ -90,6 +95,35 @@ function Product({ product, toggleShoppingCartVisibility }) {
             >
               ({product.reviews_count})
             </Typography>
+            <div className="flex w-max gap-4 mt-2 ms-auto">
+              <ButtonGroup variant="outlined" color="black" size="sm">
+                {product.stocks.map((stock) => {
+                  return stock.quantity > 0 ? (
+                    <Button
+                      className={
+                        selectedColor === stock.color_name ? "text-white bg-mainColor" : "text-black"
+                      }
+                      key={stock.color_name}
+                      onClick={() => {
+                        setSelectedColor(stock.color_name);
+                        setCountInStock(stock.quantity);
+                      }}
+                    >
+                      {stock.color_name}
+                    </Button>
+                  ) : (
+                    <Button
+                      className="text-black line-through decoration-red-900 decoration-2 decoration-solid"
+                      disabled
+                      key={stock.color_name}
+                    >
+                      {stock.color_name}
+                    </Button>
+                  );
+                })}
+              </ButtonGroup>
+            </div>
+
           </div>
         </div>
         <div className="my-3">

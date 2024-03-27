@@ -2,7 +2,7 @@ import React from "react";
 import Product from "../components/Product";
 import SeeMoreButton from "./SeeMoreButton";
 
-function DisplayProducts(toggleShoppingCartVisibility, header, products, img) {
+function DisplayProducts(toggleShoppingCartVisibility, header, products, banner) {
     return (
         < div >
             {header && (
@@ -23,12 +23,15 @@ function DisplayProducts(toggleShoppingCartVisibility, header, products, img) {
                     ))}
                 </div>
                 <SeeMoreButton link="#" />
-                {img && (<img
-                    className="h-full w-full object-cover"
-                    src={require(`../images${img.image}`)}
-                    alt="Product"
-                />
-                )}
+                {/* {banner && (
+                    <link to={banner.url}>
+                        <img
+                            className="h-full w-full object-cover"
+                            src={require(`../images${banner.image}`)}
+                            alt="Product"
+                        />
+                    </link>
+                )} */}
             </div>
         </div>
     );
