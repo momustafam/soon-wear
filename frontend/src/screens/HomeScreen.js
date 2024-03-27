@@ -5,14 +5,20 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLandingPageData } from "../slices/landingPageSlice";
 import { Spinner } from "@material-tailwind/react";
+import ThankYou from "../components/ThankYou";
+import { resetCartItems } from "../slices/cartSlice";
+import { resetOrder } from "../slices/orderSlice";
 
 function HomeScreen({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.landingPage.loading);
   const top_selling = useSelector((state) => state.landingPage.top_selling);
   const discounts = useSelector((state) => state.landingPage.discounts);
-  const recently_arrived = useSelector((state) => state.landingPage.recently_arrived);
-  const banners = useSelector((state) => state.landingPage.banners)
+  const recently_arrived = useSelector(
+    (state) => state.landingPage.recently_arrived
+  );
+  const banners = useSelector((state) => state.landingPage.banners);
+  const { success } = useSelector((state) => state.order);
   const landingPageProducts = {
     discounts: discounts,
     top_selling: top_selling,
@@ -26,24 +32,28 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
   let customersReviews = [];
 
   banners.forEach((banner) => {
-    if (banner.location == 'main_banner_dynamic') {
-      mainBannersDynamic.push(banner)
-    } else if (banner.location == 'main_banner_static') {
-      mainBannersStatic.push(banner)
-    } else if (banner.location == 'top_selling_banner') {
-      topSellingBanner = banner
-    } else if (banner.location == 'recently_arrived_banner') {
-      recentlyArrivedBanner = banner
+    if (banner.location == "main_banner_dynamic") {
+      mainBannersDynamic.push(banner);
+    } else if (banner.location == "main_banner_static") {
+      mainBannersStatic.push(banner);
+    } else if (banner.location == "top_selling_banner") {
+      topSellingBanner = banner;
+    } else if (banner.location == "recently_arrived_banner") {
+      recentlyArrivedBanner = banner;
     } else {
-      customersReviews.push(banner)
+      customersReviews.push(banner);
     }
   });
-
-
 
   useEffect(() => {
     dispatch(getLandingPageData());
   }, []);
+
+  useEffect(() => {
+    if (success === true) {
+      dispatch(resetCartItems());
+    }
+  }, [success]);
 
   return loading ? (
     <div className="flex justify-center items-center">
@@ -51,12 +61,14 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
     </div>
   ) : (
     <div>
+      {/* Thank You Message for order completion */}
+      {success && <ThankYou />}
       {/* Start the upper banner */}
       <BannersCarousel banners={mainBannersDynamic} />
       {mainBannersStatic.length > 0 && (
         <div className="grid grid-cols-3 gap-5 mt-5 ml-2 mr-2 ">
           {mainBannersStatic.map((banner) => (
-            <Link to={banner.url}>
+            <Link key={banner.id} to={banner.url}>
               <img
                 className="h-full w-full object-cover"
                 src={require(`../images${banner.image}`)}
@@ -71,27 +83,34 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
 
       {/* Start looping over featured products and display each one in a setion with an image or carousel*/}
       {Object.keys(landingPageProducts).map((feature) => {
-        console.log(landingPageProducts)
         if (
           feature === "discounts" &&
           landingPageProducts[feature].length > 0
         ) {
-          return (
-            DisplayProducts(toggleShoppingCartVisibility, "أقوى التخفيضات", landingPageProducts[feature], topSellingBanner)
+          return DisplayProducts(
+            toggleShoppingCartVisibility,
+            "أقوى التخفيضات",
+            landingPageProducts[feature],
+            topSellingBanner
           );
         } else if (
           feature === "top_selling" &&
           landingPageProducts[feature].length > 0
         ) {
-          return (
-            DisplayProducts(toggleShoppingCartVisibility, "المنتجات الأكثر مبيعاً", landingPageProducts[feature], recentlyArrivedBanner)
+          return DisplayProducts(
+            toggleShoppingCartVisibility,
+            "المنتجات الأكثر مبيعاً",
+            landingPageProducts[feature],
+            recentlyArrivedBanner
           );
         } else if (
           feature === "recently_arrived" &&
           landingPageProducts[feature].length > 0
         ) {
-          return (
-            DisplayProducts(toggleShoppingCartVisibility, "وصل حديثاً", landingPageProducts[feature])
+          return DisplayProducts(
+            toggleShoppingCartVisibility,
+            "وصل حديثاً",
+            landingPageProducts[feature]
           );
         }
         return null;
@@ -143,8 +162,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
         </div>
       </div>
       {/* End dispalying icons represents soon wear features that soon wear offers to its cusomters */}
-
-    </div >
+    </div>
   );
 }
 

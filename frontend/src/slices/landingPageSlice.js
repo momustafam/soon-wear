@@ -16,7 +16,6 @@ const landingPageSlice = createSlice({
     builder
       .addCase(getLandingPageData.fulfilled, (state, { payload }) => {
         const data = payload.data;
-        console.log(data)
         state.categories = data.categories;
         state.banners = data.banners;
         state.discounts = data.top_discounts;
@@ -46,14 +45,14 @@ export const getLandingPageData = createAsyncThunk(
           "Content-type": "application/json",
         },
       };
-      const data = axios.get(
-        "http://192.168.1.9:8000/api/v1/landing-page?format=json",
+      const data = await axios.get(
+        "http://localhost:8000/api/v1/landing-page?format=json",
         config
       );
-      console.log(data)
       return data;
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching landing page data:", error);
+      throw error;
     }
   }
 );

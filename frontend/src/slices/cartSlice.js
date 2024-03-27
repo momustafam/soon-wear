@@ -57,6 +57,8 @@ const cartSlice = createSlice({
           [payload.key]: payload.value,
         };
       }
+
+      console.log(payload);
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
   },
