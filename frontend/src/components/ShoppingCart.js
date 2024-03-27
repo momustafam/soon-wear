@@ -169,7 +169,7 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                                       <Select
                                         size="md"
                                         label="اضغط هنا لتعديل الكمية"
-                                        value={product.qty}
+                                        value={product.qty.toString()}
                                         onChange={(val) => {
                                           handleChangeQty(
                                             product.id,
@@ -200,49 +200,51 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                       )}
                     </div>
 
-                    <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                      <div className="flex flex-row-reverse justify-between text-base font-medium text-gray-900">
-                        <p>الاجمالي</p>
-                        <p className="font-bold">
-                          <span>£{discountTotal}</span>
+                    {cartItems.length !== 0 && (
+                      <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+                        <div className="flex flex-row-reverse justify-between text-base font-medium text-gray-900">
+                          <p>الاجمالي</p>
+                          <p className="font-bold">
+                            <span>£{discountTotal}</span>
 
-                          {total !== discountTotal && (
-                            <span className="text-sm font-bold text-gray-900 line-through decoration-red-900 decoration-2 decoration-solid ms-4">
-                              £{total}
-                            </span>
-                          )}
+                            {total !== discountTotal && (
+                              <span className="text-sm font-bold text-gray-900 line-through decoration-red-900 decoration-2 decoration-solid ms-4">
+                                £{total}
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                        <p className="mt-0.5 text-sm text-gray-500">
+                          مصاريف الشحن تحسب عند تأكيد الطلب
                         </p>
+                        <div className="mt-6">
+                          <Link to="/placeorder">
+                            <button
+                              className="flex items-center justify-center rounded-md border border-transparent bg-mainColor px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-mainColor/90"
+                              onClick={() => {
+                                setOpen(false);
+                                toggleShoppingCartVisibility();
+                              }}
+                            >
+                              تأكيد الطلب
+                            </button>
+                          </Link>
+                        </div>
+                        <div className="mt-3 flex justify-center text-center text-sm text-gray-500">
+                          <p>
+                            <button
+                              type="button"
+                              className="font-medium text-mainColor hover:text-mainColor/90"
+                              onClick={() => setOpen(false)}
+                            >
+                              تكملة التصفح
+                              <span aria-hidden="true"> &larr;</span>
+                            </button>
+                            او{" "}
+                          </p>
+                        </div>
                       </div>
-                      <p className="mt-0.5 text-sm text-gray-500">
-                        مصاريف الشحن تحسب عند تأكيد الطلب
-                      </p>
-                      <div className="mt-6">
-                        <Link to="/placeorder">
-                          <button
-                            className="flex items-center justify-center rounded-md border border-transparent bg-mainColor px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-mainColor/90"
-                            onClick={() => {
-                              setOpen(false);
-                              toggleShoppingCartVisibility();
-                            }}
-                          >
-                            تأكيد الطلب
-                          </button>
-                        </Link>
-                      </div>
-                      <div className="mt-3 flex justify-center text-center text-sm text-gray-500">
-                        <p>
-                          <button
-                            type="button"
-                            className="font-medium text-mainColor hover:text-mainColor/90"
-                            onClick={() => setOpen(false)}
-                          >
-                            تكملة التصفح
-                            <span aria-hidden="true"> &larr;</span>
-                          </button>
-                          او{" "}
-                        </p>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

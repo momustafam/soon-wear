@@ -41,6 +41,10 @@ function Header({ toggleShoppingCartVisibility }) {
     window.addEventListener("resize", handleResize);
   }, [navbarSearch]);
 
+  useEffect(() => {
+    dispatch(getLandingPageData());
+  }, []);
+
   const handleMenuClick = () => {
     // Toggle the 'active' class to control visibility
     if (navbarSearch) {
@@ -170,8 +174,9 @@ function Header({ toggleShoppingCartVisibility }) {
                           التصنيفات
                           <ChevronDownIcon
                             strokeWidth={2.5}
-                            className={`h-3.5 w-3.5 transition-transform ${openMenu ? "rotate-180" : ""
-                              }`}
+                            className={`h-3.5 w-3.5 transition-transform ${
+                              openMenu ? "rotate-180" : ""
+                            }`}
                           />
                         </Button>
                       </MenuHandler>
@@ -198,8 +203,9 @@ function Header({ toggleShoppingCartVisibility }) {
                 <li>
                   <Link
                     to="/"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 0 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 0 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(0)}
                   >
                     الرئيسية
@@ -208,8 +214,9 @@ function Header({ toggleShoppingCartVisibility }) {
                 <li>
                   <Link
                     to="/products?feature=top_discounts"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 1 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 1 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(1)}
                   >
                     التخفيضات
@@ -218,8 +225,9 @@ function Header({ toggleShoppingCartVisibility }) {
                 <li>
                   <Link
                     to="/products?feature=top_selling"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 2 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 2 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(2)}
                   >
                     الأعلى مبيعاً
@@ -228,8 +236,9 @@ function Header({ toggleShoppingCartVisibility }) {
                 <li>
                   <Link
                     to="/products?feature=recently_arrived"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 3 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 3 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(3)}
                   >
                     وصل حديثاً
@@ -238,8 +247,9 @@ function Header({ toggleShoppingCartVisibility }) {
                 <li>
                   <Link
                     to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(4)}
                   >
                     تواصل معنا
@@ -279,7 +289,23 @@ function Header({ toggleShoppingCartVisibility }) {
                   type="button"
                   className="inline-flex flex-col items-center justify-center px-5 border-e border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 group dark:border-gray-600"
                 >
-                  <svg className="w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">  <line x1="8" y1="6" x2="23" y2="6" />  <line x1="8" y1="12" x2="23" y2="12" />  <line x1="8" y1="18" x2="23" y2="18" />  <line x1="3" y1="6" x2="3.01" y2="6" />  <line x1="3" y1="12" x2="3.01" y2="12" />  <line x1="3" y1="18" x2="3.01" y2="18" /></svg>
+                  <svg
+                    className="w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    {" "}
+                    <line x1="8" y1="6" x2="23" y2="6" />{" "}
+                    <line x1="8" y1="12" x2="23" y2="12" />{" "}
+                    <line x1="8" y1="18" x2="23" y2="18" />{" "}
+                    <line x1="3" y1="6" x2="3.01" y2="6" />{" "}
+                    <line x1="3" y1="12" x2="3.01" y2="12" />{" "}
+                    <line x1="3" y1="18" x2="3.01" y2="18" />
+                  </svg>
                   <span className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-mainColor dark:group-hover:text-mainColor">
                     التصنيفات
                   </span>
