@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status, viewsets
 from .models import Product, Category, Banner
 from .serializers import ProductSerializer, CategorySerializer, BannerSerializer
+from collections import defaultdict
 
 class ProductView(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -34,6 +35,9 @@ class CategoryView(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     ordering_fields = ['name']
     search_fields = ['name']
+    pagination_class = None
+
+
 
 class LandingPageView(APIView):
     def get(self, request):
@@ -45,8 +49,20 @@ class LandingPageView(APIView):
                 - All Banners
         '''
         features = ['top_discounts', 'top_selling', 'recently_arrived']
+        banners_locations = [
+            'main_banner_dynamic', 
+            'main_banner_static', 
+            'top_selling_banner',
+            'recently_arrived_banner',
+            'customer_review']
         data = {}
-        data['banners'] = BannerSerializer(Banner.objects.all(), many=True).data
+        data['banners'] = {}
+                
+        # Group banners data by location
+        for location in banners_locations:
+            is_list = True if location not in ['top_selling_banner', 'recently_arrived_banner'] else False
+            data['banners'][location] = BannerSerializer(Banner.objects.filter(location=location), many=True).data
+            
         for feature in features:
             data[feature] = ProductSerializer(Product.objects.filter(feature=feature)[:4], many=True).data
 

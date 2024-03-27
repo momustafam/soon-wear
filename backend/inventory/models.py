@@ -16,14 +16,14 @@ BANNER_TYPES = [
     ('top_selling_banner', 'فوق الأعلى مبيعاً'), 
     ('recently_arrived_banner', 'فوق وصل حديثاً'),
     ('customer_review', 'آراء العملاء')
-    ]
+]
 
 class Category(models.Model):
     name = models.CharField(
         max_length=50, 
         unique=True, 
         verbose_name="الاسم"
-        )
+    )
     
     def __str__(self):
         return self.name
@@ -37,7 +37,7 @@ class Size(models.Model):
         max_length=50, 
         unique=True, 
         verbose_name="الاسم"
-        )
+    )
 
     def __str__(self):
         return self.name
@@ -51,7 +51,7 @@ class Color(models.Model):
         max_length=50, 
         unique=True, 
         verbose_name="الاسم"
-        )
+    )
     
     def __str__(self):
         return self.name
@@ -66,45 +66,45 @@ class Product(models.Model):
         unique=True,
         verbose_name="الاسم",
         db_index=True
-        )
+    )
     description = models.CharField(
         max_length=255, 
         blank=True, 
         verbose_name="الوصف"
-        )
+    )
     feature = models.CharField(
         max_length=20,
         choices=AVAILABLE_FEATURES,
         default='None',
         verbose_name="الميزة",
         db_index=True
-        )
+    )
     price = models.PositiveIntegerField(
         default=0, 
         verbose_name="السعر"
-        )
+    )
     reviews_count = models.PositiveBigIntegerField(
         default=0, 
         verbose_name='عدد المراجعات'
-        )
+    )
     discount = models.PositiveIntegerField(
         default=0, 
         verbose_name="الخصم بالجنية"
-        )
+    )
     rating = models.DecimalField(
-        default=0,
+        default=0.0,
         max_digits=2,
         decimal_places = 1,
         validators=[MaxValueValidator(5), MinValueValidator(0)],
         verbose_name = "تقييم المنتج"
-        )
+    )
     category = models.ForeignKey(
         Category, 
         on_delete=models.PROTECT, 
         related_name='products', 
         verbose_name="الفئة",
         db_index=True
-        )
+    )
     
     class Meta:
         verbose_name = "المنتج"
@@ -129,40 +129,53 @@ class Stock(models.Model):
     product = models.ForeignKey(
         Product, 
         on_delete=models.CASCADE, 
-        related_name="stock", 
+        related_name="stocks", 
         verbose_name="مخزون"
-        )
-    size = models.OneToOneField(
+    )
+    size = models.ForeignKey(
         Size, 
         on_delete=models.PROTECT, 
-        verbose_name="المقاس"
-        )
-    color = models.OneToOneField(
+        verbose_name="المقاس",
+        unique=False,
+    )
+    color = models.ForeignKey(
         Color, 
         on_delete=models.PROTECT, 
-        verbose_name='اللون'
-        )
+        verbose_name='اللون',
+        unique=False,
+    )
     quantity = models.PositiveIntegerField(
         default=0, 
         verbose_name="الكمية"
-        )
+    )
 
     class Meta:
         verbose_name = "مخزون"
         verbose_name_plural = "مخزون المنتج"
+        unique_together = (('color', 'size', 'product'))
 
 class ProductImage(models.Model):
     image = models.ImageField(
         upload_to='products/', 
-        verbose_name="الصورة"
-        )
+        verbose_name="الصورة",
+        unique=True,
+    )
     product = models.ForeignKey(
         Product, 
         on_delete=models.CASCADE, 
         related_name="images", 
         verbose_name="المنتج"
-        )
+    )
+    color = models.ForeignKey(
+        Color,
+        on_delete = models.PROTECT,
+        verbose_name = "لون المنتج اللى ف الصورة"
+    )
     
+    class Meta:
+        verbose_name = "صورة المنتج"
+        verbose_name_plural = "صور المنتجات"
+        
     def __str__(self):
         return os.path.basename(self.image.name)
 
@@ -171,10 +184,6 @@ class ProductImage(models.Model):
             os.remove(self.image.path)       
         super().delete(*args, **kwargs)
     
-    class Meta:
-        verbose_name = "صورة المنتج"
-        verbose_name_plural = "صور المنتجات"
-        
     def save(self, *args, **kwargs):
         try:
             old_image = ProductImage.objects.get(pk=self.pk)
@@ -192,7 +201,7 @@ class Banner(models.Model):
         max_length=50,
         verbose_name="موقعها فى الصفحة الرئيسية",
         choices=BANNER_TYPES
-        )
+    )
     
     class Meta:
         verbose_name = "الرآية"

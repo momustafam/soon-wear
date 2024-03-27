@@ -1,21 +1,22 @@
 from rest_framework import serializers
+from collections import defaultdict
 from .models import Product, ProductImage, Stock, Category, Banner
 
-class ImageSerializer(serializers.ModelSerializer):
+class ProductImageSerializer(serializers.ModelSerializer):
+    path = serializers.CharField(max_length=100, source='image')
+    color = serializers.CharField(max_length=50, source='color.name')
     class Meta:
         model = ProductImage
-        fields = ['image']
+        fields = ['path', 'color']
     
-    def to_representation(self, instance):
-        image = super().to_representation(instance)
-        return image.get("image")
         
-class ProductSizeSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source="size.name")
-    
+class StockSerializer(serializers.ModelSerializer):
+    size_name = serializers.CharField(source="size.name")
+    color_name = serializers.CharField(source="color.name")
+
     class Meta:
         model = Stock
-        fields = ['id', 'size', 'color', 'quantity']
+        fields = ['id', 'size_name', 'color_name', 'quantity']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,11 +26,12 @@ class CategorySerializer(serializers.ModelSerializer):
 class BannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Banner
-        fields = ['image', 'url', 'location']
+        fields = ['image', 'url']
+
 
 class ProductSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many=True)
-    sizes = ProductSizeSerializer(many=True, source="productsize_set")
+    images = ProductImageSerializer(many=True)
+    stocks = StockSerializer(many=True)
     
     class Meta:
         model = Product
@@ -43,6 +45,20 @@ class ProductSerializer(serializers.ModelSerializer):
             'rating',
             'reviews_count',
             'category',
-            'stock',
-            'images'
+            'stocks',
+            'images',
             ]
+        
+    def to_representation(self, instance):
+        # Get the original representation from the parent class
+        representation = super().to_representation(instance)
+        
+        # Group images by color
+        unique_images = defaultdict(list)
+        for image in representation['images']:
+            unique_images[image['color']].append(image['path'])
+
+        # Replace the original images with the unique ones
+        representation['images'] = unique_images
+        
+        return representation
