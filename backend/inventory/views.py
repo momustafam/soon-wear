@@ -1,14 +1,14 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status, viewsets
-from .models import Product, Category, Banner
-from .serializers import ProductSerializer, CategorySerializer, BannerSerializer
-from collections import defaultdict
+from .models import Product, Category, Banner, Color, Size
+from .serializers import ProductSerializer, CategorySerializer, BannerSerializer, SizeSerializer, ColorSerializer
 
 class ProductView(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     ordering_fields = ['price', 'discount', 'rating']
+    search_fields = ['name']
     
     def get_queryset(self):
         # Get the queryset before filtering
@@ -38,17 +38,17 @@ class ProductView(viewsets.ModelViewSet):
         # Extract query parameters from request
         feature = self.request.query_params.get('feature', None)
         category_id = self.request.query_params.get('category', None)
-        size = self.request.query_params.get('size', None)
-        color = self.request.query_params.get('color', None)
+        size_id = self.request.query_params.get('size', None)
+        color_id = self.request.query_params.get('color', None)
         
         if feature is not None:
             queryset = queryset.filter(feature=feature)
         if category_id is not None:
             queryset = queryset.filter(category__id=category_id)
-        if size is not None:
-            queryset = queryset.filter(stocks__size__name=size)
-        if color is not None:
-            queryset = queryset.filter(stocks__color__name=color)    
+        if size_id is not None:
+            queryset = queryset.filter(stocks__size__name=size_id)
+        if color_id is not None:
+            queryset = queryset.filter(stocks__color__name=color_id)    
         return queryset
 
 class CategoryView(viewsets.ModelViewSet):
@@ -58,6 +58,19 @@ class CategoryView(viewsets.ModelViewSet):
     search_fields = ['name']
     pagination_class = None
 
+class ColorView(viewsets.ModelViewSet):
+    queryset = Color.objects.all()
+    serializer_class = ColorSerializer
+    ordering_fields = ['name']
+    search_fields = ['name']
+    pagination_class = None
+    
+class SizeView(viewsets.ModelViewSet):
+    queryset = Size.objects.all()
+    serializer_class = SizeSerializer
+    ordering_fields = ['name']
+    search_fields = ['name']
+    pagination_class = None
 
 class LandingPageView(APIView):
     def get(self, request):

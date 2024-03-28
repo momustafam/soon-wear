@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from collections import defaultdict
-from .models import Product, ProductImage, Stock, Category, Banner
+from .models import Product, ProductImage, Stock, Category, Banner, Size, Color
 
 class ProductImageSerializer(serializers.ModelSerializer):
     path = serializers.CharField(max_length=100, source='image')
@@ -9,7 +9,6 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = ProductImage
         fields = ['path', 'color']
     
-        
 class StockSerializer(serializers.ModelSerializer):
     size_name = serializers.CharField(source="size.name")
     color_name = serializers.CharField(source="color.name")
@@ -28,6 +27,15 @@ class BannerSerializer(serializers.ModelSerializer):
         model = Banner
         fields = ['image', 'url']
 
+class SizeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Size
+        fields = ['id', 'name']
+        
+class ColorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Color
+        fields = ['id', 'name']
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True)

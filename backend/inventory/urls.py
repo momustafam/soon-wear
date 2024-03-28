@@ -7,7 +7,8 @@ urlpatterns = [
     path('categories/<int:pk>', views.CategoryView.as_view({'get': 'retrieve'}), name='category'),
     path('products', views.ProductView.as_view({'get': 'list'}), name="products"),
     path('products/<int:pk>', views.ProductView.as_view({'get': 'retrieve'}), name="product"),
-    # path('colors', views),
-    # path('sizes'),
-    # path('shipping-fees', views.)
+    path('colors', views.ColorView.as_view({'get': 'list'}), name='colors'),
+    path('colors/<int:pk>', views.ColorView.as_view({'get': 'retrieve'}), name='color'),
+    path('sizes', views.SizeView.as_view({'get': 'list'}), name='sizes'),
+    path('sizes/<int:pk>', views.SizeView.as_view({'get' 'retrieve'}), name='size')
 ]

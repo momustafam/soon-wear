@@ -22,9 +22,10 @@ class Category(models.Model):
     name = models.CharField(
         max_length=50, 
         unique=True, 
-        verbose_name="الاسم"
+        verbose_name="الاسم",
+        db_index=True,
     )
-    
+
     def __str__(self):
         return self.name
     
@@ -77,7 +78,6 @@ class Product(models.Model):
         choices=AVAILABLE_FEATURES,
         default='None',
         verbose_name="الميزة",
-        db_index=True
     )
     price = models.PositiveIntegerField(
         default=0, 
@@ -103,7 +103,6 @@ class Product(models.Model):
         on_delete=models.PROTECT, 
         related_name='products', 
         verbose_name="الفئة",
-        db_index=True
     )
     
     class Meta:
@@ -136,13 +135,11 @@ class Stock(models.Model):
         Size, 
         on_delete=models.PROTECT, 
         verbose_name="المقاس",
-        unique=False,
     )
     color = models.ForeignKey(
         Color, 
         on_delete=models.PROTECT, 
         verbose_name='اللون',
-        unique=False,
     )
     quantity = models.PositiveIntegerField(
         default=0, 
@@ -158,7 +155,6 @@ class ProductImage(models.Model):
     image = models.ImageField(
         upload_to='products/', 
         verbose_name="الصورة",
-        unique=True,
     )
     product = models.ForeignKey(
         Product, 
