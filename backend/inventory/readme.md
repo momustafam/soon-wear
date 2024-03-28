@@ -277,9 +277,9 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
 
 #### categories
 
-- URL: */categories
+- URL: */categories || */categories/<int:pk> (for single category)
 - Allow: GET, HEAD, OPTIONS
-- Description: Retrieve data of all available categories (id, name).
+- Description: Retrieve categories data (id, name).
 - Authentication: Not Required
 - Request Parameters: [ordering={categoryName}, search={categoryName}]
 - Response:
@@ -304,3 +304,205 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
 ]
 ```
   
+#### products
+
+- URL: */products || */products/<int:pk> (for single product)
+- Allow: GET, HEAD, OPTIONS
+- Description: Retrieve products data.
+- Authentication: Not Required
+- Request Parameters: ordering=[price, rating, discount], search=[name], feature={featureName}, category={categoryID}, size={sizeID}, color={colorID}
+- Response:
+  ```json
+  {
+    "count": 3,
+    "next": "http://localhost:8000/api/v1/products?page=2",
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "name": "ملحفة سوون",
+            "description": "قطعة قطن 100% معالجة ضد أي انكماش ،وكمان مميزة جدا وهتناسب معاكي لأي خروجة، وتعملي ليها استايلنج بكذا شكل مُختلف.😍❤️",
+            "feature": "top_discounts",
+            "price": 650,
+            "discount": 70,
+            "rating": "0.0",
+            "reviews_count": 0,
+            "category": 1,
+            "stocks": [
+                {
+                    "id": 1,
+                    "size_name": "من 60 ل 80 كيلو",
+                    "color_name": "أسود",
+                    "quantity": 29
+                },
+                {
+                    "id": 2,
+                    "size_name": "من 60 ل 80 كيلو",
+                    "color_name": "أحمر",
+                    "quantity": 14
+                },
+                {
+                    "id": 4,
+                    "size_name": "من 60 ل 80 كيلو",
+                    "color_name": "رمادى",
+                    "quantity": 0
+                },
+                {
+                    "id": 5,
+                    "size_name": "من 60 ل 80 كيلو",
+                    "color_name": "أبيض",
+                    "quantity": 3
+                },
+                {
+                    "id": 6,
+                    "size_name": "من 80 ل 100 ك",
+                    "color_name": "أحمر",
+                    "quantity": 5
+                },
+                {
+                    "id": 7,
+                    "size_name": "من 80 ل 100 ك",
+                    "color_name": "أسود",
+                    "quantity": 20
+                },
+                {
+                    "id": 8,
+                    "size_name": "من 120 ل 140 ك",
+                    "color_name": "أحمر",
+                    "quantity": 5
+                },
+                {
+                    "id": 9,
+                    "size_name": "من 120 ل 140 ك",
+                    "color_name": "أبيض",
+                    "quantity": 45
+                },
+                {
+                    "id": 10,
+                    "size_name": "من 120 ل 140 ك",
+                    "color_name": "رمادى",
+                    "quantity": 8
+                },
+                {
+                    "id": 11,
+                    "size_name": "من 120 ل 140 ك",
+                    "color_name": "أسود",
+                    "quantity": 0
+                }
+            ],
+            "images": {
+                "أسود": [
+                    "products/product_4.jpg",
+                    "products/header-logo.jpg",
+                    "products/adds1.jpg"
+                ],
+                "رمادى": [
+                    "products/product_6.jpg",
+                    "products/sweat-shirt-dress-sky.jpg"
+                ],
+                "أبيض": [
+                    "products/adds2.jpg",
+                    "products/product_12.jpg"
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "name": "سويت شيرت سوون",
+            "description": "قطعة قطن 100% معالجة ضد أي انكماش ،وكمان مميزة جدا وهتناسب معاكي لأي خروجة، وتعملي ليها استايلنج بكذا شكل مُختلف.😍❤️",
+            "feature": "top_selling",
+            "price": 760,
+            "discount": 250,
+            "rating": "0.0",
+            "reviews_count": 0,
+            "category": 2,
+            "stocks": [
+                {
+                    "id": 12,
+                    "size_name": "من 80 ل 100 ك",
+                    "color_name": "أسود",
+                    "quantity": 45
+                },
+                {
+                    "id": 13,
+                    "size_name": "من 80 ل 100 ك",
+                    "color_name": "رمادى",
+                    "quantity": 14
+                },
+                {
+                    "id": 14,
+                    "size_name": "من 60 ل 80 كيلو",
+                    "color_name": "أحمر",
+                    "quantity": 12
+                }
+            ],
+            "images": {
+                "أسود": [
+                    "products/adds1_DVRguzh.jpg",
+                    "products/product_10.jpg"
+                ],
+                "رمادى": [
+                    "products/product_6_wqHjnc8.jpg"
+                ],
+                "أحمر": [
+                    "products/product_3.jpg"
+                ]
+            }
+        }
+    ]
+  }
+``
+#### sizes
+
+- URL: */sizes || */sizes/<int:pk> (for single size)
+- Allow: GET, HEAD, OPTIONS
+- Description: Retrieve sizes data.
+- Authentication: Not Required
+- Request Parameters: ordering={sizeName}, search={sizeName}
+- Response:
+```json
+[
+    {
+        "id": 1,
+        "name": "من 60 ل 80 كيلو"
+    },
+    {
+        "id": 2,
+        "name": "من 80 ل 100 ك"
+    },
+    {
+        "id": 3,
+        "name": "من 120 ل 140 ك"
+    }
+]
+```
+
+#### colors
+
+- URL: */colors || */products/<int:pk> (for single color)
+- Allow: GET, HEAD, OPTIONS
+- Description: Retrieve colors data (id, name).
+- Authentication: Not Required
+- Request Parameters: ordering={colorName}, search={colorName}
+- Response:
+- 
+```json
+[
+    {
+        "id": 1,
+        "name": "أسود"
+    },
+    {
+        "id": 2,
+        "name": "أحمر"
+    },
+    {
+        "id": 4,
+        "name": "رمادى"
+    },
+    {
+        "id": 5,
+        "name": "أبيض"
+    }
+]
+```
