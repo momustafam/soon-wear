@@ -9,6 +9,7 @@ import ThankYou from "../components/ThankYou";
 import { resetCartItems } from "../slices/cartSlice";
 import { resetOrder } from "../slices/orderSlice";
 
+
 function HomeScreen({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.landingPage.loading);
@@ -116,6 +117,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
       {/* <BannersCarousel banners={customersReviews} /> */}
 
       {/* Start dispalying icons represents soon wear features that soon wear offers to its cusomters */}
+
       <div className="flex items-center m-auto mt-20 mb-20">
         <div className="ml-5 mr-5 text-center">
           <img

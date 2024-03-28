@@ -9,7 +9,28 @@ class ProductView(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     ordering_fields = ['price', 'discount', 'rating']
-    search_fields = ['name']
+    
+    def get_queryset(self):
+        # Get the queryset before filtering
+        queryset = super().get_queryset()
+
+        # Get the query paramaters
+        feature = self.request.query_params.get('feature')
+        category_id = self.request.query_params.get('category')
+        size_id = self.request.query_params.get('size')
+        color_id = self.request.query_params.get('size')
+        
+        # Filter queryset by given paramters
+        if feature is not None:
+            queryset = queryset.filter(feature=feature)
+        if category_id is not None:
+            queryset = queryset.filter(category=category_id)
+        if size_id is not None:
+            queryset = queryset.filter(stocks__size__id=size_id)
+        if color_id is not None:
+            queryset = queryset.filter(stocks__color__id=color_id)
+
+        return self.queryset
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -17,17 +38,17 @@ class ProductView(viewsets.ModelViewSet):
         # Extract query parameters from request
         feature = self.request.query_params.get('feature', None)
         category_id = self.request.query_params.get('category', None)
-        size_id = self.request.query_params.get('size', None)
-        color_id = self.request.query_params.get('color', None)
+        size = self.request.query_params.get('size', None)
+        color = self.request.query_params.get('color', None)
         
         if feature is not None:
             queryset = queryset.filter(feature=feature)
         if category_id is not None:
             queryset = queryset.filter(category__id=category_id)
-        if size_id is not None:
-            queryset = queryset.filter(quantities__size__id=size_id)
-        if color_id is not None:
-            queryset = queryset.filter(quantities__color__id=color_id)    
+        if size is not None:
+            queryset = queryset.filter(stocks__size__name=size)
+        if color is not None:
+            queryset = queryset.filter(stocks__color__name=color)    
         return queryset
 
 class CategoryView(viewsets.ModelViewSet):
@@ -36,7 +57,6 @@ class CategoryView(viewsets.ModelViewSet):
     ordering_fields = ['name']
     search_fields = ['name']
     pagination_class = None
-
 
 
 class LandingPageView(APIView):
@@ -60,7 +80,6 @@ class LandingPageView(APIView):
                 
         # Group banners data by location
         for location in banners_locations:
-            is_list = True if location not in ['top_selling_banner', 'recently_arrived_banner'] else False
             data['banners'][location] = BannerSerializer(Banner.objects.filter(location=location), many=True).data
             
         for feature in features:
