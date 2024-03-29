@@ -118,69 +118,65 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
             "discount": 70,
             "rating": "0.0",
             "reviews_count": 0,
-            "category": 1,
-            "stocks": [
-                {
-                    "id": 1,
-                    "size_name": "من 60 ل 80 كيلو",
-                    "color_name": "أسود",
-                    "quantity": 29
-                },
-                {
-                    "id": 2,
-                    "size_name": "من 60 ل 80 كيلو",
-                    "color_name": "أحمر",
-                    "quantity": 14
-                },
-                {
-                    "id": 4,
-                    "size_name": "من 60 ل 80 كيلو",
-                    "color_name": "رمادى",
-                    "quantity": 0
-                },
-                {
-                    "id": 5,
-                    "size_name": "من 60 ل 80 كيلو",
-                    "color_name": "أبيض",
-                    "quantity": 3
-                },
-                {
-                    "id": 6,
-                    "size_name": "من 80 ل 100 ك",
-                    "color_name": "أحمر",
-                    "quantity": 5
-                },
-                {
-                    "id": 7,
-                    "size_name": "من 80 ل 100 ك",
-                    "color_name": "أسود",
-                    "quantity": 20
-                },
-                {
-                    "id": 8,
-                    "size_name": "من 120 ل 140 ك",
-                    "color_name": "أحمر",
-                    "quantity": 5
-                },
-                {
-                    "id": 9,
-                    "size_name": "من 120 ل 140 ك",
-                    "color_name": "أبيض",
-                    "quantity": 45
-                },
-                {
-                    "id": 10,
-                    "size_name": "من 120 ل 140 ك",
-                    "color_name": "رمادى",
-                    "quantity": 8
-                },
-                {
-                    "id": 11,
-                    "size_name": "من 120 ل 140 ك",
-                    "color_name": "أسود",
-                    "quantity": 0
-                }
-            ],
+            "category_id": 1,
+            "stocks": {
+                "من 60 ل 80 كيلو": [
+                    {
+                        "stock_id": 1,
+                        "color_name": "أسود",
+                        "quantity": 29
+                    },
+                    {
+                        "stock_id": 2,
+                        "color_name": "أحمر",
+                        "quantity": 14
+                    },
+                    {
+                        "stock_id": 4,
+                        "color_name": "رمادى",
+                        "quantity": 0
+                    },
+                    {
+                        "stock_id": 5,
+                        "color_name": "أبيض",
+                        "quantity": 3
+                    }
+                ],
+                "من 80 ل 100 ك": [
+                    {
+                        "stock_id": 6,
+                        "color_name": "أحمر",
+                        "quantity": 5
+                    },
+                    {
+                        "stock_id": 7,
+                        "color_name": "أسود",
+                        "quantity": 20
+                    }
+                ],
+                "من 120 ل 140 ك": [
+                    {
+                        "stock_id": 8,
+                        "color_name": "أحمر",
+                        "quantity": 5
+                    },
+                    {
+                        "stock_id": 9,
+                        "color_name": "أبيض",
+                        "quantity": 45
+                    },
+                    {
+                        "stock_id": 10,
+                        "color_name": "رمادى",
+                        "quantity": 8
+                    },
+                    {
+                        "stock_id": 11,
+                        "color_name": "أسود",
+                        "quantity": 0
+                    }
+                ]
+            },
             "images": {
                 "أسود": [
                     "products/product_4.jpg",
@@ -208,27 +204,28 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
             "discount": 250,
             "rating": "0.0",
             "reviews_count": 0,
-            "category": 2,
-            "stocks": [
-                {
-                    "id": 12,
-                    "size_name": "من 80 ل 100 ك",
-                    "color_name": "أسود",
-                    "quantity": 45
-                },
-                {
-                    "id": 13,
-                    "size_name": "من 80 ل 100 ك",
-                    "color_name": "رمادى",
-                    "quantity": 14
-                },
-                {
-                    "id": 14,
-                    "size_name": "من 60 ل 80 كيلو",
-                    "color_name": "أحمر",
-                    "quantity": 12
-                }
-            ],
+            "category_id": 2,
+            "stocks": {
+                "من 80 ل 100 ك": [
+                    {
+                        "stock_id": 12,
+                        "color_name": "أسود",
+                        "quantity": 45
+                    },
+                    {
+                        "stock_id": 13,
+                        "color_name": "رمادى",
+                        "quantity": 14
+                    }
+                ],
+                "من 60 ل 80 كيلو": [
+                    {
+                        "stock_id": 14,
+                        "color_name": "أحمر",
+                        "quantity": 12
+                    }
+                ]
+            },
             "images": {
                 "أسود": [
                     "products/adds1_DVRguzh.jpg",
@@ -253,15 +250,16 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
             "discount": 90,
             "rating": "0.0",
             "reviews_count": 0,
-            "category": 3,
-            "stocks": [
-                {
-                    "id": 15,
-                    "size_name": "من 120 ل 140 ك",
-                    "color_name": "أبيض",
-                    "quantity": 20
-                }
-            ],
+            "category_id": 3,
+            "stocks": {
+                "من 120 ل 140 ك": [
+                    {
+                        "stock_id": 15,
+                        "color_name": "أبيض",
+                        "quantity": 20
+                    }
+                ]
+            },
             "images": {
                 "أبيض": [
                     "products/product_6_Yl1K9wk.jpg"
@@ -327,69 +325,65 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
             "discount": 70,
             "rating": "0.0",
             "reviews_count": 0,
-            "category": 1,
-            "stocks": [
-                {
-                    "id": 1,
-                    "size_name": "من 60 ل 80 كيلو",
-                    "color_name": "أسود",
-                    "quantity": 29
-                },
-                {
-                    "id": 2,
-                    "size_name": "من 60 ل 80 كيلو",
-                    "color_name": "أحمر",
-                    "quantity": 14
-                },
-                {
-                    "id": 4,
-                    "size_name": "من 60 ل 80 كيلو",
-                    "color_name": "رمادى",
-                    "quantity": 0
-                },
-                {
-                    "id": 5,
-                    "size_name": "من 60 ل 80 كيلو",
-                    "color_name": "أبيض",
-                    "quantity": 3
-                },
-                {
-                    "id": 6,
-                    "size_name": "من 80 ل 100 ك",
-                    "color_name": "أحمر",
-                    "quantity": 5
-                },
-                {
-                    "id": 7,
-                    "size_name": "من 80 ل 100 ك",
-                    "color_name": "أسود",
-                    "quantity": 20
-                },
-                {
-                    "id": 8,
-                    "size_name": "من 120 ل 140 ك",
-                    "color_name": "أحمر",
-                    "quantity": 5
-                },
-                {
-                    "id": 9,
-                    "size_name": "من 120 ل 140 ك",
-                    "color_name": "أبيض",
-                    "quantity": 45
-                },
-                {
-                    "id": 10,
-                    "size_name": "من 120 ل 140 ك",
-                    "color_name": "رمادى",
-                    "quantity": 8
-                },
-                {
-                    "id": 11,
-                    "size_name": "من 120 ل 140 ك",
-                    "color_name": "أسود",
-                    "quantity": 0
-                }
-            ],
+            "category_id": 1,
+            "stocks": {
+                "من 60 ل 80 كيلو": [
+                    {
+                        "stock_id": 1,
+                        "color_name": "أسود",
+                        "quantity": 29
+                    },
+                    {
+                        "stock_id": 2,
+                        "color_name": "أحمر",
+                        "quantity": 14
+                    },
+                    {
+                        "stock_id": 4,
+                        "color_name": "رمادى",
+                        "quantity": 0
+                    },
+                    {
+                        "stock_id": 5,
+                        "color_name": "أبيض",
+                        "quantity": 3
+                    }
+                ],
+                "من 80 ل 100 ك": [
+                    {
+                        "stock_id": 6,
+                        "color_name": "أحمر",
+                        "quantity": 5
+                    },
+                    {
+                        "stock_id": 7,
+                        "color_name": "أسود",
+                        "quantity": 20
+                    }
+                ],
+                "من 120 ل 140 ك": [
+                    {
+                        "stock_id": 8,
+                        "color_name": "أحمر",
+                        "quantity": 5
+                    },
+                    {
+                        "stock_id": 9,
+                        "color_name": "أبيض",
+                        "quantity": 45
+                    },
+                    {
+                        "stock_id": 10,
+                        "color_name": "رمادى",
+                        "quantity": 8
+                    },
+                    {
+                        "stock_id": 11,
+                        "color_name": "أسود",
+                        "quantity": 0
+                    }
+                ]
+            },
             "images": {
                 "أسود": [
                     "products/product_4.jpg",
@@ -415,27 +409,28 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
             "discount": 250,
             "rating": "0.0",
             "reviews_count": 0,
-            "category": 2,
-            "stocks": [
-                {
-                    "id": 12,
-                    "size_name": "من 80 ل 100 ك",
-                    "color_name": "أسود",
-                    "quantity": 45
-                },
-                {
-                    "id": 13,
-                    "size_name": "من 80 ل 100 ك",
-                    "color_name": "رمادى",
-                    "quantity": 14
-                },
-                {
-                    "id": 14,
-                    "size_name": "من 60 ل 80 كيلو",
-                    "color_name": "أحمر",
-                    "quantity": 12
-                }
-            ],
+            "category_id": 2,
+            "stocks": {
+                "من 80 ل 100 ك": [
+                    {
+                        "stock_id": 12,
+                        "color_name": "أسود",
+                        "quantity": 45
+                    },
+                    {
+                        "stock_id": 13,
+                        "color_name": "رمادى",
+                        "quantity": 14
+                    }
+                ],
+                "من 60 ل 80 كيلو": [
+                    {
+                        "stock_id": 14,
+                        "color_name": "أحمر",
+                        "quantity": 12
+                    }
+                ]
+            },
             "images": {
                 "أسود": [
                     "products/adds1_DVRguzh.jpg",
@@ -452,6 +447,7 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
     ]
   }
 ``
+
 #### sizes
 
 - URL: */sizes || */sizes/<int:pk> (for single size)
@@ -479,7 +475,7 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
 
 #### colors
 
-- URL: */colors || */products/<int:pk> (for single color)
+- URL: */colors || */colors/<int:pk> (for single color)
 - Allow: GET, HEAD, OPTIONS
 - Description: Retrieve colors data (id, name).
 - Authentication: Not Required
