@@ -10,12 +10,14 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields = ['path', 'color']
     
 class StockSerializer(serializers.ModelSerializer):
-    size_name = serializers.CharField(source="size.name")
+    stock_id = serializers.IntegerField(source='id')
     color_name = serializers.CharField(source="color.name")
+    size = serializers.CharField(source="size.name")
 
     class Meta:
         model = Stock
-        fields = ['id', 'size_name', 'color_name', 'quantity']
+        fields = ['stock_id', 'size', 'color_name', 'quantity']
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,6 +40,7 @@ class ColorSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class ProductSerializer(serializers.ModelSerializer):
+    category_id = serializers.IntegerField(source='category.id')
     images = ProductImageSerializer(many=True)
     stocks = StockSerializer(many=True)
     
@@ -52,7 +55,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'discount',
             'rating',
             'reviews_count',
-            'category',
+            'category_id',
             'stocks',
             'images',
             ]
@@ -66,7 +69,13 @@ class ProductSerializer(serializers.ModelSerializer):
         for image in representation['images']:
             unique_images[image['color']].append(image['path'])
 
+        unique_sizes = defaultdict(list)
+        for stock in representation['stocks']:
+            size = stock['size']
+            del stock['size']
+            unique_sizes[size].append(stock)
+
         # Replace the original images with the unique ones
         representation['images'] = unique_images
-        
+        representation['stocks'] = unique_sizes
         return representation
