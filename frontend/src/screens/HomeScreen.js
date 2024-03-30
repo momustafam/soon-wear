@@ -19,14 +19,6 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
     (state) => state.landingPage.recently_arrived
   );
 
-  // Start fetch Banners data
-  // const mainBannersDynamic = useSelector((state, index) => state.landingPage.banners.main_dynamic_banner);
-  // const mainBannersStatic = useSelector((state) => state.landingPage.banners.main_banner_static);
-  // const topSellingBanner = useSelector((state) => state.landingPage.banners.top_selling_banner[0]);
-  // const recentlyArrivedBanner = useSelector((state) => state.landingPage.banners.recently_selling_banner[0]);
-  // const customersReviews = useSelector((state) => state.landingPage.banners.customer_review);
-  // // End fetch Banners data
-
   const { success } = useSelector((state) => state.order);
   const landingPageProducts = {
     discounts: discounts,
@@ -55,22 +47,25 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
     <div>
       {/* Thank You Message for order completion */}
       {success && <ThankYou />}
+
       {/* Start the upper banner */}
-      {/* <BannersCarousel banners={mainBannersDynamic} /> */}
-      {/* {mainBannersStatic.length > 0 && (
-        <div className="grid grid-cols-3 gap-5 mt-5 ml-2 mr-2 ">
-          {mainBannersStatic.map((banner) => (
-            <Link key={banner.id} to={banner.url}>
-              <img
-                className="h-full w-full object-cover"
-                src={require(`../images${banner.image}`)}
-                alt="Banner Image"
-                style={{ maxHeight: "70vh" }}
-              />
-            </Link>
-          ))}
-        </div>
-      )} */}
+      {<BannersCarousel banners={mainBannersDynamic} />}
+      {{
+        mainBannersStatic.length > 0 && (
+          <div className="grid grid-cols-3 gap-5 mt-5 ml-2 mr-2 ">
+            {mainBannersStatic.map((banner) => (
+              <Link key={banner.id} to={banner.url}>
+                <img
+                  className="h-full w-full object-cover"
+                  src={require(`../images${banner.image}`)}
+                  alt="Banner Image"
+                  style={{ maxHeight: "70vh" }}
+                />
+              </Link>
+            ))}
+          </div>
+        )
+      }}
       {/* End the upper banner */}
 
       {/* Start looping over featured products and display each one in a setion with an image or carousel*/}
@@ -83,7 +78,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
             toggleShoppingCartVisibility,
             "أقوى التخفيضات",
             landingPageProducts[feature],
-            // topSellingBanner
+            topSellingBanners
           );
         } else if (
           feature === "top_selling" &&
@@ -93,7 +88,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
             toggleShoppingCartVisibility,
             "المنتجات الأكثر مبيعاً",
             landingPageProducts[feature],
-            // recentlyArrivedBanner
+            recentlyArrivedBanners
           );
         } else if (
           feature === "recently_arrived" &&
@@ -107,17 +102,21 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
         }
         return null;
       })}
-
       {/* End looping over featured products*/}
-      {/* {customersReviews.length > 0 && (
-        <h1 className="text-center bg-darkWhite text-black font-bold text-3xl p-3 pt-6 pb-6 mt-10 mb-0">
-          آراء عملائنا فى منتجاتنا
-        </h1>
-      )} */}
-      {/* <BannersCarousel banners={customersReviews} /> */}
+
+      {/* Start Customer Reviews Section */}
+      {{
+        customersReviews.length > 0 && (
+          <h1 className="text-center bg-darkWhite text-black font-bold text-3xl p-3 pt-6 pb-6 mt-10 mb-0">
+            آراء عملائنا فى منتجاتنا
+          </h1>
+        )
+      }}
+      {<BannersCarousel banners={customersReviews} />}
+      {/* End Customer Reviews Section */}
+
 
       {/* Start dispalying icons represents soon wear features that soon wear offers to its cusomters */}
-
       <div className="flex items-center m-auto mt-20 mb-20">
         <div className="ml-5 mr-5 text-center">
           <img
@@ -155,6 +154,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
         </div>
       </div>
       {/* End dispalying icons represents soon wear features that soon wear offers to its cusomters */}
+
     </div>
   );
 }

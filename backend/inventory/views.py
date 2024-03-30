@@ -97,5 +97,9 @@ class LandingPageView(APIView):
             
         for feature in features:
             data[feature] = ProductSerializer(Product.objects.filter(feature=feature)[:4], many=True).data
+            for product in data[feature]:
+                for color in product['images']:
+                    print(data[feature][product]['images'][color])
+                    data[feature][product]['images'][color] = data[feature][product]['images'][color][0]
 
         return Response(data, status.HTTP_200_OK)

@@ -10,12 +10,9 @@ function Product({ product, toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
 
   const [size, setSize] = useState("");
-  const [color, setColor] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [selectedSize, setSelectedSize] = useState(null);
   const [noSizeSelected, setNoSizeSelected] = useState(false);
-  const [selectedColor, setSelectedColor] = useState(null);
-  const [noColorSelected, setNoColorSelected] = useState(false);
 
 
   const handleAddToCart = () => {
@@ -95,35 +92,6 @@ function Product({ product, toggleShoppingCartVisibility }) {
             >
               ({product.reviews_count})
             </Typography>
-            <div className="flex w-max gap-4 mt-2 ms-auto">
-              <ButtonGroup variant="outlined" color="black" size="sm">
-                {product.stocks.map((stock) => {
-                  return stock.quantity > 0 ? (
-                    <Button
-                      className={
-                        selectedColor === stock.color_name ? "text-white bg-mainColor" : "text-black"
-                      }
-                      key={stock.color_name}
-                      onClick={() => {
-                        setSelectedColor(stock.color_name);
-                        setCountInStock(stock.quantity);
-                      }}
-                    >
-                      {stock.color_name}
-                    </Button>
-                  ) : (
-                    <Button
-                      className="text-black line-through decoration-red-900 decoration-2 decoration-solid"
-                      disabled
-                      key={stock.color_name}
-                    >
-                      {stock.color_name}
-                    </Button>
-                  );
-                })}
-              </ButtonGroup>
-            </div>
-
           </div>
         </div>
         <div className="my-3">
