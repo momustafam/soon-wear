@@ -3,7 +3,13 @@ import axios from "axios";
 
 const initialState = {
   categories: [],
-  banners: [],
+  banners: {
+    main_banner_dynamic: [],
+    main_banner_static: [],
+    top_selling_banner: [],
+    recently_arrived_banner: [],
+    customer_review: [],
+  },
   discounts: [],
   recently_arrived: [],
   top_selling: [],
