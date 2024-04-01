@@ -7,11 +7,10 @@ import { getLandingPageData } from "../slices/landingPageSlice";
 import { Spinner } from "@material-tailwind/react";
 import ThankYou from "../components/ThankYou";
 import { resetCartItems } from "../slices/cartSlice";
-import { resetOrder } from "../slices/orderSlice";
-
 
 function HomeScreen({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
+  const banners = useSelector((state) => state.landingPage.banners);
   const loading = useSelector((state) => state.landingPage.loading);
   const top_selling = useSelector((state) => state.landingPage.top_selling);
   const discounts = useSelector((state) => state.landingPage.discounts);
@@ -25,9 +24,6 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
     top_selling: top_selling,
     recently_arrived: recently_arrived,
   };
-
-
-
 
   useEffect(() => {
     dispatch(getLandingPageData());
@@ -49,11 +45,14 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
       {success && <ThankYou />}
 
       {/* Start the upper banner */}
-      {<BannersCarousel banners={mainBannersDynamic} />}
-      {{
-        mainBannersStatic.length > 0 && (
+      {banners && banners.main_banner_static && (
+        <BannersCarousel banners={banners.main_banner_static} />
+      )}
+      {banners &&
+        banners.main_banner_static &&
+        banners.main_banner_static.length > 0 && (
           <div className="grid grid-cols-3 gap-5 mt-5 ml-2 mr-2 ">
-            {mainBannersStatic.map((banner) => (
+            {banners.main_banner_static.map((banner) => (
               <Link key={banner.id} to={banner.url}>
                 <img
                   className="h-full w-full object-cover"
@@ -64,8 +63,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               </Link>
             ))}
           </div>
-        )
-      }}
+        )}
       {/* End the upper banner */}
 
       {/* Start looping over featured products and display each one in a setion with an image or carousel*/}
@@ -74,30 +72,40 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
           feature === "discounts" &&
           landingPageProducts[feature].length > 0
         ) {
-          return DisplayProducts(
-            toggleShoppingCartVisibility,
-            "أقوى التخفيضات",
-            landingPageProducts[feature],
-            topSellingBanners
+          return (
+            <DisplayProducts
+              toggleShoppingCartVisibility={toggleShoppingCartVisibility}
+              header="أقوى التخفيضات"
+              products={landingPageProducts[feature]}
+              images={banners.recently_arrived_banner}
+              link={"/products?category=top_discounts"}
+            />
           );
         } else if (
           feature === "top_selling" &&
           landingPageProducts[feature].length > 0
         ) {
-          return DisplayProducts(
-            toggleShoppingCartVisibility,
-            "المنتجات الأكثر مبيعاً",
-            landingPageProducts[feature],
-            recentlyArrivedBanners
+          return (
+            <DisplayProducts
+              toggleShoppingCartVisibility={toggleShoppingCartVisibility}
+              header="المنتجات الأكثر مبيعاً"
+              products={landingPageProducts[feature]}
+              images={banners.recently_arrived_banner}
+              link={"/products?category=top_selling"}
+            />
           );
         } else if (
           feature === "recently_arrived" &&
           landingPageProducts[feature].length > 0
         ) {
-          return DisplayProducts(
-            toggleShoppingCartVisibility,
-            "وصل حديثاً",
-            landingPageProducts[feature]
+          return (
+            <DisplayProducts
+              toggleShoppingCartVisibility={toggleShoppingCartVisibility}
+              header="وصل حديثاً"
+              products={landingPageProducts[feature]}
+              images={banners.recently_arrived_banner}
+              link={"/products?category=recently_arrived"}
+            />
           );
         }
         return null;
@@ -105,16 +113,17 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
       {/* End looping over featured products*/}
 
       {/* Start Customer Reviews Section */}
-      {{
-        customersReviews.length > 0 && (
+      {banners &&
+        banners.customer_review &&
+        banners.customer_review.length > 0 && (
           <h1 className="text-center bg-darkWhite text-black font-bold text-3xl p-3 pt-6 pb-6 mt-10 mb-0">
             آراء عملائنا فى منتجاتنا
           </h1>
-        )
-      }}
-      {<BannersCarousel banners={customersReviews} />}
+        )}
+      {banners && banners.customer_review && (
+        <BannersCarousel banners={banners.customer_review} />
+      )}
       {/* End Customer Reviews Section */}
-
 
       {/* Start dispalying icons represents soon wear features that soon wear offers to its cusomters */}
       <div className="flex items-center m-auto mt-20 mb-20">
@@ -154,7 +163,6 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
         </div>
       </div>
       {/* End dispalying icons represents soon wear features that soon wear offers to its cusomters */}
-
     </div>
   );
 }

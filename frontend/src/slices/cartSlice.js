@@ -15,12 +15,16 @@ const cartSlice = createSlice({
     addToCart: (state, { payload }) => {
       const item = { ...payload.product }; // Create a copy of product object
       const size = payload.size;
+      const color = payload.color;
       const countInStock = payload.countInStock;
-      const newItem = { ...item, size, countInStock, qty: 1 }; // Create a new object with 'size' property added
+      const newItem = { ...item, size, color, countInStock, qty: 1 }; // Create a new object with 'size', 'color', 'qty', 'countInStock property added
       const existItem = state.cartItems.find((x) => x.id === newItem.id);
 
       if (existItem) {
-        if (existItem.size !== newItem.size) {
+        if (
+          existItem.size !== newItem.size ||
+          existItem.color !== newItem.color
+        ) {
           state.cartItems = [...state.cartItems, newItem];
         } else {
           state.cartItems = state.cartItems.map((x) =>
@@ -36,7 +40,9 @@ const cartSlice = createSlice({
     removeFromCart: (state, action) => {
       state.cartItems = state.cartItems.filter(
         (x) =>
-          x.id !== parseInt(action.payload.id) || x.size !== action.payload.size
+          x.id !== parseInt(action.payload.id) ||
+          x.size !== action.payload.size ||
+          x.color !== action.payload.color
       );
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },

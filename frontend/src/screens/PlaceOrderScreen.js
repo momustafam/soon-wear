@@ -371,7 +371,9 @@ export default function PlaceOrderScreen() {
                       <div className="flex-shrink-0">
                         <Link to={`/products/${product.id}`}>
                           <img
-                            src={require(`../images${product.images[0]}`)}
+                            src={require(`../images/${
+                              product.images[product.color][0]
+                            }`)}
                             alt="product image"
                             className="w-20 rounded-md"
                           />
@@ -392,6 +394,10 @@ export default function PlaceOrderScreen() {
 
                             <p className="mt-1 text-sm text-gray-500">
                               {product.size}
+                            </p>
+
+                            <p className="mt-1 text-sm text-gray-500">
+                              {product.color}
                             </p>
                           </div>
 

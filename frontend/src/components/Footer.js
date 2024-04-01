@@ -8,7 +8,7 @@ import React from "react";
  */
 function Footer() {
   // get the available products categories
-  const categories = useSelector((state) => state.landingPage.categories);
+  const { categories } = useSelector((state) => state.category);
   return (
     <footer className="bg-mainColor dark:bg-gray-900">
       <div className="mx-auto w-full max-w-screen-xl pr-3 py-6 lg:py-8">
@@ -70,7 +70,7 @@ function Footer() {
                 categories.map((category) => (
                   <li className="mt-1 mb-1" key={category.id}>
                     <Link
-                      to={`/products?category=${category.name}`}
+                      to={`/products?category=${category.id}`}
                       className="hover:underline"
                     >
                       {category.name}
