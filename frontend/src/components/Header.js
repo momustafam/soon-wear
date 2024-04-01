@@ -14,13 +14,14 @@ import {
   Badge,
 } from "@material-tailwind/react";
 import { getLandingPageData } from "../slices/landingPageSlice";
+import { getCategories } from "../slices/categorySlice";
 
 function Header({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(0);
 
-  const categories = useSelector((state) => state.landingPage.categories);
+  const { categories } = useSelector((state) => state.category);
   const { cartItems } = useSelector((state) => state.cart);
   const navbarSearch = document.getElementById("navbar-search");
 
@@ -42,7 +43,7 @@ function Header({ toggleShoppingCartVisibility }) {
   }, [navbarSearch]);
 
   useEffect(() => {
-    dispatch(getLandingPageData());
+    dispatch(getCategories());
   }, []);
 
   const handleMenuClick = () => {
@@ -174,8 +175,9 @@ function Header({ toggleShoppingCartVisibility }) {
                           التصنيفات
                           <ChevronDownIcon
                             strokeWidth={2.5}
-                            className={`h-3.5 w-3.5 transition-transform ${openMenu ? "rotate-180" : ""
-                              }`}
+                            className={`h-3.5 w-3.5 transition-transform ${
+                              openMenu ? "rotate-180" : ""
+                            }`}
                           />
                         </Button>
                       </MenuHandler>
@@ -202,8 +204,9 @@ function Header({ toggleShoppingCartVisibility }) {
                 <li>
                   <Link
                     to="/"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 0 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 0 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(0)}
                   >
                     الرئيسية
@@ -212,8 +215,9 @@ function Header({ toggleShoppingCartVisibility }) {
                 <li>
                   <Link
                     to="/products?feature=top_discounts"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 1 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 1 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(1)}
                   >
                     التخفيضات
@@ -222,8 +226,9 @@ function Header({ toggleShoppingCartVisibility }) {
                 <li>
                   <Link
                     to="/products?feature=top_selling"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 2 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 2 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(2)}
                   >
                     الأعلى مبيعاً
@@ -232,8 +237,9 @@ function Header({ toggleShoppingCartVisibility }) {
                 <li>
                   <Link
                     to="/products?feature=recently_arrived"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 3 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 3 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(3)}
                   >
                     وصل حديثاً
@@ -242,8 +248,9 @@ function Header({ toggleShoppingCartVisibility }) {
                 <li>
                   <Link
                     to="#"
-                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
-                      } lg:pt-4 lg:pb-4`}
+                    className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
+                      clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
+                    } lg:pt-4 lg:pb-4`}
                     onClick={() => handleLiClick(4)}
                   >
                     تواصل معنا

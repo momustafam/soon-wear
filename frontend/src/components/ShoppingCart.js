@@ -21,8 +21,8 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
     .reduce((acc, item) => acc + item.qty * parseFloat(item.price), 0)
     .toFixed(2);
 
-  const handleRemoveFromCart = (id, size) => {
-    dispatch(removeFromCart({ id, size }));
+  const handleRemoveFromCart = (id, size, color) => {
+    dispatch(removeFromCart({ id, size, color }));
   };
 
   const handleChangeQty = (id, val, size) => {
@@ -101,11 +101,13 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                                   key={`${product.id}-${product.size}`}
                                   className="flex py-6"
                                 >
-                                  {product.images.length > 0 && (
+                                  {product.images[product.color].length > 0 && (
                                     <div className="h-30 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                       <Link to={`/product/${product.id}`}>
                                         <img
-                                          src={require(`../images${product.images[0]}`)}
+                                          src={require(`../images/${
+                                            product.images[product.color][0]
+                                          }`)}
                                           alt="Product"
                                           className="h-full w-full object-fill object-center"
                                         />
@@ -140,8 +142,11 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                                         </p>
                                       </div>
                                     </div>
-                                    <span className="m0 text-black text-sm">
-                                      size: {product.size.toUpperCase()}
+                                    <span className="my-1 text-black text-sm">
+                                      المقاش: {product.size.toUpperCase()}
+                                    </span>
+                                    <span className="m-0 text-black text-sm">
+                                      اللون: {product.color.toUpperCase()}
                                     </span>
                                     <div className="flex flex-1 items-center h-auto justify-between text-sm">
                                       <p className="text-black">
@@ -154,7 +159,8 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                                           onClick={() =>
                                             handleRemoveFromCart(
                                               product.id,
-                                              product.size
+                                              product.size,
+                                              product.color
                                             )
                                           }
                                         >
