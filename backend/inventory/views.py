@@ -9,28 +9,6 @@ class ProductView(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     ordering_fields = ['price', 'discount', 'rating']
     search_fields = ['name']
-    
-    def get_queryset(self):
-        # Get the queryset before filtering
-        queryset = super().get_queryset()
-
-        # Get the query paramaters
-        feature = self.request.query_params.get('feature')
-        category_id = self.request.query_params.get('category')
-        size_id = self.request.query_params.get('size')
-        color_id = self.request.query_params.get('size')
-        
-        # Filter queryset by given paramters
-        if feature is not None:
-            queryset = queryset.filter(feature=feature)
-        if category_id is not None:
-            queryset = queryset.filter(category=category_id)
-        if size_id is not None:
-            queryset = queryset.filter(stocks__size__id=size_id)
-        if color_id is not None:
-            queryset = queryset.filter(stocks__color__id=color_id)
-
-        return self.queryset
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -94,12 +72,8 @@ class LandingPageView(APIView):
         # Group banners data by location
         for location in banners_locations:
             data['banners'][location] = BannerSerializer(Banner.objects.filter(location=location), many=True).data
-            
+
         for feature in features:
             data[feature] = ProductSerializer(Product.objects.filter(feature=feature)[:4], many=True).data
-            for product in data[feature]:
-                for color in product['images']:
-                    print(data[feature][product]['images'][color])
-                    data[feature][product]['images'][color] = data[feature][product]['images'][color][0]
 
         return Response(data, status.HTTP_200_OK)
