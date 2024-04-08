@@ -52,7 +52,7 @@ export const getLandingPageData = createAsyncThunk(
         },
       };
       const data = await axios.get(
-        "http://localhost:8000/api/v1/landing-page?format=json",
+        "http://192.168.1.9:8000/api/v1/landing-page?format=json",
         config
       );
       return data;

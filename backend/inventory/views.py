@@ -17,17 +17,17 @@ class ProductView(viewsets.ModelViewSet):
         # Extract query parameters from request
         feature = self.request.query_params.get('feature', None)
         category_id = self.request.query_params.get('category', None)
-        size_id = self.request.query_params.get('size', None)
-        color_id = self.request.query_params.get('color', None)
+        size_name = self.request.query_params.get('size', None)
+        color_name = self.request.query_params.get('color', None)
 
         if feature is not None:
             queryset = queryset.filter(feature=feature)
         if category_id is not None:
             queryset = queryset.filter(category__id=category_id)
-        if size_id is not None:
-            queryset = queryset.filter(stocks__size__name=size_id)
-        if color_id is not None:
-            queryset = queryset.filter(stocks__color__name=color_id)
+        if size_name is not None:
+            queryset = queryset.filter(stocks__size__name=size_name)
+        if color_name is not None:
+            queryset = queryset.filter(stocks__color__name=color_name)
         return queryset
 
 

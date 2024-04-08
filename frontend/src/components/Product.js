@@ -11,7 +11,6 @@ function Product({ product, toggleShoppingCartVisibility }) {
 
   const initialSize = Object.keys(product.stocks)[0];
   const initialColor = product.stocks[initialSize][0].color_name;
-
   const [countInStock, setCountInStock] = useState(0);
   const [selectedSize, setSelectedSize] = useState(initialSize);
   const [colorSelected, setColorSelected] = useState(initialColor);
@@ -45,80 +44,82 @@ function Product({ product, toggleShoppingCartVisibility }) {
       )}
 
       <div className="px-5 pb-5">
-        <Link to="#">
-          <h5 className="text-l text-right font-semibold tracking-tight text-gray-900 dark:text-white">
-            {product.name}
-          </h5>
-        </Link>
-        <div className="flex w-max gap-4 mt-2 ms-auto">
-          <ButtonGroup variant="outlined" color="black" size="sm">
-            {Object.keys(product.stocks).map((size) => (
-              <Button
-                className={
-                  selectedSize === size
-                    ? "text-white bg-mainColor"
-                    : "text-black bg-white"
-                }
-                key={size}
-                onClick={() => {
-                  setSelectedSize(size);
-                }}
-              >
-                {size}
-              </Button>
-            ))}
-          </ButtonGroup>
+        <div className="flex items-center gap-2 mt-2 mb-2 font-bold">
+          <Stack spacing={1}>
+            <Rating
+              name="half-rating"
+              defaultValue={product.rating}
+              precision={0.5}
+              readOnly
+            />
+          </Stack>
+          <Typography
+            color="blue-gray"
+            className="text-sm font-semibold text-blue-gray-500"
+          >
+            ({product.reviews_count})
+          </Typography>
+          <Link to="#" className="ml-auto">
+            <h5 className="text-l font-semibold tracking-tight text-gray-900 dark:text-white">
+              {product.name}
+            </h5>
+          </Link>
         </div>
 
-        <div className="flex w-max gap-4 mt-2 ms-auto">
-          <ButtonGroup variant="outlined" color="black" size="sm">
-            {selectedSize &&
-              product.stocks[selectedSize].map((color) =>
-                color.quantity > 0 ? (
-                  <Button
-                    className={
-                      colorSelected === color.color_name
-                        ? "text-white bg-mainColor"
-                        : "text-black bg-white"
-                    }
-                    key={color.color_name}
-                    onClick={() => {
-                      setColorSelected(color.color_name);
-                      setCountInStock(color.quantity);
-                    }}
-                  >
-                    {color.color_name}
-                  </Button>
-                ) : (
-                  <Button
-                    className="text-black line-through decoration-red-900 decoration-2 decoration-solid"
-                    disabled
-                    key={color.color_name}
-                  >
-                    {color.color_name}
-                  </Button>
-                )
-              )}
-          </ButtonGroup>
-        </div>
-        <div className="flex items-center mt-2.5 mb-5">
-          <div className="flex items-center gap-2 font-bold text-blue-gray-500">
-            <Stack spacing={1}>
-              <Rating
-                name="half-rating"
-                defaultValue={product.rating}
-                precision={0.5}
-                readOnly
-              />
-            </Stack>
-            <Typography
-              color="blue-gray"
-              className="text-sm font-semibold text-blue-gray-500"
-            >
-              ({product.reviews_count})
-            </Typography>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="ml-auto">
+            <ButtonGroup className="flex flex-wrap" variant="outlined" color="black" size="sm">
+              {selectedSize &&
+                product.stocks[selectedSize].map((color) =>
+                  color.quantity > 0 ? (
+                    <Button
+                      className={
+                        colorSelected === color.color_name
+                          ? "text-white bg-mainColor"
+                          : "text-black bg-white"
+                      }
+                      key={color.color_name}
+                      onClick={() => {
+                        setColorSelected(color.color_name);
+                        setCountInStock(color.quantity);
+                      }}
+                    >
+                      {color.color_name}
+                    </Button>
+                  ) : (
+                    <Button
+                      className="text-black line-through decoration-red-900 decoration-2 decoration-solid"
+                      disabled
+                      key={color.color_name}
+                    >
+                      {color.color_name}
+                    </Button>
+                  )
+                )}
+            </ButtonGroup>
+          </div>
+
+          <div className="ml-auto">
+            <ButtonGroup className="flex flex-wrap-reverse" variant="outlined" color="black" size="sm">
+              {Object.keys(product.stocks).map((size) => (
+                <Button
+                  className={
+                    selectedSize === size
+                      ? "text-white bg-mainColor"
+                      : "text-black bg-white"
+                  }
+                  key={size}
+                  onClick={() => {
+                    setSelectedSize(size);
+                  }}
+                >
+                  {size}
+                </Button>
+              ))}
+            </ButtonGroup>
           </div>
         </div>
+
         <div className="my-3">
           {noSizeSelected && (
             <Alert

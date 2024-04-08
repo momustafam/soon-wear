@@ -48,7 +48,7 @@ export const getCategories = createAsyncThunk("categories/get", async () => {
       },
     };
     const data = await axios.get(
-      "http://localhost:8000/api/v1/categories",
+      "http://192.168.1.9:8000/api/v1/categories",
       config
     );
     return data;
