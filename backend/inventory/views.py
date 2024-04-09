@@ -15,20 +15,25 @@ class ProductView(viewsets.ModelViewSet):
         queryset = super().get_queryset()
 
         # Extract query parameters from request
-        feature = self.request.query_params.get('feature', None)
-        category_id = self.request.query_params.get('category', None)
-        size_name = self.request.query_params.get('size', None)
-        color_name = self.request.query_params.get('color', None)
+        features = self.request.query_params.get('feature')
+        categories = self.request.query_params.get('category')
+        sizes = self.request.query_params.get('size')
+        colors = self.request.query_params.get('color')
 
-        if feature is not None:
-            queryset = queryset.filter(feature=feature)
-        if category_id is not None:
-            queryset = queryset.filter(category__id=category_id)
-        if size_name is not None:
-            queryset = queryset.filter(stocks__size__name=size_name)
-        if color_name is not None:
-            queryset = queryset.filter(stocks__color__name=color_name)
-        return queryset
+        if features:
+            filtered_features = features.split(',')
+            queryset = queryset.filter(feature__in=filtered_features)
+        if categories:
+            filtered_categories = categories.split(',')
+            queryset = queryset.filter(category__id__in=filtered_categories)
+        if sizes:
+            filtered_sizes = sizes.split(',')
+            queryset = queryset.filter(stocks__size__name__in=filtered_sizes)
+        if colors:
+            filtered_colors = colors.split(',')
+            queryset = queryset.filter(stocks__color__name__in=filtered_colors)
+
+        return queryset.distinct()
 
 
 class CategoryView(viewsets.ModelViewSet):

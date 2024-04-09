@@ -104,7 +104,11 @@ class Product(models.Model):
         related_name='products', 
         verbose_name="الفئة",
     )
-    
+    main_image = models.ImageField(
+        upload_to='products/', 
+        verbose_name="الصورة الرئيسية للمنتج",
+        )
+
     class Meta:
         verbose_name = "المنتج"
         verbose_name_plural = "المنتجات"
@@ -113,10 +117,22 @@ class Product(models.Model):
         return self.name
     
     def delete(self, *args, **kwargs):
+        if os.path.exists(self.main_image.path):
+            os.remove(self.main_image.path)
         for img_obj in self.images.all():
             if os.path.exists(img_obj.image.path):
                 os.remove(img_obj.image.path)
         super().delete(*args, **kwargs)
+    
+    def save(self, *args, **kwargs):
+        try:
+            old_main_image = Product.objects.get(pk=self.pk).main_image
+            if self.main_image != old_main_image:
+                if os.path.exists(self.main_image.path):
+                    os.remove(old_main_image.path)
+        except:
+            pass
+        super().save(*args, **kwargs)
     
     def clean(self):
         super().clean()
