@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
   success: false,
@@ -18,6 +19,25 @@ const orderSlice = createSlice({
       state.order = {};
     },
   },
+});
+
+export const sendOrder = createAsyncThunk("order/send", async (order) => {
+  try {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
+    const { data } = await axios.post(
+      "http://localhost:8000/api/v1/orders",
+      order,
+      config
+    );
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
 });
 
 export default orderSlice.reducer;

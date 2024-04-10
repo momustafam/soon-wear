@@ -21,7 +21,7 @@ const landingPageSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getLandingPageData.fulfilled, (state, { payload }) => {
-        const data = payload.data;
+        const data = payload;
         state.categories = data.categories;
         state.banners = data.banners;
         state.discounts = data.top_discounts;
@@ -51,10 +51,11 @@ export const getLandingPageData = createAsyncThunk(
           "Content-type": "application/json",
         },
       };
-      const data = await axios.get(
+      const { data } = await axios.get(
         "http://localhost:8000/api/v1/landing-page?format=json",
         config
       );
+
       return data;
     } catch (error) {
       console.error("Error fetching landing page data:", error);

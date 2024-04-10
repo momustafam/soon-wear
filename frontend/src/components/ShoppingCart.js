@@ -87,7 +87,6 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                       {cartItems.length === 0 ? (
                         <Alert
                           className="flex flex-row-reverse mt-5 bg-mainColor"
-                          color=""
                           icon={<Icon />}
                         >
                           السلة فارغة
@@ -103,7 +102,7 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                                 >
                                   {product.images[product.color].length > 0 && (
                                     <div className="h-30 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                      <Link to={`/product/${product.id}`}>
+                                      <Link to={`/products/${product.id}`}>
                                         <img
                                           src={require(`../images/${
                                             product.images[product.color][0]
@@ -119,7 +118,7 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
-                                          <Link to={`/product/${product.id}`}>
+                                          <Link to={`/products/${product.id}`}>
                                             {product.name}
                                           </Link>
                                         </h3>

@@ -6,6 +6,7 @@ import CategoryScreen from "./screens/CategoryScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import ShoppingCart from "./components/ShoppingCart";
 import { useState } from "react";
+import ProductDetailsScreen from "./screens/ProductDetailsScreen";
 
 function App() {
   const [isShoppingCartVisible, setShoppingCartVisible] = useState(false);
@@ -36,6 +37,7 @@ function App() {
             }
           />
           <Route path="/placeorder" element={<PlaceOrderScreen />} />
+          <Route path="/products/:id" element={<ProductDetailsScreen />} />
         </Routes>
       </main>
       <Footer />

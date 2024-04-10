@@ -13,17 +13,23 @@ import {
   IconButton,
   Badge,
 } from "@material-tailwind/react";
-import { getLandingPageData } from "../slices/landingPageSlice";
 import { getCategories } from "../slices/categorySlice";
 
 function Header({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
-  const [clickedIndex, setClickedIndex] = useState(0);
+  const [clickedIndex, setClickedIndex] = useState(
+    localStorage.getItem("clickedIndex") || 0
+  );
 
   const { categories } = useSelector((state) => state.category);
   const { cartItems } = useSelector((state) => state.cart);
   const navbarSearch = document.getElementById("navbar-search");
+
+  useEffect(() => {
+    // Store clickedIndex in localStorage
+    localStorage.setItem("clickedIndex", clickedIndex);
+  }, [clickedIndex]);
 
   useEffect(() => {
     if (navbarSearch) {
@@ -247,7 +253,7 @@ function Header({ toggleShoppingCartVisibility }) {
                 </li>
                 <li>
                   <Link
-                    to="#"
+                    to="/"
                     className={`block py-3 px-3 text-black text-end rounded hover:bg-gray-100 hover:text-mainColor ${
                       clickedIndex === 4 ? "border-b-2 border-b-mainColor" : ""
                     } lg:pt-4 lg:pb-4`}

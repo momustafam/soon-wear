@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
 import { addToCart } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Rating, Stack } from "@mui/material";
 import Alert from "./AlertError";
@@ -15,7 +15,6 @@ function Product({ product, toggleShoppingCartVisibility }) {
   const [countInStock, setCountInStock] = useState(0);
   const [selectedSize, setSelectedSize] = useState(initialSize);
   const [colorSelected, setColorSelected] = useState(initialColor);
-  const [noSizeSelected, setNoSizeSelected] = useState(false);
 
   const handleAddToCart = () => {
     toggleShoppingCartVisibility();
@@ -32,7 +31,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       {product.images && (
-        <Link to="#" className="m-auto">
+        <Link to={`/products/${product.id}`} className="m-auto">
           <img
             className="h-[35rem] w-full object-cover p-4 pb-1 rounded-2xl"
             src={
@@ -45,7 +44,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
       )}
 
       <div className="px-5 pb-5">
-        <Link to="#">
+        <Link to={`/products/${product.id}`}>
           <h5 className="text-l text-right font-semibold tracking-tight text-gray-900 dark:text-white">
             {product.name}
           </h5>
@@ -106,7 +105,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
             <Stack spacing={1}>
               <Rating
                 name="half-rating"
-                defaultValue={product.rating}
+                defaultValue={parseFloat(product.rating)}
                 precision={0.5}
                 readOnly
               />
@@ -119,7 +118,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
             </Typography>
           </div>
         </div>
-        <div className="my-3">
+        {/* <div className="my-3">
           {noSizeSelected && (
             <Alert
               className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
@@ -127,7 +126,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
               message="الرجاء اختيار مقاس"
             />
           )}
-        </div>
+        </div> */}
         <div className="flex items-center justify-between">
           {product.discount > 0 ? (
             <span className="text-2xl font-bold text-gray-90">

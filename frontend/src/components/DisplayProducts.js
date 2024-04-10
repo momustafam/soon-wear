@@ -30,7 +30,7 @@ function DisplayProducts({
         <SeeMoreButton link={link} />
         {images &&
           images.map((image) => (
-            <Link to={image.url}>
+            <Link key={image} to={image.url}>
               <img
                 className="h-full w-full object-cover"
                 src={require(`../images${image.image}`)}
