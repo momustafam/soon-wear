@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
 import { addToCart } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Rating, Stack } from "@mui/material";
 import Alert from "./AlertError";
@@ -9,23 +9,35 @@ import Alert from "./AlertError";
 function Product({ product, toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
 
-  const initialSize = Object.keys(product.stocks)[0];
-  const initialColor = product.stocks[initialSize][0].color_name;
   const [countInStock, setCountInStock] = useState(0);
-  const [selectedSize, setSelectedSize] = useState(initialSize);
-  const [colorSelected, setColorSelected] = useState(initialColor);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [colorSelected, setColorSelected] = useState(null);
+  const [changeSize, setChangeSize] = useState(false);
+
+  const [noColorSelected, setNoColorSelected] = useState(false);
+  const [noSizeSelected, setNoSizeSelected] = useState(false);
 
   const handleAddToCart = () => {
-    toggleShoppingCartVisibility();
-    dispatch(
-      addToCart({
-        product,
-        size: selectedSize,
-        color: colorSelected,
-        countInStock,
-      })
-    );
+    if (selectedSize && colorSelected) {
+      toggleShoppingCartVisibility();
+      dispatch(
+        addToCart({
+          product,
+          size: selectedSize,
+          color: colorSelected,
+          countInStock,
+        })
+      );
+      setNoColorSelected(false);
+      setNoSizeSelected(false);
+    }
+    if (!selectedSize) setNoSizeSelected(true);
+    if (!colorSelected) setNoColorSelected(true);
   };
+
+  useEffect(() => {
+    if (colorSelected);
+  }, [colorSelected, selectedSize]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -34,8 +46,11 @@ function Product({ product, toggleShoppingCartVisibility }) {
           <img
             className="h-[35rem] w-full object-cover p-4 pb-1 rounded-2xl"
             src={
-              colorSelected &&
-              require(`../images/${product.images[colorSelected][0]}`)
+              changeSize
+                ? require(`../images/${product.main_img}`)
+                : colorSelected
+                ? require(`../images/${product.images[colorSelected][0]}`)
+                : require(`../images/${product.main_img}`)
             }
             alt="Product"
           />
@@ -47,7 +62,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
           <Stack spacing={1}>
             <Rating
               name="half-rating"
-              defaultValue={product.rating}
+              defaultValue={parseFloat(product.rating)}
               precision={0.5}
               readOnly
             />
@@ -58,7 +73,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
           >
             ({product.reviews_count})
           </Typography>
-          <Link to="#" className="ml-auto">
+          <Link to={`/products/${product.id}`} className="ml-auto">
             <h5 className="text-l font-semibold tracking-tight text-gray-900 dark:text-white">
               {product.name}
             </h5>
@@ -86,6 +101,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
                       onClick={() => {
                         setColorSelected(color.color_name);
                         setCountInStock(color.quantity);
+                        setChangeSize(false);
                       }}
                     >
                       {color.color_name}
@@ -120,6 +136,8 @@ function Product({ product, toggleShoppingCartVisibility }) {
                   key={size}
                   onClick={() => {
                     setSelectedSize(size);
+                    setChangeSize(true);
+                    setColorSelected(null);
                   }}
                 >
                   {size}
@@ -130,11 +148,20 @@ function Product({ product, toggleShoppingCartVisibility }) {
         </div>
 
         <div className="my-3">
-          {noSizeSelected && (
+          {noSizeSelected && !selectedSize && (
             <Alert
               className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
               color=""
               message="الرجاء اختيار مقاس"
+            />
+          )}
+        </div>
+        <div className="my-3">
+          {noColorSelected && !colorSelected && (
+            <Alert
+              className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
+              color=""
+              message="الرجاء اختيار اللون"
             />
           )}
         </div>
@@ -155,7 +182,9 @@ function Product({ product, toggleShoppingCartVisibility }) {
             className="text-white font-bold bg-mainColor focus:outline-none focus:bg-mainColor  rounded-lg text-l px-3 py-3 text-center"
             onClick={() => {
               handleAddToCart();
-              setSelectedSize("");
+              setSelectedSize(null);
+              setColorSelected(null);
+              setChangeSize(false);
             }}
           >
             اضف الى السلة
@@ -167,33 +196,3 @@ function Product({ product, toggleShoppingCartVisibility }) {
 }
 
 export default Product;
-
-{
-  /* {product.stocks[size].map((stock) => {
-                  return stock.quantity > 0 ? (
-                    <Button
-                      className={
-                        selectedSize === stock.size_name
-                          ? "text-white bg-mainColor"
-                          : "text-black bg-mainColor"
-                      }
-                      key={stock.size_name}
-                      onClick={() => {
-                        setSelectedSize(stock.size_name);
-                        setCountInStock(stock.quantity);
-                      }}
-                    >
-                      {size}
-                      Test
-                    </Button>
-                  ) : (
-                    <Button
-                      className="text-black line-through decoration-red-900 decoration-2 decoration-solid"
-                      disabled
-                      key={stock.size_name}
-                    >
-                      {stock.size_name}
-                    </Button>
-                  );
-                })} */
-}

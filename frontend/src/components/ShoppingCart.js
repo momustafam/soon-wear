@@ -142,7 +142,7 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                                       </div>
                                     </div>
                                     <span className="my-1 text-black text-sm">
-                                      المقاش: {product.size.toUpperCase()}
+                                      المقاس: {product.size.toUpperCase()}
                                     </span>
                                     <span className="m-0 text-black text-sm">
                                       اللون: {product.color.toUpperCase()}

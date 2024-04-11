@@ -37,7 +37,14 @@ function App() {
             }
           />
           <Route path="/placeorder" element={<PlaceOrderScreen />} />
-          <Route path="/products/:id" element={<ProductDetailsScreen />} />
+          <Route
+            path="/products/:id"
+            element={
+              <ProductDetailsScreen
+                toggleShoppingCartVisibility={toggleShoppingCartVisibility}
+              />
+            }
+          />
         </Routes>
       </main>
       <Footer />

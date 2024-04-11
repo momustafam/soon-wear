@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Spinner } from "@material-tailwind/react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductDetails } from "../slices/productDetailsSlice";
 import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
+import { Rating, Stack } from "@mui/material";
+import { addToCart } from "../slices/cartSlice";
+import Alert from "../components/AlertError";
 
-function ProductDetailsScreen() {
+function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -13,13 +16,35 @@ function ProductDetailsScreen() {
     (state) => state.productDetails
   );
 
+  const [countInStock, setCountInStock] = useState(0);
   const [selectedSize, setSelectedSize] = useState(null);
   const [colorSelected, setColorSelected] = useState(null);
-  const [countInStock, setCountInStock] = useState(0);
+  const [changeSize, setChangeSize] = useState(false);
+
+  const [noColorSelected, setNoColorSelected] = useState(false);
+  const [noSizeSelected, setNoSizeSelected] = useState(false);
 
   useEffect(() => {
     dispatch(getProductDetails(id));
   }, [dispatch, id]);
+
+  const handleAddToCart = () => {
+    if (selectedSize && colorSelected) {
+      toggleShoppingCartVisibility();
+      dispatch(
+        addToCart({
+          product,
+          size: selectedSize,
+          color: colorSelected,
+          countInStock,
+        })
+      );
+      setNoColorSelected(false);
+      setNoSizeSelected(false);
+    }
+    if (!selectedSize) setNoSizeSelected(true);
+    if (!colorSelected) setNoColorSelected(true);
+  };
 
   return loading ? (
     <div className="flex justify-center items-center">
@@ -30,18 +55,37 @@ function ProductDetailsScreen() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row-reverse -mx-4">
           <div className="md:flex-1 px-4">
-            <div className="h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+            <div className="h-80 rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+              {/* Main Product Image */}
               <img
                 className="w-full h-full object-cover"
-                src="https://cdn.pixabay.com/photo/2020/05/22/17/53/mockup-5206355_960_720.jpg"
-                alt="Product Image"
+                src={(() => {
+                  if (Object.keys(product).length !== 0) {
+                    if (changeSize) {
+                      return require(`../images/${product.main_img}`);
+                    } else if (colorSelected && product.images[colorSelected]) {
+                      return require(`../images/${product.images[colorSelected][0]}`);
+                    } else {
+                      return require(`../images/${product.main_img}`);
+                    }
+                  }
+                })()}
+                alt="Main Product Image"
               />
-            </div>
-            <div className="flex -mx-2 mb-4">
-              <div className="w-full px-2">
-                <button className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">
-                  أضف الى السلة
-                </button>
+              {/* Additional Images */}
+              <div className="flex mt-2 overflow-x-auto">
+                {/* Map and render additional images */}
+                {Object.keys(product).length !== 0 &&
+                  product.images &&
+                  product.images[colorSelected] &&
+                  product.images[colorSelected].map((image, index) => (
+                    <img
+                      key={index}
+                      className="w-20 h-20 object-cover rounded-lg mr-2"
+                      src={require(`../images/${image}`)}
+                      alt={`Product Image ${index}`}
+                    />
+                  ))}
               </div>
             </div>
           </div>
@@ -50,13 +94,21 @@ function ProductDetailsScreen() {
               {product.name}
             </h2>
 
-            <div className="mb-4 text-right">
-              <span className="font-bold text-gray-700 dark:text-gray-300 text-right">
-                وصف المنتج
-              </span>
-              <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
-                {product.description}
-              </p>
+            <div className="flex justify-end items-center gap-2 mt-2 mb-2 font-bold">
+              <Stack spacing={1}>
+                <Rating
+                  name="half-rating"
+                  defaultValue={parseFloat(product.rating)}
+                  precision={0.5}
+                  readOnly
+                />
+              </Stack>
+              <Typography
+                color="blue-gray"
+                className="text-sm font-semibold text-blue-gray-500"
+              >
+                ({product.reviews_count})
+              </Typography>
             </div>
 
             <div className="flex flex-row-reverse mb-4">
@@ -68,12 +120,15 @@ function ProductDetailsScreen() {
                   £{product.price}
                 </span>
               </div>
-              {/* <div>
-                <span className="font-bold text-gray-700 dark:text-gray-300">
-                  Availability:
-                </span>
-                <span className="text-gray-600 dark:text-gray-300">In Stock</span>
-              </div> */}
+            </div>
+
+            <div className="mb-4 text-right">
+              <span className="font-bold text-gray-700 dark:text-gray-300 text-right">
+                وصف المنتج
+              </span>
+              <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
+                {product.description}
+              </p>
             </div>
 
             <div className="mb-4 text-right">
@@ -145,6 +200,39 @@ function ProductDetailsScreen() {
                 </div>
               </div>
             )}
+            <div className="my-3">
+              {noSizeSelected && !selectedSize && (
+                <Alert
+                  className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
+                  color=""
+                  message="الرجاء اختيار مقاس"
+                />
+              )}
+            </div>
+            <div className="my-3">
+              {noColorSelected && !colorSelected && (
+                <Alert
+                  className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
+                  color=""
+                  message="الرجاء اختيار اللون"
+                />
+              )}
+            </div>
+            <div className="flex -mx-2 mb-4">
+              <div className="w-full px-2">
+                <button
+                  className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700"
+                  onClick={() => {
+                    handleAddToCart();
+                    setSelectedSize(null);
+                    setColorSelected(null);
+                    setChangeSize(false);
+                  }}
+                >
+                  أضف الى السلة
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

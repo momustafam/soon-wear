@@ -191,7 +191,7 @@ function Header({ toggleShoppingCartVisibility }) {
                         <MenuList className="w-[10rem] overflow-visible">
                           {categories.map((category) => (
                             <Link
-                              to={`/products?category=${category.id}`}
+                              to={`/products?category=${category.name}`}
                               key={category.id}
                             >
                               <MenuItem

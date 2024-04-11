@@ -25,7 +25,7 @@ class ProductView(viewsets.ModelViewSet):
             queryset = queryset.filter(feature__in=filtered_features)
         if categories:
             filtered_categories = categories.split(',')
-            queryset = queryset.filter(category__id__in=filtered_categories)
+            queryset = queryset.filter(category__name__in=filtered_categories)
         if sizes:
             filtered_sizes = sizes.split(',')
             queryset = queryset.filter(stocks__size__name__in=filtered_sizes)

@@ -8,10 +8,10 @@ import {
   PlusIcon,
 } from "@heroicons/react/20/solid";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
 import { getColors } from "../slices/colorSlice";
 import { getSizes } from "../slices/sizeSlice";
 import { getCategories, getProductByCategory } from "../slices/categorySlice";
+import { addFilter } from "../slices/filterSlice";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -19,16 +19,20 @@ function classNames(...classes) {
 
 export default function CategoryFilter({ products, feature, category_id }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const initialQuery = "";
-  const [query, setQuery] = useState(initialQuery);
+  const [sortingQuery, setSortingQuery] = useState("");
+  const [filteringQuery, setFilteringQuery] = useState(
+    localStorage.getItem("query") || ""
+  );
 
   const { colors } = useSelector((state) => state.color);
   const { sizes } = useSelector((state) => state.size);
   const { categories } = useSelector((state) => state.category);
+  const { filters: checkboxData } = useSelector((state) => state.filters);
+
+  // if checkboxData is empty reset localStorage
+  if (Object.keys(checkboxData).length === 0) localStorage.setItem("query", "");
 
   const filters = [
     {
@@ -37,47 +41,68 @@ export default function CategoryFilter({ products, feature, category_id }) {
       options: colors,
     },
     {
-      id: "category",
-      name: "الفئات",
-      options: categories,
-    },
-    {
       id: "size",
       name: "المقاس",
       options: sizes,
     },
   ];
 
+  if (feature) {
+    const obj = {
+      id: "category",
+      name: "الفئات",
+      options: categories,
+    };
+    filters.push(obj);
+  }
+
   const sortOptions = [
     {
       name: "احسن تقييم",
       onClick: () => {
         const updatedQuery = updateQuery("ordering", "-rating");
-        setQuery(updatedQuery);
+        setSortingQuery(updatedQuery);
       },
     },
     {
       name: "التخفيضات",
       onClick: () => {
         const updatedQuery = updateQuery("ordering", "-discounts");
-        setQuery(updatedQuery);
+        setSortingQuery(updatedQuery);
       },
     },
     {
       name: "السعر: المنخفض الى الاعلى",
       onClick: () => {
         const updatedQuery = updateQuery("ordering", "price");
-        setQuery(updatedQuery);
+        setSortingQuery(updatedQuery);
       },
     },
     {
       name: "السعر: الاعلى الى المنخفض",
       onClick: () => {
         const updatedQuery = updateQuery("ordering", "-price");
-        setQuery(updatedQuery);
+        setSortingQuery(updatedQuery);
       },
     },
   ];
+
+  useEffect(() => {
+    if (sortingQuery !== "") {
+      const query =
+        filteringQuery !== ""
+          ? filteringQuery + "&" + sortingQuery
+          : sortingQuery;
+
+      dispatch(
+        getProductByCategory({
+          category_id,
+          feature,
+          options: query,
+        })
+      );
+    }
+  }, [sortingQuery]);
 
   useEffect(() => {
     if (colors.length === 0) dispatch(getColors());
@@ -88,68 +113,97 @@ export default function CategoryFilter({ products, feature, category_id }) {
     }
   }, []);
 
-  const addQueryParam = () => {
-    // Get current query parameters
-    const queryParams = new URLSearchParams(location.search);
-
-    // Add or update a query parameter
-    queryParams.set("key", "value");
-
-    // Replace current query string with updated one
-    navigate.push({
-      pathname: location.pathname,
-      search: `?${queryParams.toString()}`,
-    });
-  };
-
   const updateQuery = (paramKey, paramValue) => {
     // Check if the current query already contains the specified parameter
-    const existingParamIndex = query.indexOf(`${paramKey}=`);
+    const existingParamIndex = sortingQuery.indexOf(`${paramKey}=`);
     if (existingParamIndex !== -1) {
       // Extract the current value of the parameter
       const startIndex = existingParamIndex + paramKey.length + 1;
-      const endIndex = query.indexOf("&", startIndex);
-      const currentValue = query.substring(
+      const endIndex = sortingQuery.indexOf("&", startIndex);
+      const currentValue = sortingQuery.substring(
         startIndex,
         endIndex !== -1 ? endIndex : undefined
       );
 
       // Replace the current parameter value with the new value
-      return query.replace(
+      return sortingQuery.replace(
         `${paramKey}=${currentValue}`,
         `${paramKey}=${paramValue}`
       );
     } else {
-      // Append the new parameter and its value to the current query
-      return query
-        ? `${query}&${paramKey}=${paramValue}`
+      // Append the new parameter and its value to the current sortingQuery
+      return sortingQuery
+        ? `${sortingQuery}&${paramKey}=${paramValue}`
         : `${paramKey}=${paramValue}`;
     }
   };
 
   const handleFilterSelelection = (e) => {
-    const value = e.target.value;
-    const type = e.target.name;
-    const checked = e.target.checked;
+    const { name: type, value, checked } = e.target;
+    dispatch(addFilter({ name: type, value, checked }));
 
-    // Update the query based on the selected filter
-    setQuery((prevQuery) => {
+    setFilteringQuery((prevQuery) => {
       if (checked) {
-        // Add the selected filter to the query
-        return prevQuery ? `${prevQuery}&${type}=${value}` : `${type}=${value}`;
+        // Add or update the selected filter in the query
+        if (!prevQuery) {
+          // If no previous query, create a new one
+          return `${type}=${value}`;
+        } else {
+          const existingFilter = new URLSearchParams(prevQuery).get(type);
+
+          if (existingFilter) {
+            // Append the new value to the existing filter
+            const updatedFilter = `${type}=${existingFilter},${value}`;
+            return prevQuery.replace(
+              `${type}=${existingFilter}`,
+              updatedFilter
+            );
+          } else {
+            // Add the new filter type and value to the existing query
+            return `${prevQuery}&${type}=${value}`;
+          }
+        }
       } else {
-        // Remove the deselected filter from the query
-        const updatedQuery = prevQuery
-          .replace(`${type}=${value}`, "")
-          .replace("&&", "&");
-        return updatedQuery.startsWith("&")
-          ? updatedQuery.substring(1)
-          : updatedQuery;
+        // Remove the deselected filter value from the query
+        let updatedQuery = prevQuery;
+
+        // Construct the regex pattern to match the filter type and value
+        const pattern = new RegExp(`${type}=[^&]+`);
+
+        // Replace the matching pattern in the query string
+        updatedQuery = updatedQuery.replace(pattern, (match) => {
+          const values = match.split("=")[1].split(",");
+          const filteredValues = values.filter((v) => v !== value);
+
+          // Return the updated filter values or an empty string if no values left
+          return filteredValues.length > 0
+            ? `${type}=${filteredValues.join(",")}`
+            : "";
+        });
+
+        // Remove leading or trailing '&' if necessary
+        updatedQuery = updatedQuery.replace(/^&|&$/g, "");
+
+        // update local storage
+        localStorage.setItem("query", updatedQuery);
+
+        return updatedQuery;
       }
     });
   };
 
-  const handleFilter = () => {};
+  const handleFilter = () => {
+    if (filteringQuery != "") {
+      const query = sortingQuery
+        ? sortingQuery + "&" + filteringQuery
+        : filteringQuery;
+      dispatch(getProductByCategory({ category_id, feature, options: query }));
+
+      localStorage.setItem("query", query);
+    } else {
+      dispatch(getProductByCategory({ category_id, feature, options: "" }));
+    }
+  };
   return (
     <div className="bg-white">
       <div>
@@ -239,7 +293,15 @@ export default function CategoryFilter({ products, feature, category_id }) {
                                       name={`${section.id}`}
                                       defaultValue={option.name}
                                       type="checkbox"
-                                      defaultChecked={option.checked}
+                                      defaultChecked={
+                                        checkboxData &&
+                                        checkboxData[section.id] &&
+                                        checkboxData[section.id][option.name]
+                                          ? checkboxData[section.id][
+                                              option.name
+                                            ]
+                                          : false
+                                      }
                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                       onChange={handleFilterSelelection}
                                     />
@@ -273,7 +335,12 @@ export default function CategoryFilter({ products, feature, category_id }) {
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              New Arrivals
+              {category_id ||
+                (feature && feature === "top_selling"
+                  ? "الأعلى مبيعاً"
+                  : feature === "top_discounts"
+                  ? "التخفيضات"
+                  : "وصل حديثاً")}
             </h1>
 
             <div className="flex items-center">

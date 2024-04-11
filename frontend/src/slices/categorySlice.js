@@ -74,6 +74,7 @@ export const getProductByCategory = createAsyncThunk(
       if (options !== "") {
         options = "&" + options;
       }
+
       const { data } = await axios.get(
         `http://localhost:8000/api/v1/products?${query + options}`,
         config

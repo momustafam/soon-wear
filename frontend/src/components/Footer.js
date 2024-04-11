@@ -70,7 +70,7 @@ function Footer() {
                 categories.map((category) => (
                   <li className="mt-1 mb-1" key={category.id}>
                     <Link
-                      to={`/products?category=${category.id}`}
+                      to={`/products?category=${category.name}`}
                       className="hover:underline"
                     >
                       {category.name}
