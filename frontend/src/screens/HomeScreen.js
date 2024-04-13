@@ -46,14 +46,17 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
 
       {/* Start the upper banner */}
       {banners && banners.main_banner_static && (
-        <BannersCarousel banners={banners.main_banner_static} />
+        <BannersCarousel
+          banners={banners.main_banner_static}
+          key={"main_banner"}
+        />
       )}
       {banners &&
         banners.main_banner_static &&
         banners.main_banner_static.length > 0 && (
           <div className="grid grid-cols-3 gap-5 mt-5 ml-2 mr-2 ">
             {banners.main_banner_static.map((banner) => (
-              <Link key={banner.id} to={banner.url}>
+              <Link key={`${banner.image}`} to={banner.url}>
                 <img
                   className="h-full w-full object-cover"
                   src={require(`../images${banner.image}`)}
@@ -79,6 +82,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               products={landingPageProducts[feature]}
               images={banners.recently_arrived_banner}
               link={"/products?category=top_discounts"}
+              key={feature}
             />
           );
         } else if (
@@ -92,6 +96,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               products={landingPageProducts[feature]}
               images={banners.recently_arrived_banner}
               link={"/products?category=top_selling"}
+              key={feature}
             />
           );
         } else if (
@@ -105,6 +110,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               products={landingPageProducts[feature]}
               images={banners.recently_arrived_banner}
               link={"/products?category=recently_arrived"}
+              key={feature}
             />
           );
         }
@@ -121,7 +127,10 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
           </h1>
         )}
       {banners && banners.customer_review && (
-        <BannersCarousel banners={banners.customer_review} />
+        <BannersCarousel
+          banners={banners.customer_review}
+          key={"customer_review_banners"}
+        />
       )}
       {/* End Customer Reviews Section */}
 

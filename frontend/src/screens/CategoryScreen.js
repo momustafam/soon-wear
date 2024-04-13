@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { Spinner } from "@material-tailwind/react";
 import DisplayProducts from "../components/DisplayProducts";
 import { getProductByCategory } from "../slices/categorySlice";
+import CategoryFilter from "../components/CategoryFilter";
 
 function CategoryScreen({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
@@ -18,18 +19,25 @@ function CategoryScreen({ toggleShoppingCartVisibility }) {
 
   useEffect(() => {
     dispatch(getProductByCategory({ category_id, feature }));
-  }, [category_id, feature]);
+  }, [dispatch, category_id, feature]);
 
   return loading ? (
     <div className="flex justify-center items-center">
       <Spinner className="h-[250px] w-[250px] mt-[3rem]" />
     </div>
   ) : (
-    <DisplayProducts
-      toggleShoppingCartVisibility={toggleShoppingCartVisibility}
-      header={category_id || feature}
-      products={products}
-    />
+    <div>
+      <CategoryFilter
+        feature={feature}
+        category_id={category_id}
+        products={
+          <DisplayProducts
+            toggleShoppingCartVisibility={toggleShoppingCartVisibility}
+            products={products}
+          />
+        }
+      />
+    </div>
   );
 }
 

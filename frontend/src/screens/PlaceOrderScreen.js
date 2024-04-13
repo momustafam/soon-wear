@@ -171,6 +171,7 @@ export default function PlaceOrderScreen() {
       // Form is valid, submit the form
       navigate("/");
       dispatch(createOrder(formData));
+      console.log(formData);
     }
   };
 

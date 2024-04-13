@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 
 # The directory of uploaded media files of the project
-MEDIA_ROOT = r'D:\Work\Soon Wear\soon-wear\frontend\src\images'
+# MEDIA_ROOT = r'D:\Work\Soon Wear\soon-wear\frontend\src\images'
+MEDIA_ROOT = r'C:\soonwear\soon-wear\frontend\src\images'
 
 # The URL prefix for media files
 MEIDA_URL = '/media/'

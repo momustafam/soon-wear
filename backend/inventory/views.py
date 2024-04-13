@@ -25,7 +25,7 @@ class ProductView(viewsets.ModelViewSet):
             queryset = queryset.filter(feature__in=filtered_features)
         if categories:
             filtered_categories = categories.split(',')
-            queryset = queryset.filter(category__id__in=filtered_categories)
+            queryset = queryset.filter(category__name__in=filtered_categories)
         if sizes:
             filtered_sizes = sizes.split(',')
             queryset = queryset.filter(stocks__size__name__in=filtered_sizes)
@@ -81,9 +81,11 @@ class LandingPageView(APIView):
 
         # Group banners data by location
         for location in banners_locations:
-            data['banners'][location] = BannerSerializer(Banner.objects.filter(location=location), many=True).data
+            data['banners'][location] = BannerSerializer(
+                Banner.objects.filter(location=location), many=True).data
 
         for feature in features:
-            data[feature] = ProductSerializer(Product.objects.filter(feature=feature)[:4], many=True).data
+            data[feature] = ProductSerializer(
+                Product.objects.filter(feature=feature)[:4], many=True).data
 
         return Response(data, status.HTTP_200_OK)

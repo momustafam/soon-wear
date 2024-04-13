@@ -12,7 +12,7 @@ const categorySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getCategories.fulfilled, (state, { payload }) => {
-        state.categories = payload.data;
+        state.categories = payload;
         state.loading = false;
         state.error = false;
       })
@@ -25,7 +25,7 @@ const categorySlice = createSlice({
         state.loading = false;
       })
       .addCase(getProductByCategory.fulfilled, (state, { payload }) => {
-        state.categoryProducts = payload.data.results;
+        state.categoryProducts = payload.results;
         state.loading = false;
         state.error = false;
       })
@@ -47,10 +47,11 @@ export const getCategories = createAsyncThunk("categories/get", async () => {
         "Content-type": "application/json",
       },
     };
-    const data = await axios.get(
-      "http://192.168.1.9:8000/api/v1/categories",
+    const { data } = await axios.get(
+      "http://localhost:8000/api/v1/categories",
       config
     );
+
     return data;
   } catch (error) {
     throw error;
@@ -59,19 +60,26 @@ export const getCategories = createAsyncThunk("categories/get", async () => {
 
 export const getProductByCategory = createAsyncThunk(
   "categories/getProductsByCategory",
-  async ({ category_id, feature }) => {
+  async ({ category_id, feature, options = "" }) => {
     try {
       const config = {
         headers: {
           "Content-type": "application/json",
         },
       };
+
       const query =
         category_id !== null ? `category=${category_id}` : `feature=${feature}`;
-      const data = await axios.get(
-        `http://localhost:8000/api/v1/products?${query}`,
+
+      if (options !== "") {
+        options = "&" + options;
+      }
+
+      const { data } = await axios.get(
+        `http://localhost:8000/api/v1/products?${query + options}`,
         config
       );
+
       return data;
     } catch (error) {
       throw error;

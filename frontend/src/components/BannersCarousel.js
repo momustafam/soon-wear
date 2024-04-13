@@ -12,7 +12,7 @@ function BannersCarousel({ banners }) {
         className="rounded-xl"
       >
         {banners.map((banner) => (
-          <Link to={banner.url} key={banner.id}>
+          <Link to={banner.url} key={banner.image}>
             <img
               src={require(`../images${banner.image}`)}
               alt={`banner image`}
