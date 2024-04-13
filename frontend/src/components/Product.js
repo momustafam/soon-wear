@@ -35,10 +35,6 @@ function Product({ product, toggleShoppingCartVisibility }) {
     if (!colorSelected) setNoColorSelected(true);
   };
 
-  useEffect(() => {
-    if (colorSelected);
-  }, [colorSelected, selectedSize]);
-
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       {product.images && (
@@ -81,15 +77,15 @@ function Product({ product, toggleShoppingCartVisibility }) {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="ml-auto">
-            <ButtonGroup
-              className="flex flex-wrap"
-              variant="outlined"
-              color="black"
-              size="sm"
-            >
-              {selectedSize &&
-                product.stocks[selectedSize].map((color) =>
+          {selectedSize && (
+            <div className="ml-auto">
+              <ButtonGroup
+                className="flex flex-wrap"
+                variant="outlined"
+                color="black"
+                size="sm"
+              >
+                {product.stocks[selectedSize].map((color) =>
                   color.quantity > 0 ? (
                     <Button
                       className={
@@ -116,8 +112,9 @@ function Product({ product, toggleShoppingCartVisibility }) {
                     </Button>
                   )
                 )}
-            </ButtonGroup>
-          </div>
+              </ButtonGroup>
+            </div>
+          )}
 
           <div className="ml-auto">
             <ButtonGroup
@@ -151,7 +148,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
           {noSizeSelected && !selectedSize && (
             <Alert
               className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
-              color=""
+              color="red"
               message="الرجاء اختيار مقاس"
             />
           )}
@@ -160,7 +157,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
           {noColorSelected && !colorSelected && (
             <Alert
               className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
-              color=""
+              color="red"
               message="الرجاء اختيار اللون"
             />
           )}

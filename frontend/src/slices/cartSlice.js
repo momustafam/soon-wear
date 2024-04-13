@@ -18,24 +18,17 @@ const cartSlice = createSlice({
       const color = payload.color;
       const countInStock = payload.countInStock;
       const newItem = { ...item, size, color, countInStock, qty: 1 }; // Create a new object with 'size', 'color', 'qty', 'countInStock property added
-      const existItem = state.cartItems.find((x) => x.id === newItem.id);
+      const existItem = state.cartItems.find(
+        (x) =>
+          x.id === newItem.id &&
+          x.size === newItem.size &&
+          x.color === newItem.color
+      );
 
-      if (existItem) {
-        if (
-          existItem.size !== newItem.size ||
-          existItem.color !== newItem.color
-        ) {
-          state.cartItems = [...state.cartItems, newItem];
-        } else {
-          state.cartItems = state.cartItems.map((x) =>
-            x.id === existItem.id ? newItem : x
-          );
-        }
-      } else {
+      if (!existItem) {
         state.cartItems = [...state.cartItems, newItem];
+        localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
       }
-
-      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
     removeFromCart: (state, action) => {
       state.cartItems = state.cartItems.filter(

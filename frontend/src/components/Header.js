@@ -25,6 +25,7 @@ function Header({ toggleShoppingCartVisibility }) {
   const { categories } = useSelector((state) => state.category);
   const { cartItems } = useSelector((state) => state.cart);
   const navbarSearch = document.getElementById("navbar-search");
+  const isLargescreen = window.innerWidth > 1024;
 
   useEffect(() => {
     // Store clickedIndex in localStorage
@@ -37,7 +38,7 @@ function Header({ toggleShoppingCartVisibility }) {
     }
     const handleResize = () => {
       if (navbarSearch) {
-        if (window.innerWidth > 1024) {
+        if (isLargescreen) {
           navbarSearch.classList.remove("active");
           navbarSearch.classList.add("active");
         } else {
@@ -46,7 +47,7 @@ function Header({ toggleShoppingCartVisibility }) {
       }
     };
     window.addEventListener("resize", handleResize);
-  }, [navbarSearch]);
+  }, [navbarSearch, isLargescreen]);
 
   useEffect(() => {
     dispatch(getCategories());
@@ -54,6 +55,7 @@ function Header({ toggleShoppingCartVisibility }) {
 
   const handleMenuClick = () => {
     // Toggle the 'active' class to control visibility
+    console.log(navbarSearch);
     if (navbarSearch) {
       navbarSearch.classList.toggle("active");
     }
@@ -172,7 +174,11 @@ function Header({ toggleShoppingCartVisibility }) {
               <ul className="flex flex-col mb-3 p-4 lg:p-0 mt-4 font-medium border border-gray-100 rounded-lg lg:space-x-4 lg:flex-row-reverse lg:mt-5 lg:border-0">
                 {window.innerWidth > 940 && (
                   <li className="m-auto">
-                    <Menu open={openMenu} handler={setOpenMenu} allowHover>
+                    <Menu
+                      open={openMenu}
+                      handler={setOpenMenu}
+                      allowHover={isLargescreen}
+                    >
                       <MenuHandler className="flex justify-center items-center text-white text-xl bg-mainColor hover:text-mainColor border-none ml-4">
                         <Button
                           variant="text"
