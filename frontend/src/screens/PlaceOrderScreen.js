@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { addKeyToCart, removeFromCart } from "../slices/cartSlice";
-import { createOrder } from "../slices/orderSlice";
+import { createOrder, sendOrder } from "../slices/orderSlice";
 
 const paymentMethods = [
   { id: "cash", title: "كاش" },
@@ -22,7 +22,15 @@ const paymentMethods = [
 export default function PlaceOrderScreen() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
+    paymentMethods[0].id
+  );
   const { cartItems } = useSelector((state) => state.cart);
+  const shippingAddressDataLocal =
+    localStorage.getItem("shippingAddress") || "";
+
+  const shippingAddressData =
+    shippingAddressDataLocal !== "" && JSON.parse(shippingAddressDataLocal);
   const discountTotal = parseFloat(
     cartItems
       .reduce(
@@ -39,13 +47,13 @@ export default function PlaceOrderScreen() {
   );
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    homeNumber: "",
-    streetAddress: "",
-    city: "",
-    phoneNumber: "",
-    district: "",
+    first_name: shippingAddressData["first_name"] || "",
+    last_name: shippingAddressData["last_name"] || "",
+    home_number: shippingAddressData["home_number"] || "",
+    street_address: shippingAddressData["street_address"] || "",
+    city: shippingAddressData["city"] || "",
+    phone_number: shippingAddressData["phone_number"] || "",
+    district: shippingAddressData["district"] || "",
   });
   const [errors, setErrors] = useState({});
 
@@ -81,15 +89,15 @@ export default function PlaceOrderScreen() {
     {
       label: "اسم العائلة",
       placeholder: "ادخل اسم العائلة",
-      name: "lastName",
-      error: errors.lastName,
+      name: "last_name",
+      error: errors.last_name,
       required: true,
     },
     {
       label: "الأسم الاول",
       placeholder: "ادخل اسمك الاول",
-      name: "firstName",
-      error: errors.firstName,
+      name: "first_name",
+      error: errors.first_name,
       required: true,
     },
     {
@@ -111,22 +119,22 @@ export default function PlaceOrderScreen() {
     {
       label: "عنوان الشارع",
       placeholder: "ادخل عنوانك",
-      name: "streetAddress",
-      error: errors.streetAddress,
+      name: "street_address",
+      error: errors.street_address,
       required: true,
     },
     {
       label: "رقم الهاتف",
       placeholder: "ادخل رقم الهاتف",
-      name: "phoneNumber",
-      error: errors.phoneNumber,
+      name: "phone_number",
+      error: errors.phone_number,
       required: true,
     },
     {
       label: "رقم المنزل / الشقة",
       placeholder: "ادخل رقم المنزل / الشقة",
-      name: "homeNumber",
-      error: errors.homeNumber,
+      name: "home_number",
+      error: errors.home_number,
       required: false,
     },
   ];
@@ -142,14 +150,14 @@ export default function PlaceOrderScreen() {
 
     // Perform validation checks
     const newErrors = {};
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "الرجاء إدخال الاسم الأول";
+    if (!formData.first_name.trim()) {
+      newErrors.first_name = "الرجاء إدخال الاسم الأول";
     }
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "الرجاء إدخال اسم العائلة";
+    if (!formData.last_name.trim()) {
+      newErrors.last_name = "الرجاء إدخال اسم العائلة";
     }
-    if (!formData.streetAddress.trim()) {
-      newErrors.streetAddress = "الرجاء إدخال عنوان الشارع";
+    if (!formData.street_address.trim()) {
+      newErrors.street_address = "الرجاء إدخال عنوان الشارع";
     }
     if (!formData.city) {
       newErrors.city = "الرجاء تحديد المدينة";
@@ -157,10 +165,10 @@ export default function PlaceOrderScreen() {
     if (!formData.district) {
       newErrors.district = "الرجاء تحديد المنظقة";
     }
-    if (!formData.phoneNumber.trim()) {
-      newErrors.phoneNumber = "الرجاء إدخال رقم الهاتف";
-    } else if (!/^(01)\d{9}/.test(formData.phoneNumber.trim())) {
-      newErrors.phoneNumber = "الرجاء إدخال رقم الهاتف صحيح";
+    if (!formData.phone_number.trim()) {
+      newErrors.phone_number = "الرجاء إدخال رقم الهاتف";
+    } else if (!/^(01)\d{9}/.test(formData.phone_number.trim())) {
+      newErrors.phone_number = "الرجاء إدخال رقم الهاتف صحيح";
     }
 
     // Update errors state
@@ -168,10 +176,19 @@ export default function PlaceOrderScreen() {
 
     // If there are validation errors, prevent form submission
     if (Object.keys(newErrors).length === 0) {
+      // save shipping address data to local storage
+      localStorage.setItem("shippingAddress", JSON.stringify(formData));
+      // add fields to form
+      formData["payment_method"] = selectedPaymentMethod;
+      formData["order_items"] = cartItems;
+      formData["total"] = discountTotal;
+
       // Form is valid, submit the form
-      navigate("/");
       dispatch(createOrder(formData));
-      console.log(formData);
+      dispatch(sendOrder(formData));
+
+      // redirect to home page
+      navigate("/");
     }
   };
 
@@ -194,8 +211,12 @@ export default function PlaceOrderScreen() {
     dispatch(addKeyToCart({ id, size, key: "qty", value: parseInt(val) }));
   };
 
-  const handleRemove = (id, size) => {
-    dispatch(removeFromCart({ id, size }));
+  const handleRemove = (id, size, color) => {
+    dispatch(removeFromCart({ id, size, color }));
+  };
+
+  const handlePaymentMethodChange = (event) => {
+    setSelectedPaymentMethod(event.target.value);
   };
 
   return (
@@ -215,7 +236,7 @@ export default function PlaceOrderScreen() {
                     <div
                       key={index}
                       className={
-                        field.name === "streetAddress" ? "col-span-2" : ""
+                        field.name === "street_address" ? "col-span-2" : ""
                       }
                     >
                       <label
@@ -368,7 +389,10 @@ export default function PlaceOrderScreen() {
                 <h3 className="sr-only">Items in your cart</h3>
                 <ul role="list" className="divide-y divide-gray-200">
                   {cartItems.map((product) => (
-                    <li key={product.id} className="flex py-6 px-4 sm:px-6">
+                    <li
+                      key={`${product.id}-${product.size}-${product.color}`}
+                      className="flex py-6 px-4 sm:px-6"
+                    >
                       <div className="flex-shrink-0">
                         <Link to={`/products/${product.id}`}>
                           <img
@@ -407,7 +431,11 @@ export default function PlaceOrderScreen() {
                               type="button"
                               className="-m-2.5 bg-white p-2.5 flex items-center justify-center text-gray-400 hover:text-gray-500"
                               onClick={() =>
-                                handleRemove(product.id, product.size)
+                                handleRemove(
+                                  product.id,
+                                  product.size,
+                                  product.color
+                                )
                               }
                             >
                               <span className="sr-only">Remove</span>
@@ -500,38 +528,30 @@ export default function PlaceOrderScreen() {
                     <fieldset className="mt-4">
                       <legend className="sr-only">Payment type</legend>
                       <div className="grid grid-cols-3">
-                        {paymentMethods.map(
-                          (paymentMethod, paymentMethodIdx) => (
-                            <div
-                              key={paymentMethod.id}
-                              className="flex items-center flex-row-reverse"
+                        {paymentMethods.map((paymentMethod) => (
+                          <div
+                            key={paymentMethod.id}
+                            className="flex items-center flex-row-reverse"
+                          >
+                            <input
+                              id={paymentMethod.id}
+                              name="payment-type"
+                              type="radio"
+                              value={paymentMethod.id}
+                              checked={
+                                selectedPaymentMethod === paymentMethod.id
+                              }
+                              onChange={handlePaymentMethodChange}
+                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 ms-2"
+                            />
+                            <label
+                              htmlFor={paymentMethod.id}
+                              className="ml-3 block text-sm font-medium text-gray-700 ms-2"
                             >
-                              {paymentMethodIdx === 0 ? (
-                                <input
-                                  id={paymentMethod.id}
-                                  name="payment-type"
-                                  type="radio"
-                                  defaultChecked
-                                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 ms-2"
-                                />
-                              ) : (
-                                <input
-                                  id={paymentMethod.id}
-                                  name="payment-type"
-                                  type="radio"
-                                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300  ms-2"
-                                />
-                              )}
-
-                              <label
-                                htmlFor={paymentMethod.id}
-                                className="ml-3 block text-sm font-medium text-gray-700  ms-2"
-                              >
-                                {paymentMethod.title}
-                              </label>
-                            </div>
-                          )
-                        )}
+                              {paymentMethod.title}
+                            </label>
+                          </div>
+                        ))}
                       </div>
                     </fieldset>
                   </div>

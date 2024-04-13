@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Spinner } from "@material-tailwind/react";
 import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getProductDetails } from "../slices/productDetailsSlice";
+import productDetailsSlice, {
+  getProductDetails,
+} from "../slices/productDetailsSlice";
 import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
 import { Rating, Stack } from "@mui/material";
 import { addToCart } from "../slices/cartSlice";
@@ -58,20 +60,19 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
             <div className="h-80 rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
               {/* Main Product Image */}
               <img
-                className="w-full h-full object-cover"
-                src={(() => {
-                  if (Object.keys(product).length !== 0) {
-                    if (changeSize) {
-                      return require(`../images/${product.main_img}`);
-                    } else if (colorSelected && product.images[colorSelected]) {
-                      return require(`../images/${product.images[colorSelected][0]}`);
-                    } else {
-                      return require(`../images/${product.main_img}`);
-                    }
-                  }
-                })()}
+                className="w-full h-full object-cover rounded-lg"
+                src={
+                  Object.keys(product).length !== 0
+                    ? changeSize
+                      ? require(`../images/${product.main_img}`)
+                      : colorSelected && product.images[colorSelected]
+                      ? require(`../images/${product.images[colorSelected][0]}`)
+                      : require(`../images/${product.main_img}`)
+                    : ""
+                }
                 alt="Main Product Image"
               />
+
               {/* Additional Images */}
               <div className="flex mt-2 overflow-x-auto">
                 {/* Map and render additional images */}
@@ -97,8 +98,8 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
             <div className="flex justify-end items-center gap-2 mt-2 mb-2 font-bold">
               <Stack spacing={1}>
                 <Rating
-                  name="half-rating"
-                  defaultValue={parseFloat(product.rating)}
+                  name="controlled-rating"
+                  value={parseFloat(product.rating)}
                   precision={0.5}
                   readOnly
                 />
@@ -136,10 +137,9 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
                 اختر المقاس:
               </span>
               <div className="flex flex-row-reverse items-center mt-2">
-                <ButtonGroup variant="outlined" color="black" size="sm">
-                  {product &&
-                    product.stocks &&
-                    Object.keys(product.stocks).map((size) => (
+                {product && product.stocks && (
+                  <ButtonGroup variant="outlined" color="black" size="sm">
+                    {Object.keys(product.stocks).map((size) => (
                       <Button
                         className={
                           selectedSize === size
@@ -154,7 +154,8 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
                         {size}
                       </Button>
                     ))}
-                </ButtonGroup>
+                  </ButtonGroup>
+                )}
               </div>
             </div>
             {selectedSize && (
@@ -204,7 +205,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               {noSizeSelected && !selectedSize && (
                 <Alert
                   className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
-                  color=""
+                  color="red"
                   message="الرجاء اختيار مقاس"
                 />
               )}
@@ -213,7 +214,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               {noColorSelected && !colorSelected && (
                 <Alert
                   className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
-                  color=""
+                  color="red"
                   message="الرجاء اختيار اللون"
                 />
               )}

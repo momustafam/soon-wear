@@ -81,7 +81,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               header="أقوى التخفيضات"
               products={landingPageProducts[feature]}
               images={banners.recently_arrived_banner}
-              link={"/products?category=top_discounts"}
+              link={"/products?feature=top_discounts"}
               key={feature}
             />
           );
@@ -95,7 +95,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               header="المنتجات الأكثر مبيعاً"
               products={landingPageProducts[feature]}
               images={banners.recently_arrived_banner}
-              link={"/products?category=top_selling"}
+              link={"/products?feature=top_selling"}
               key={feature}
             />
           );
@@ -109,7 +109,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               header="وصل حديثاً"
               products={landingPageProducts[feature]}
               images={banners.recently_arrived_banner}
-              link={"/products?category=recently_arrived"}
+              link={"/products?feature=recently_arrived"}
               key={feature}
             />
           );

@@ -56,6 +56,19 @@ export default function CategoryFilter({ products, feature, category_id }) {
     filters.push(obj);
   }
 
+  if (category_id) {
+    const obj = {
+      id: "feature",
+      name: "المميزات",
+      options: [
+        { id: 1, name: "top_discounts" },
+        { id: 2, name: "top_selling" },
+        { id: 3, name: "recently_arrived" },
+      ],
+    };
+    filters.push(obj);
+  }
+
   const sortOptions = [
     {
       name: "احسن تقييم",
@@ -107,10 +120,7 @@ export default function CategoryFilter({ products, feature, category_id }) {
   useEffect(() => {
     if (colors.length === 0) dispatch(getColors());
     if (sizes.length === 0) dispatch(getSizes());
-
-    if (categories.length === 0) {
-      dispatch(getCategories());
-    }
+    if (categories.length === 0) dispatch(getCategories());
   }, []);
 
   const updateQuery = (paramKey, paramValue) => {
@@ -139,7 +149,8 @@ export default function CategoryFilter({ products, feature, category_id }) {
   };
 
   const handleFilterSelelection = (e) => {
-    const { name: type, value, checked } = e.target;
+    let { name: type, value, checked } = e.target;
+
     dispatch(addFilter({ name: type, value, checked }));
 
     setFilteringQuery((prevQuery) => {
@@ -309,7 +320,17 @@ export default function CategoryFilter({ products, feature, category_id }) {
                                       htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
                                       className="ml-3 min-w-0 flex-1 text-gray-500"
                                     >
-                                      {option.name}
+                                      {section.id === "feature" ? (
+                                        <>
+                                          {option.name === "top_discounts"
+                                            ? "التخفيضات"
+                                            : option.name === "top_selling"
+                                            ? "الأعلى مبيعاً"
+                                            : "وصل حديثاً"}
+                                        </>
+                                      ) : (
+                                        option.name
+                                      )}
                                     </label>
                                   </div>
                                 ))}

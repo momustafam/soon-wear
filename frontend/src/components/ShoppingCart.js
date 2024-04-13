@@ -97,7 +97,7 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                             <ul className="-my-6 divide-y divide-gray-200">
                               {cartItems.map((product) => (
                                 <li
-                                  key={`${product.id}-${product.size}`}
+                                  key={`${product.id}-${product.size}-${product.color}`}
                                   className="flex py-6"
                                 >
                                   {product.images[product.color].length > 0 && (
