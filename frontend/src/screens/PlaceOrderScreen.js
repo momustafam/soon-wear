@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Input,
-  Typography,
-  Select,
-  Option,
-  Alert,
-} from "@material-tailwind/react";
+import { Input, Typography, Select, Option } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { TrashIcon } from "@heroicons/react/24/outline";
@@ -19,13 +13,43 @@ const paymentMethods = [
   { id: "paypal", title: "باي بال" },
 ];
 
+const cities = [
+  "القاهرة",
+  "الإسكندرية",
+  "الجيزة",
+  "الشرقية",
+  "الدقهلية",
+  "القليوبية",
+  "كفر الشيخ",
+  "الغربية",
+  "المنوفية",
+  "دمياط",
+  "البحيرة",
+  "الفيوم",
+  "المنيا",
+  "أسيوط",
+  "سوهاج",
+  "قنا",
+  "أسوان",
+  "الأقصر",
+  "البحر الأحمر",
+  "مطروح",
+  "الوادي الجديد",
+  "شمال سيناء",
+  "جنوب سيناء",
+];
+
 export default function PlaceOrderScreen() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
     paymentMethods[0].id
   );
+  const [shippingPrice, setShippingPrice] = useState(15);
+  const [errors, setErrors] = useState({});
+
   const { cartItems } = useSelector((state) => state.cart);
+
   const shippingAddressDataLocal =
     localStorage.getItem("shippingAddress") || "";
 
@@ -46,6 +70,29 @@ export default function PlaceOrderScreen() {
       .toFixed(2)
   );
 
+  const citiesWithShipping = cities.map((city) => {
+    let shippingPrice = 0;
+
+    // Set shipping prices based on city names
+    switch (city) {
+      case "القاهرة":
+        shippingPrice = 20;
+        break;
+      case "الإسكندرية":
+        shippingPrice = 25;
+        break;
+      case "الجيزة":
+        shippingPrice = 18;
+        break;
+
+      default:
+        shippingPrice = 15; // Default shipping price for unknown cities
+        break;
+    }
+
+    return { name: city, shippingPrice };
+  });
+
   const [formData, setFormData] = useState({
     first_name: shippingAddressData["first_name"] || "",
     last_name: shippingAddressData["last_name"] || "",
@@ -55,34 +102,6 @@ export default function PlaceOrderScreen() {
     phone_number: shippingAddressData["phone_number"] || "",
     district: shippingAddressData["district"] || "",
   });
-  const [errors, setErrors] = useState({});
-
-  const shippingPrice = 20;
-  const cities = [
-    "القاهرة",
-    "الإسكندرية",
-    "الجيزة",
-    "الشرقية",
-    "الدقهلية",
-    "القليوبية",
-    "كفر الشيخ",
-    "الغربية",
-    "المنوفية",
-    "دمياط",
-    "البحيرة",
-    "الفيوم",
-    "المنيا",
-    "أسيوط",
-    "سوهاج",
-    "قنا",
-    "أسوان",
-    "الأقصر",
-    "البحر الأحمر",
-    "مطروح",
-    "الوادي الجديد",
-    "شمال سيناء",
-    "جنوب سيناء",
-  ];
 
   // Define an array for form fields and errors
   const formFields = [
@@ -105,7 +124,7 @@ export default function PlaceOrderScreen() {
       placeholder: "اختر المنطقة",
       name: "district",
       error: errors.district,
-      select: true,
+
       required: true,
     },
     {
@@ -143,7 +162,7 @@ export default function PlaceOrderScreen() {
     if (cartItems.length === 0) {
       navigate("/");
     }
-  }, [cartItems]);
+  }, [cartItems, navigate]);
 
   const validateForm = (e) => {
     e.preventDefault();
@@ -181,7 +200,7 @@ export default function PlaceOrderScreen() {
       // add fields to form
       formData["payment_method"] = selectedPaymentMethod;
       formData["order_items"] = cartItems;
-      formData["total"] = discountTotal;
+      formData["total"] = discountTotal + shippingPrice;
 
       // Form is valid, submit the form
       dispatch(createOrder(formData));
@@ -201,14 +220,22 @@ export default function PlaceOrderScreen() {
   };
 
   const handleChangeSelect = (name, value) => {
+    for (const city of citiesWithShipping) {
+      if (city.name === value) {
+        setShippingPrice(city.shippingPrice);
+        break;
+      }
+    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleChangeQty = (id, val, size) => {
-    dispatch(addKeyToCart({ id, size, key: "qty", value: parseInt(val) }));
+  const handleChangeQty = (id, val, size, color) => {
+    dispatch(
+      addKeyToCart({ id, size, color, key: "qty", value: parseInt(val) })
+    );
   };
 
   const handleRemove = (id, size, color) => {
@@ -235,9 +262,11 @@ export default function PlaceOrderScreen() {
                   {formFields.map((field, index) => (
                     <div
                       key={index}
-                      className={
-                        field.name === "street_address" ? "col-span-2" : ""
-                      }
+                      className={`${
+                        field.name === "street_address"
+                          ? "md:col-span-2"
+                          : "col-span-1"
+                      }`}
                     >
                       <label
                         htmlFor={field.name}
@@ -387,7 +416,7 @@ export default function PlaceOrderScreen() {
 
               <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
                 <h3 className="sr-only">Items in your cart</h3>
-                <ul role="list" className="divide-y divide-gray-200">
+                <ul className="divide-y divide-gray-200">
                   {cartItems.map((product) => (
                     <li
                       key={`${product.id}-${product.size}-${product.color}`}
@@ -399,7 +428,7 @@ export default function PlaceOrderScreen() {
                             src={require(`../images/${
                               product.images[product.color][0]
                             }`)}
-                            alt="product image"
+                            alt={`${product.name}`}
                             className="w-20 rounded-md"
                           />
                         </Link>
@@ -471,7 +500,8 @@ export default function PlaceOrderScreen() {
                                   handleChangeQty(
                                     product.id,
                                     val,
-                                    product.size
+                                    product.size,
+                                    product.color
                                   );
                                 }}
                               >

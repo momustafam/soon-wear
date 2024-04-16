@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { Spinner } from "@material-tailwind/react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import productDetailsSlice, {
-  getProductDetails,
-} from "../slices/productDetailsSlice";
+import { getProductDetails } from "../slices/productDetailsSlice";
 import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
 import { Rating, Stack } from "@mui/material";
 import { addToCart } from "../slices/cartSlice";
@@ -14,9 +12,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const { product, loading, error } = useSelector(
-    (state) => state.productDetails
-  );
+  const { product, loading } = useSelector((state) => state.productDetails);
 
   const [countInStock, setCountInStock] = useState(0);
   const [selectedSize, setSelectedSize] = useState(null);
@@ -70,7 +66,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
                       : require(`../images/${product.main_img}`)
                     : ""
                 }
-                alt="Main Product Image"
+                alt="main"
               />
 
               {/* Additional Images */}
@@ -84,7 +80,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
                       key={index}
                       className="w-20 h-20 object-cover rounded-lg mr-2"
                       src={require(`../images/${image}`)}
-                      alt={`Product Image ${index}`}
+                      alt={`${product.name} - ${index}`}
                     />
                   ))}
               </div>

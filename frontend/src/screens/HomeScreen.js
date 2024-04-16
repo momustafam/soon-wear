@@ -27,13 +27,13 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
 
   useEffect(() => {
     dispatch(getLandingPageData());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (success === true) {
       dispatch(resetCartItems());
     }
-  }, [success]);
+  }, [success, dispatch]);
 
   return loading ? (
     <div className="flex justify-center items-center">
@@ -60,7 +60,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
                 <img
                   className="h-full w-full object-cover"
                   src={require(`../images${banner.image}`)}
-                  alt="Banner Image"
+                  alt="Banner"
                   style={{ maxHeight: "70vh" }}
                 />
               </Link>
@@ -140,6 +140,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
           <img
             className="mb-3 sm:w-4/5 lg:w-2/5 md:w-3/5 m-auto"
             src={require(`../images/features/cash-on-delivery.png`)}
+            alt={"cash on delivery"}
           ></img>
           <span className="text-l text-center font-semibold inline-block m-auto">
             الدفع عند الإستلام
@@ -149,6 +150,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
           <img
             className="mb-3 sm:w-4/5 lg:w-2/5 md:w-3/5 m-auto"
             src={require(`../images/features/fast-delivery.png`)}
+            alt={"fast delivery"}
           ></img>
           <span className="text-l text-center font-semibold inline-block m-auto">
             توصيل سريع
@@ -158,6 +160,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
           <img
             className="mb-3 sm:w-4/5 lg:w-2/5 md:w-3/5 m-auto"
             src={require(`../images/features/24-hours-support.png`)}
+            alt={"customer support"}
           ></img>
           <span className="text-l font-semibold">خدمة 24/7</span>
         </div>
@@ -165,6 +168,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
           <img
             className="mb-3 sm:w-4/5 lg:w-2/5 md:w-3/5 m-auto"
             src={require(`../images/features/campaign-optimization.png`)}
+            alt={"campaign optimization"}
           ></img>
           <span className="text-l text-center font-semibold inline-block m-auto">
             عروض يومياً

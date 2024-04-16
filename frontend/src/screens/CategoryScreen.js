@@ -13,13 +13,14 @@ function CategoryScreen({ toggleShoppingCartVisibility }) {
   const queryParams = new URLSearchParams(location.search);
   const category_id = queryParams.get("category") || null;
   const feature = queryParams.get("feature") || null;
+  const name = queryParams.get("feature") || null;
 
   const products = useSelector((state) => state.category.categoryProducts);
   const loading = useSelector((state) => state.category.loading);
 
   useEffect(() => {
-    dispatch(getProductByCategory({ category_id, feature }));
-  }, [dispatch, category_id, feature]);
+    dispatch(getProductByCategory({ category_id, feature, name }));
+  }, [dispatch, category_id, feature, name]);
 
   return loading ? (
     <div className="flex justify-center items-center">
@@ -30,10 +31,13 @@ function CategoryScreen({ toggleShoppingCartVisibility }) {
       <CategoryFilter
         feature={feature}
         category_id={category_id}
+        name={name}
         products={
           <DisplayProducts
             toggleShoppingCartVisibility={toggleShoppingCartVisibility}
             products={products}
+            link={`?${queryParams}`}
+            seeMore={true}
           />
         }
       />

@@ -2,7 +2,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import headerLogo from "../images/logos/header-logo.jpg";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Menu,
@@ -17,6 +17,8 @@ import { getCategories } from "../slices/categorySlice";
 
 function Header({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [openMenu, setOpenMenu] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(
     localStorage.getItem("clickedIndex") || 0
@@ -33,7 +35,7 @@ function Header({ toggleShoppingCartVisibility }) {
   }, [clickedIndex]);
 
   useEffect(() => {
-    if (navbarSearch) {
+    if (navbarSearch && window.innerWidth >= 960) {
       navbarSearch.classList.add("active");
     }
     const handleResize = () => {
@@ -51,11 +53,10 @@ function Header({ toggleShoppingCartVisibility }) {
 
   useEffect(() => {
     dispatch(getCategories());
-  }, []);
+  }, [dispatch]);
 
   const handleMenuClick = () => {
     // Toggle the 'active' class to control visibility
-    console.log(navbarSearch);
     if (navbarSearch) {
       navbarSearch.classList.toggle("active");
     }
@@ -67,6 +68,26 @@ function Header({ toggleShoppingCartVisibility }) {
 
   const handleClick = () => {
     toggleShoppingCartVisibility();
+  };
+
+  const handleSearch = (e) => {
+    // prevent default behaviour
+    e.preventDefault();
+
+    // get number of search nav bar
+    const number = isLargescreen ? "" : "2";
+    // get input field
+    const input = document.getElementById(`search-navbar${number}`);
+
+    // Get the value from the input field
+    const productName = input.value;
+
+    // navigate to path
+    if (productName === "") navigate("/");
+    else navigate(`/products?name=${productName}`);
+
+    // reset input field
+    input.value = "";
   };
 
   return (
@@ -85,30 +106,37 @@ function Header({ toggleShoppingCartVisibility }) {
           </Link>
           <div className="flex lg:order-2">
             <div className="relative hidden lg:block">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  className="w-4 h-4"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              <div className="relative w-full">
+                <form className="flex w-full" onSubmit={handleSearch}>
+                  <input
+                    type="text"
+                    id="search-navbar"
+                    className="block w-full p-2 text-sm text-end rounded-lg bg-mainColor placeholder-white pr-10"
+                    placeholder="...ابحثي عن ما تريدين"
                   />
-                </svg>
-                <span className="sr-only">Search icon</span>
+                  <button
+                    type="submit"
+                    className="absolute inset-y-0 left-0 flex items-center justify-center px-3 text-white bg-mainColor rounded-l-lg"
+                    aria-label="Search"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                      />
+                    </svg>
+                  </button>
+                </form>
               </div>
-              <input
-                type="text"
-                id="search-navbar"
-                className="block w-full mt-2 p-2 ps-10 text-sm text-end rounded-lg bg-mainColor placeholder-white"
-                placeholder="...ابحثي عن ما تريدين"
-              />
             </div>
             <button
               id="btn-hamburger"
@@ -146,29 +174,37 @@ function Header({ toggleShoppingCartVisibility }) {
             id="navbar-search"
           >
             <div className="relative mt-3 lg:hidden">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              <div className="relative w-full">
+                <form className="flex w-full" onSubmit={handleSearch}>
+                  <input
+                    type="text"
+                    id="search-navbar2"
+                    className="block w-full p-2 text-sm text-end rounded-lg bg-mainColor placeholder-white pr-10"
+                    placeholder="...ابحثي عن ما تريدين"
                   />
-                </svg>
+                  <button
+                    type="submit"
+                    className="absolute inset-y-0 left-0 flex items-center justify-center px-3 text-white bg-mainColor rounded-l-lg"
+                    aria-label="Search"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                      />
+                    </svg>
+                  </button>
+                </form>
               </div>
-              <input
-                type="text"
-                id="search-navbar"
-                className="block w-full mt-2 p-2 ps-10 text-sm text-white text-end border bg-mainColor border-darkWhite rounded-lg  focus:ring-blue-500 focus:border-blue-500 placeholder-white"
-                placeholder="ابحثي عن ما تريدين..."
-              />
             </div>
             <div className="flex flex-col">
               <ul className="flex flex-col mb-3 p-4 lg:p-0 mt-4 font-medium border border-gray-100 rounded-lg lg:space-x-4 lg:flex-row-reverse lg:mt-5 lg:border-0">

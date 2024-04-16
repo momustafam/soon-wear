@@ -46,7 +46,10 @@ const cartSlice = createSlice({
     addKeyToCart: (state, { payload }) => {
       // Find the index of the product in cartItems array
       const index = state.cartItems.findIndex(
-        (item) => item.id === payload.id && item.size === payload.size
+        (item) =>
+          item.id === payload.id &&
+          item.size === payload.size &&
+          item.color === payload.color
       );
 
       if (index !== -1) {
@@ -57,7 +60,6 @@ const cartSlice = createSlice({
         };
       }
 
-      console.log(payload);
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
   },

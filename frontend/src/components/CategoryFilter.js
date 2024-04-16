@@ -17,7 +17,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function CategoryFilter({ products, feature, category_id }) {
+export default function CategoryFilter({
+  products,
+  feature,
+  category_id,
+  name,
+}) {
   const dispatch = useDispatch();
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -69,6 +74,26 @@ export default function CategoryFilter({ products, feature, category_id }) {
     filters.push(obj);
   }
 
+  if (name) {
+    const featureFilter = {
+      id: "feature",
+      name: "المميزات",
+      options: [
+        { id: 1, name: "top_discounts" },
+        { id: 2, name: "top_selling" },
+        { id: 3, name: "recently_arrived" },
+      ],
+    };
+
+    const categoryFilter = {
+      id: "category",
+      name: "الفئات",
+      options: categories,
+    };
+
+    filters.push(featureFilter, categoryFilter);
+  }
+
   const sortOptions = [
     {
       name: "احسن تقييم",
@@ -111,17 +136,18 @@ export default function CategoryFilter({ products, feature, category_id }) {
         getProductByCategory({
           category_id,
           feature,
+          name,
           options: query,
         })
       );
     }
-  }, [sortingQuery]);
+  }, [sortingQuery, category_id, feature, name, filteringQuery, dispatch]);
 
   useEffect(() => {
     if (colors.length === 0) dispatch(getColors());
     if (sizes.length === 0) dispatch(getSizes());
     if (categories.length === 0) dispatch(getCategories());
-  }, []);
+  }, [categories.length, colors.length, sizes.length, dispatch]);
 
   const updateQuery = (paramKey, paramValue) => {
     // Check if the current query already contains the specified parameter
@@ -204,15 +230,19 @@ export default function CategoryFilter({ products, feature, category_id }) {
   };
 
   const handleFilter = () => {
-    if (filteringQuery != "") {
+    if (filteringQuery !== "") {
       const query = sortingQuery
         ? sortingQuery + "&" + filteringQuery
         : filteringQuery;
-      dispatch(getProductByCategory({ category_id, feature, options: query }));
+      dispatch(
+        getProductByCategory({ category_id, feature, name, options: query })
+      );
 
       localStorage.setItem("query", query);
     } else {
-      dispatch(getProductByCategory({ category_id, feature, options: "" }));
+      dispatch(
+        getProductByCategory({ category_id, feature, name, options: "" })
+      );
     }
   };
   return (
@@ -391,16 +421,16 @@ export default function CategoryFilter({ products, feature, category_id }) {
                       {sortOptions.map((option) => (
                         <Menu.Item key={option.name}>
                           {({ active }) => (
-                            <a
+                            <button
                               onClick={option.onClick}
                               className={classNames(
                                 "text-gray-500",
                                 active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm"
+                                "block w-full px-4 py-2 text-sm"
                               )}
                             >
                               {option.name}
-                            </a>
+                            </button>
                           )}
                         </Menu.Item>
                       ))}

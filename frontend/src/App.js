@@ -7,6 +7,7 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import ShoppingCart from "./components/ShoppingCart";
 import { useState } from "react";
 import ProductDetailsScreen from "./screens/ProductDetailsScreen";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   const [isShoppingCartVisible, setShoppingCartVisible] = useState(false);
@@ -16,6 +17,7 @@ function App() {
   };
   return (
     <Router>
+      <ScrollToTop />
       <Header toggleShoppingCartVisibility={toggleShoppingCartVisibility} />
       <main>
         <Routes>

@@ -4,6 +4,7 @@ import axios from "axios";
 const initialState = {
   categories: [],
   categoryProducts: [],
+  next: "",
 };
 
 const categorySlice = createSlice({
@@ -26,6 +27,7 @@ const categorySlice = createSlice({
       })
       .addCase(getProductByCategory.fulfilled, (state, { payload }) => {
         state.categoryProducts = payload.results;
+        state.next = payload.next;
         state.loading = false;
         state.error = false;
       })
@@ -36,6 +38,13 @@ const categorySlice = createSlice({
       .addCase(getProductByCategory.rejected, (state) => {
         state.error = true;
         state.loading = false;
+      })
+      .addCase(addMoreProducts.fulfilled, (state, { payload }) => {
+        state.categoryProducts = [
+          ...state.categoryProducts,
+          ...payload.results,
+        ];
+        state.next = payload.next;
       });
   },
 });
@@ -60,7 +69,7 @@ export const getCategories = createAsyncThunk("categories/get", async () => {
 
 export const getProductByCategory = createAsyncThunk(
   "categories/getProductsByCategory",
-  async ({ category_id, feature, options = "" }) => {
+  async ({ category_id, feature, name, options = "" }) => {
     try {
       const config = {
         headers: {
@@ -68,8 +77,10 @@ export const getProductByCategory = createAsyncThunk(
         },
       };
 
-      const query =
-        category_id !== null ? `category=${category_id}` : `feature=${feature}`;
+      let query = "";
+      if (name) query = `name=${name}`;
+      else if (category_id) query = `category=${category_id}`;
+      else if (feature) query = `feature=${feature}`;
 
       if (options !== "") {
         options = "&" + options;
@@ -79,6 +90,30 @@ export const getProductByCategory = createAsyncThunk(
         `http://localhost:8000/api/v1/products?${query + options}`,
         config
       );
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const addMoreProducts = createAsyncThunk(
+  "categories/addMoreProducts",
+  async (_, { getState }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      // get next from current state
+      const {
+        category: { next },
+      } = getState();
+
+      const { data } = await axios.get(next, config);
 
       return data;
     } catch (error) {
