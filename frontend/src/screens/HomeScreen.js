@@ -83,6 +83,8 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               images={banners.recently_arrived_banner}
               link={"/products?feature=top_discounts"}
               key={feature}
+              seeMore={false}
+              next={true}
             />
           );
         } else if (
@@ -97,6 +99,8 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               images={banners.recently_arrived_banner}
               link={"/products?feature=top_selling"}
               key={feature}
+              seeMore={false}
+              next={true}
             />
           );
         } else if (
@@ -111,6 +115,8 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               images={banners.recently_arrived_banner}
               link={"/products?feature=recently_arrived"}
               key={feature}
+              seeMore={false}
+              next={true}
             />
           );
         }

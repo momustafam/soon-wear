@@ -2,9 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addMoreProducts } from "../slices/categorySlice";
 
-function SeeMoreButton({ link, seeMore = false }) {
+function SeeMoreButton({ link, seeMore = false, next }) {
   const dispatch = useDispatch();
-  const { next } = useSelector((state) => state.category);
 
   const handleClick = () => {
     if (seeMore) {

@@ -9,6 +9,8 @@ function DisplayProducts({
   products,
   images,
   link,
+  seeMore,
+  next,
 }) {
   return (
     <div>
@@ -27,7 +29,7 @@ function DisplayProducts({
             />
           ))}
         </div>
-        <SeeMoreButton link={link} seeMore={true} />
+        <SeeMoreButton link={link} seeMore={seeMore} next={next} />
         {images &&
           images.map((image) => (
             <Link key={image} to={image.url}>

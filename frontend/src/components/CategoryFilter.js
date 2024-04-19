@@ -59,9 +59,7 @@ export default function CategoryFilter({
       options: categories,
     };
     filters.push(obj);
-  }
-
-  if (category_id) {
+  } else if (category_id) {
     const obj = {
       id: "feature",
       name: "المميزات",
@@ -72,9 +70,7 @@ export default function CategoryFilter({
       ],
     };
     filters.push(obj);
-  }
-
-  if (name) {
+  } else if (name) {
     const featureFilter = {
       id: "feature",
       name: "المميزات",
