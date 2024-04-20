@@ -110,7 +110,7 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="text-center pb-10">
+        <div className="text-center pb-10 mt-4">
           <span className="text-sm text-white sm:text-center dark:text-gray-400">
             .كل الحقوق محفوظة
             <Link to="/" className="hover:underline">

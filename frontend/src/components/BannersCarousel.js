@@ -15,7 +15,7 @@ function BannersCarousel({ banners }) {
           <Link to={banner.url} key={banner.image}>
             <img
               src={require(`../images${banner.image}`)}
-              alt={`banner image`}
+              alt={`${banner.name}`}
               className="w-full h-full object-fit rounded-xl"
               style={{ maxHeight: "70vh" }}
             />
