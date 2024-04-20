@@ -11,7 +11,6 @@ import { resetCartItems } from "../slices/cartSlice";
 function HomeScreen({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
   const banners = useSelector((state) => state.landingPage.banners);
-  console.log(banners);
   const loading = useSelector((state) => state.landingPage.loading);
   const top_selling = useSelector((state) => state.landingPage.top_selling);
   const discounts = useSelector((state) => state.landingPage.discounts);

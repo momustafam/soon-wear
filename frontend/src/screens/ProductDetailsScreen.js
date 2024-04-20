@@ -118,7 +118,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
                 {/* Map and render additional images */}
                 {Object.keys(product).length !== 0 &&
                   product.images &&
-                  product.images[colorSelected] &&
+                  product.images[colorSelected] !== undefined &&
                   product.images[colorSelected].map((image, index) => (
                     <img
                       key={index}
@@ -215,32 +215,33 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               </div> */}
                 <div className="flex flex-row-reverse items-center mt-2">
                   <ButtonGroup variant="outlined" color="black" size="lg">
-                    {product.stocks[selectedSize].map((color) =>
-                      color.quantity > 0 ? (
-                        <Button
-                          className={
-                            colorSelected === color.color_name
-                              ? "text-white bg-mainColor py-2 px-4 rounded-full font-bold mr-2 hover:bg-mainColor/90"
-                              : "text-black  py-2 px-4 rounded-full font-bold mr-2 hover:bg-mainColor hover:text-white "
-                          }
-                          key={color.color_name}
-                          onClick={() => {
-                            setColorSelected(color.color_name);
-                            setCountInStock(color.quantity);
-                          }}
-                        >
-                          {color.color_name}
-                        </Button>
-                      ) : (
-                        <Button
-                          className="text-black line-through decoration-red-900 decoration-2 decoration-solid  py-2 px-4 rounded-full font-bold mr-2"
-                          disabled
-                          key={color.color_name}
-                        >
-                          {color.color_name}
-                        </Button>
-                      )
-                    )}
+                    {product.stocks[selectedSize] !== undefined &&
+                      product.stocks[selectedSize].map((color) =>
+                        color.quantity > 0 ? (
+                          <Button
+                            className={
+                              colorSelected === color.color_name
+                                ? "text-white bg-mainColor py-2 px-4 rounded-full font-bold mr-2 hover:bg-mainColor/90"
+                                : "text-black  py-2 px-4 rounded-full font-bold mr-2 hover:bg-mainColor hover:text-white "
+                            }
+                            key={color.color_name}
+                            onClick={() => {
+                              setColorSelected(color.color_name);
+                              setCountInStock(color.quantity);
+                            }}
+                          >
+                            {color.color_name}
+                          </Button>
+                        ) : (
+                          <Button
+                            className="text-black line-through decoration-red-900 decoration-2 decoration-solid  py-2 px-4 rounded-full font-bold mr-2"
+                            disabled
+                            key={color.color_name}
+                          >
+                            {color.color_name}
+                          </Button>
+                        )
+                      )}
                   </ButtonGroup>
                 </div>
               </div>
