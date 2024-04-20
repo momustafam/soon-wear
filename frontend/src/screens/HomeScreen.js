@@ -11,6 +11,7 @@ import { resetCartItems } from "../slices/cartSlice";
 function HomeScreen({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();
   const banners = useSelector((state) => state.landingPage.banners);
+  console.log(banners);
   const loading = useSelector((state) => state.landingPage.loading);
   const top_selling = useSelector((state) => state.landingPage.top_selling);
   const discounts = useSelector((state) => state.landingPage.discounts);
@@ -45,9 +46,9 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
       {success && <ThankYou />}
 
       {/* Start the upper banner */}
-      {banners && banners.main_banner_static && (
+      {banners && banners.main_banner_dynamic && (
         <BannersCarousel
-          banners={banners.main_banner_static}
+          banners={banners.main_banner_dynamic}
           key={"main_banner"}
         />
       )}
@@ -96,7 +97,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               toggleShoppingCartVisibility={toggleShoppingCartVisibility}
               header="المنتجات الأكثر مبيعاً"
               products={landingPageProducts[feature]}
-              images={banners.recently_arrived_banner}
+              images={banners.top_selling_banner}
               link={"/products?feature=top_selling"}
               key={feature}
               seeMore={false}
@@ -112,7 +113,7 @@ function HomeScreen({ toggleShoppingCartVisibility }) {
               toggleShoppingCartVisibility={toggleShoppingCartVisibility}
               header="وصل حديثاً"
               products={landingPageProducts[feature]}
-              images={banners.recently_arrived_banner}
+              images={null}
               link={"/products?feature=recently_arrived"}
               key={feature}
               seeMore={false}

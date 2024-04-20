@@ -332,11 +332,11 @@ export default function CategoryFilter({
                                       type="checkbox"
                                       defaultChecked={
                                         checkboxData &&
-                                        checkboxData[section.id] &&
-                                        checkboxData[section.id][option.name]
+                                          checkboxData[section.id] &&
+                                          checkboxData[section.id][option.name]
                                           ? checkboxData[section.id][
-                                              option.name
-                                            ]
+                                          option.name
+                                          ]
                                           : false
                                       }
                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
@@ -351,8 +351,8 @@ export default function CategoryFilter({
                                           {option.name === "top_discounts"
                                             ? "التخفيضات"
                                             : option.name === "top_selling"
-                                            ? "الأعلى مبيعاً"
-                                            : "وصل حديثاً"}
+                                              ? "الأعلى مبيعاً"
+                                              : "وصل حديثاً"}
                                         </>
                                       ) : (
                                         option.name
@@ -379,19 +379,18 @@ export default function CategoryFilter({
           </Dialog>
         </Transition.Root>
 
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <main className="mx-auto max-w px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              {category_id ||
-                (feature && feature === "top_selling"
-                  ? "الأعلى مبيعاً"
-                  : feature === "top_discounts"
-                  ? "التخفيضات"
-                  : "وصل حديثاً")}
-            </h1>
-
-            <div className="flex items-center">
-              <Menu as="div" className="relative inline-block text-left">
+            <div className="flex gap-5 items-center">
+              <button
+                type="button"
+                className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6"
+                onClick={() => setMobileFiltersOpen(true)}
+              >
+                <span className="sr-only">Filters</span>
+                <FunnelIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+              <Menu as="div" className="relative">
                 <div>
                   <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                     Sort
@@ -411,7 +410,7 @@ export default function CategoryFilter({
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Menu.Items className="absolute z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                     {/* Sorting options */}
                     <div className="py-1">
                       {sortOptions.map((option) => (
@@ -434,16 +433,15 @@ export default function CategoryFilter({
                   </Menu.Items>
                 </Transition>
               </Menu>
-
-              <button
-                type="button"
-                className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6"
-                onClick={() => setMobileFiltersOpen(true)}
-              >
-                <span className="sr-only">Filters</span>
-                <FunnelIcon className="h-5 w-5" aria-hidden="true" />
-              </button>
             </div>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+              {category_id ||
+                (feature && feature === "top_selling"
+                  ? "الأعلى مبيعاً"
+                  : feature === "top_discounts"
+                    ? "التخفيضات"
+                    : "وصل حديثاً")}
+            </h1>
           </div>
 
           <section aria-labelledby="products-heading" className="pb-24 pt-6">

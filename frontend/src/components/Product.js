@@ -83,49 +83,10 @@ function Product({ product, toggleShoppingCartVisibility }) {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            {selectedSize && (
-              <div className="ml-auto">
-                <ButtonGroup
-                  className="flex flex-wrap"
-                  variant="outlined"
-                  color="black"
-                  size="sm"
-                >
-                  {product.stocks[selectedSize].map((color) =>
-                    color.quantity > 0 ? (
-                      <Button
-                        className={
-                          colorSelected === color.color_name
-                            ? "text-white bg-mainColor"
-                            : "text-black bg-white"
-                        }
-                        key={color.color_name}
-                        onClick={() => {
-                          setColorSelected(color.color_name);
-                          setCountInStock(color.quantity);
-                          setChangeSize(false);
-                        }}
-                      >
-                        {color.color_name}
-                      </Button>
-                    ) : (
-                      <Button
-                        className="text-black line-through decoration-red-900 decoration-2 decoration-solid"
-                        disabled
-                        key={color.color_name}
-                      >
-                        {color.color_name}
-                      </Button>
-                    )
-                  )}
-                </ButtonGroup>
-              </div>
-            )}
-
+          <div className="grid grid-cols-1 gap-4">
             <div className="ml-auto">
               <ButtonGroup
-                className="flex flex-wrap-reverse"
+                className="flex justify-end flex-wrap"
                 variant="outlined"
                 color="black"
                 size="sm"
@@ -150,22 +111,50 @@ function Product({ product, toggleShoppingCartVisibility }) {
               </ButtonGroup>
             </div>
           </div>
-
+          {selectedSize && (
+            <div className="ml-auto mt-1">
+              <ButtonGroup
+                className="flex justify-end flex-wrap"
+                variant="outlined"
+                color="black"
+                size="sm"
+              >
+                {product.stocks[selectedSize].map((color) =>
+                  color.quantity > 0 ? (
+                    <Button
+                      className={
+                        colorSelected === color.color_name
+                          ? "text-white bg-mainColor"
+                          : "text-black bg-white"
+                      }
+                      key={color.color_name}
+                      onClick={() => {
+                        setColorSelected(color.color_name);
+                        setCountInStock(color.quantity);
+                        setChangeSize(false);
+                      }}
+                    >
+                      {color.color_name}
+                    </Button>
+                  ) : (
+                    <Button
+                      className="text-black line-through decoration-red-900 decoration-2 decoration-solid"
+                      disabled
+                      key={color.color_name}
+                    >
+                      {color.color_name}
+                    </Button>
+                  )
+                )}
+              </ButtonGroup>
+            </div>
+          )}
           <div className="my-3">
-            {noSizeSelected && !selectedSize && (
+            {((noSizeSelected && !selectedSize) || (noColorSelected && !colorSelected)) && (
               <Alert
                 className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
                 color="red"
-                message="الرجاء اختيار مقاس"
-              />
-            )}
-          </div>
-          <div className="my-3">
-            {noColorSelected && !colorSelected && (
-              <Alert
-                className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
-                color="red"
-                message="الرجاء اختيار اللون"
+                message="يجب اختيار اللون و المقاس"
               />
             )}
           </div>

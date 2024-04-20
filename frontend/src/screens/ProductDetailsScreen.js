@@ -53,17 +53,17 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row-reverse -mx-4">
           <div className="md:flex-1 px-4">
-            <div className="h-80 rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+            <div className="rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
               {/* Main Product Image */}
               <img
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-full object-fill rounded-lg"
                 src={
                   Object.keys(product).length !== 0
                     ? changeSize
                       ? require(`../images/${product.main_img}`)
                       : colorSelected && product.images[colorSelected]
-                      ? require(`../images/${product.images[colorSelected][0]}`)
-                      : require(`../images/${product.main_img}`)
+                        ? require(`../images/${product.images[colorSelected][0]}`)
+                        : require(`../images/${product.main_img}`)
                     : ""
                 }
                 alt="main"
@@ -87,7 +87,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
             </div>
           </div>
           <div className="md:flex-1 px-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 text-right">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-5 text-right">
               {product.name}
             </h2>
 
@@ -102,25 +102,25 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               </Stack>
               <Typography
                 color="blue-gray"
-                className="text-sm font-semibold text-blue-gray-500"
+                className="text-lg font-semibold text-blue-gray-500"
               >
                 ({product.reviews_count})
               </Typography>
             </div>
 
-            <div className="flex flex-row-reverse mb-4">
+            <div className="flex flex-row-reverse mb-4 mt-10">
               <div className="ms-4">
-                <span className="font-bold text-gray-700 dark:text-gray-300">
+                <span className="font-bold text-2xl text-gray-700 dark:text-gray-300">
                   السعر:{" "}
                 </span>
-                <span className="text-gray-600 dark:text-gray-300">
+                <span className="text-2xl text-gray-600 dark:text-gray-300">
                   £{product.price}
                 </span>
               </div>
             </div>
 
-            <div className="mb-4 text-right">
-              <span className="font-bold text-gray-700 dark:text-gray-300 text-right">
+            <div className="mb-4 mt-10 text-right">
+              <span className="font-bold text-2xl text-gray-700 dark:text-gray-300 text-right">
                 وصف المنتج
               </span>
               <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
@@ -128,13 +128,13 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               </p>
             </div>
 
-            <div className="mb-4 text-right">
-              <span className="font-bold text-gray-700 dark:text-gray-300">
+            <div className="mb-4 mt-10 text-right">
+              <span className="font-bold text-2xl text-gray-700 dark:text-gray-300">
                 اختر المقاس:
               </span>
               <div className="flex flex-row-reverse items-center mt-2">
                 {product && product.stocks && (
-                  <ButtonGroup variant="outlined" color="black" size="sm">
+                  <ButtonGroup variant="outlined" color="black" size="lg">
                     {Object.keys(product.stocks).map((size) => (
                       <Button
                         className={
@@ -155,8 +155,8 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               </div>
             </div>
             {selectedSize && (
-              <div className="mb-4 text-right">
-                <span className="font-bold text-gray-700 dark:text-gray-300">
+              <div className="mb-4 mt-5 text-right">
+                <span className="font-bold text-2xl text-gray-700 dark:text-gray-300">
                   اختر اللون:
                 </span>
                 {/* <div className="flex flex-row-reverse items-center mt-2">
@@ -166,7 +166,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
                 <button className="w-6 h-6 rounded-full bg-yellow-500 dark:bg-yellow-700 mr-2"></button>
               </div> */}
                 <div className="flex flex-row-reverse items-center mt-2">
-                  <ButtonGroup variant="outlined" color="black" size="sm">
+                  <ButtonGroup variant="outlined" color="black" size="lg">
                     {product.stocks[selectedSize].map((color) =>
                       color.quantity > 0 ? (
                         <Button
@@ -198,27 +198,18 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               </div>
             )}
             <div className="my-3">
-              {noSizeSelected && !selectedSize && (
+              {((noSizeSelected && !selectedSize) || (noColorSelected && !colorSelected)) && (
                 <Alert
                   className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
                   color="red"
-                  message="الرجاء اختيار مقاس"
-                />
-              )}
-            </div>
-            <div className="my-3">
-              {noColorSelected && !colorSelected && (
-                <Alert
-                  className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
-                  color="red"
-                  message="الرجاء اختيار اللون"
+                  message="يجب اختيار اللون و المقاس"
                 />
               )}
             </div>
             <div className="flex -mx-2 mb-4">
-              <div className="w-full px-2">
+              <div className="w-full px-2 mt-10">
                 <button
-                  className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700"
+                  className="w-full text-2xl bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700"
                   onClick={() => {
                     handleAddToCart();
                     setSelectedSize(null);

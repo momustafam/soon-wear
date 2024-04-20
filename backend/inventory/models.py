@@ -95,7 +95,7 @@ class Product(models.Model):
         default=0.0,
         max_digits=2,
         decimal_places = 1,
-        validators=[MaxValueValidator(5), MinValueValidator(0)],
+        validators=[MaxValueValidator(5.0), MinValueValidator(0.0)],
         verbose_name = "تقييم المنتج"
     )
     category = models.ForeignKey(

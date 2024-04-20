@@ -118,6 +118,7 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
             "discount": 70,
             "rating": "0.0",
             "reviews_count": 0,
+            "main_img": "products/product_6.jpg",
             "category_id": 1,
             "stocks": {
                 "من 60 ل 80 كيلو": [
@@ -204,6 +205,7 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
             "discount": 250,
             "rating": "0.0",
             "reviews_count": 0,
+            "main_img": "products/product_6.jpg",
             "category_id": 2,
             "stocks": {
                 "من 80 ل 100 ك": [
@@ -250,6 +252,7 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
             "discount": 90,
             "rating": "0.0",
             "reviews_count": 0,
+            "main_img": "products/product_6.jpg",
             "category_id": 3,
             "stocks": {
                 "من 120 ل 140 ك": [
@@ -308,7 +311,7 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
 - Allow: GET, HEAD, OPTIONS
 - Description: Retrieve products data.
 - Authentication: Not Required
-- Request Parameters: ordering=[price, rating, discount], search=[name], feature={featureName}, category={categoryID}, size={sizeID}, color={colorID}
+- Request Parameters: ordering=[price, rating, discount], search=[name], feature={featureName/s}, category={categoryID/s}, size={sizeName/s}, color={colorName/s}
 - Response:
   ```json
   {
@@ -325,6 +328,7 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
             "discount": 70,
             "rating": "0.0",
             "reviews_count": 0,
+            "main_img": "products/product_6.jpg",
             "category_id": 1,
             "stocks": {
                 "من 60 ل 80 كيلو": [
@@ -409,6 +413,7 @@ Base URL --> `http://{localIPAdress}:8000/api/v1/` <br><br>
             "discount": 250,
             "rating": "0.0",
             "reviews_count": 0,
+            "main_img": "products/product_6.jpg",
             "category_id": 2,
             "stocks": {
                 "من 80 ل 100 ك": [
