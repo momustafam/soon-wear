@@ -35,27 +35,32 @@ function Product({ product, toggleShoppingCartVisibility }) {
     if (!colorSelected) setNoColorSelected(true);
   };
 
+  const getImageSource = () => {
+    try {
+      if (changeSize) {
+        return require(`../images/${product.main_img}`);
+      } else if (colorSelected && product.images[colorSelected]) {
+        const imagesExist = product.images[colorSelected].length > 0;
+        if (imagesExist)
+          return require(`../images/${product.images[colorSelected][0]}`); // if there an image for the color
+        else return require(`../images/${product.main_img}`); // if there is no image for the color show main image
+      } else {
+        return require(`../images/${product.main_img}`);
+      }
+    } catch (error) {
+      // Handle error case (e.g., log the error or return a placeholder image)
+      console.error("Error loading image:", error);
+      return ""; // Return an empty image source or a placeholder
+    }
+  };
+
   return (
     product && (
       <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <Link to={`/products/${product.id}`} className="m-auto">
           <img
             className="h-[35rem] w-full object-cover p-4 pb-1 rounded-2xl"
-            src={(() => {
-              try {
-                // Attempt to load the image dynamically
-                if (changeSize) {
-                  return require(`../images/${product.main_img}`);
-                } else if (colorSelected) {
-                  return require(`../images/${product.images[colorSelected][0]}`);
-                } else {
-                  return require(`../images/${product.main_img}`);
-                }
-              } catch (error) {
-                // Return a placeholder image or handle the error case
-                return ""; // return empty image
-              }
-            })()}
+            src={getImageSource()}
             alt="Product"
           />
         </Link>
