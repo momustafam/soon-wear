@@ -150,7 +150,8 @@ function Product({ product, toggleShoppingCartVisibility }) {
             </div>
           )}
           <div className="my-3">
-            {((noSizeSelected && !selectedSize) || (noColorSelected && !colorSelected)) && (
+            {((noSizeSelected && !selectedSize) ||
+              (noColorSelected && !colorSelected)) && (
               <Alert
                 className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
                 color="red"
