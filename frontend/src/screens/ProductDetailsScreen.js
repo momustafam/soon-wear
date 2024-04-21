@@ -138,7 +138,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               {product.name}
             </h2>
 
-            <div className="flex justify-end items-center gap-2 mt-2 mb-2 font-bold">
+            {/* <div className="flex justify-end items-center gap-2 mt-2 mb-2 font-bold">
               <Stack spacing={1}>
                 <Rating
                   name="controlled-rating"
@@ -153,7 +153,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               >
                 ({product.reviews_count})
               </Typography>
-            </div>
+            </div> */}
 
             <div className="flex flex-row-reverse mb-4 mt-10">
               <div className="ms-4">
@@ -259,7 +259,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
             <div className="flex -mx-2 mb-4">
               <div className="w-full px-2 mt-10">
                 <button
-                  className="w-full text-2xl bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700"
+                  className="w-full text-2xl bg-mainColor text-white py-2 px-4 rounded-full font-bold hover:bg-mainColor/90 active:bg-mainColor/80"
                   onClick={() => {
                     handleAddToCart();
                     setSelectedSize(null);

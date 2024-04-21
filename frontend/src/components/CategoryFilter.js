@@ -332,11 +332,11 @@ export default function CategoryFilter({
                                       type="checkbox"
                                       defaultChecked={
                                         checkboxData &&
-                                          checkboxData[section.id] &&
-                                          checkboxData[section.id][option.name]
+                                        checkboxData[section.id] &&
+                                        checkboxData[section.id][option.name]
                                           ? checkboxData[section.id][
-                                          option.name
-                                          ]
+                                              option.name
+                                            ]
                                           : false
                                       }
                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
@@ -351,8 +351,8 @@ export default function CategoryFilter({
                                           {option.name === "top_discounts"
                                             ? "التخفيضات"
                                             : option.name === "top_selling"
-                                              ? "الأعلى مبيعاً"
-                                              : "وصل حديثاً"}
+                                            ? "الأعلى مبيعاً"
+                                            : "وصل حديثاً"}
                                         </>
                                       ) : (
                                         option.name
@@ -435,12 +435,15 @@ export default function CategoryFilter({
               </Menu>
             </div>
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              {category_id ||
-                (feature && feature === "top_selling"
-                  ? "الأعلى مبيعاً"
-                  : feature === "top_discounts"
-                    ? "التخفيضات"
-                    : "وصل حديثاً")}
+              {category_id
+                ? category_id
+                : feature === "top_selling"
+                ? "الأعلى مبيعاً"
+                : feature === "top_discounts"
+                ? "التخفيضات"
+                : feature === "recently_arrived"
+                ? "وصل حديثاً"
+                : "المنتجات"}
             </h1>
           </div>
 

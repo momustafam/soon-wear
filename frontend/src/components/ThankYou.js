@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Progress } from "@material-tailwind/react";
+import { useDispatch } from "react-redux";
+import { resetOrder } from "../slices/orderSlice";
 
 function ThankYou() {
+  const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(true);
   const [progressValue, setProgressValue] = useState(0);
 
@@ -19,14 +22,16 @@ function ThankYou() {
       if (elapsedTime >= 5000) {
         setIsVisible(false);
         clearInterval(timer);
+        dispatch(resetOrder());
       }
     }, 100); // Update progress every 100 milliseconds
 
     return () => clearInterval(timer); // Cleanup interval on component unmount
-  }, []); // Empty dependency array ensures this effect runs only once after mount
+  }, [dispatch]);
 
   const handleClose = () => {
     setIsVisible(false);
+    dispatch(resetOrder());
   };
 
   return (

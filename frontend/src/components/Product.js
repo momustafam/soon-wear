@@ -67,7 +67,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
 
         <div className="px-5 pb-5">
           <div className="flex items-center gap-2 mt-2 mb-2 font-bold">
-            <Stack spacing={1}>
+            {/* <Stack spacing={1}>
               <Rating
                 name="half-rating"
                 defaultValue={parseFloat(product.rating)}
@@ -80,7 +80,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
               className="text-sm font-semibold text-blue-gray-500"
             >
               ({product.reviews_count})
-            </Typography>
+            </Typography> */}
             <Link to={`/products/${product.id}`} className="ml-auto">
               <h5 className="text-l font-semibold tracking-tight text-gray-900 dark:text-white">
                 {product.name}
@@ -100,8 +100,8 @@ function Product({ product, toggleShoppingCartVisibility }) {
                   <Button
                     className={
                       selectedSize === size
-                        ? "text-white bg-mainColor"
-                        : "text-black bg-white"
+                        ? "text-white bg-mainColor hover:bg-mainColor/90"
+                        : "text-black bg-white hover:bg-white/5"
                     }
                     key={size}
                     onClick={() => {
@@ -129,8 +129,8 @@ function Product({ product, toggleShoppingCartVisibility }) {
                     <Button
                       className={
                         colorSelected === color.color_name
-                          ? "text-white bg-mainColor"
-                          : "text-black bg-white"
+                          ? "text-white bg-mainColor hover:bg-mainColor/90"
+                          : "text-black bg-white hover:bg-white/5"
                       }
                       key={color.color_name}
                       onClick={() => {
@@ -178,7 +178,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
               </span>
             )}
             <button
-              className="text-white font-bold bg-mainColor focus:outline-none focus:bg-mainColor  rounded-lg text-l px-3 py-3 text-center"
+              className="bg-mainColor text-white py-2 px-4 rounded-full font-bold hover:bg-mainColor/90 active:bg-mainColor/80"
               onClick={() => {
                 handleAddToCart();
                 setSelectedSize(null);

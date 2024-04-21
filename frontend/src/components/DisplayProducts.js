@@ -1,4 +1,3 @@
-import React from "react";
 import Product from "../components/Product";
 import SeeMoreButton from "./SeeMoreButton";
 import { Link } from "react-router-dom";
