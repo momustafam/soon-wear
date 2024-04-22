@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Spinner } from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,24 +7,55 @@ import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
 import { Rating, Stack } from "@mui/material";
 import { addToCart } from "../slices/cartSlice";
 import Alert from "../components/AlertError";
+import DisplayProducts from "../components/DisplayProducts";
+import { getCategory, getProductByCategory } from "../slices/categorySlice";
 
 function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const { product, loading } = useSelector((state) => state.productDetails);
+  const { category, categoryProducts } = useSelector((state) => state.category);
 
   const [countInStock, setCountInStock] = useState(0);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [prevSelectedSize, setPrevSelectedSize] = useState(null);
+
   const [colorSelected, setColorSelected] = useState(null);
   const [changeSize, setChangeSize] = useState(false);
 
   const [noColorSelected, setNoColorSelected] = useState(false);
   const [noSizeSelected, setNoSizeSelected] = useState(false);
 
+  const [mainImage, setMainImage] = useState(product.main_img);
+
   useEffect(() => {
     dispatch(getProductDetails(id));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (product.category_id) {
+      dispatch(getCategory(product.category_id));
+    }
+  }, [dispatch, product]);
+
+  useEffect(() => {
+    if (category !== "")
+      dispatch(
+        getProductByCategory({
+          category_id: category,
+          feature: null,
+          name: null,
+        })
+      );
+  }, [dispatch, category]);
+
+  useEffect(() => {
+    // Check if selectedSize has changed
+    if (selectedSize !== prevSelectedSize) {
+      setPrevSelectedSize(selectedSize); // Update prevSelectedSize
+    }
+  }, [selectedSize, prevSelectedSize]);
 
   const handleAddToCart = () => {
     if (selectedSize && colorSelected) {
@@ -44,6 +75,27 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
     if (!colorSelected) setNoColorSelected(true);
   };
 
+  const handleMainImage = useCallback(() => {
+    let src = "";
+    if (Object.keys(product).length !== 0) {
+      if (changeSize || selectedSize !== prevSelectedSize) {
+        src = require(`../images/${product.main_img}`);
+      } else if (colorSelected && product.images[colorSelected]) {
+        const imagesExist = product.images[colorSelected].length > 0;
+        if (imagesExist)
+          src = require(`../images/${product.images[colorSelected][0]}`); // if there an image for the color
+        else src = require(`../images/${product.main_img}`); // if there is no image for the color show main image
+      } else {
+        src = require(`../images/${product.main_img}`);
+      }
+    }
+    setMainImage(src);
+  }, [product, changeSize, selectedSize, prevSelectedSize, colorSelected]);
+
+  useEffect(() => {
+    handleMainImage();
+  }, [handleMainImage]);
+
   return loading ? (
     <div className="flex justify-center items-center">
       <Spinner className="h-[250px] w-[250px] mt-[3rem]" />
@@ -57,15 +109,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               {/* Main Product Image */}
               <img
                 className="w-full h-full object-fill rounded-lg"
-                src={
-                  Object.keys(product).length !== 0
-                    ? changeSize
-                      ? require(`../images/${product.main_img}`)
-                      : colorSelected && product.images[colorSelected]
-                        ? require(`../images/${product.images[colorSelected][0]}`)
-                        : require(`../images/${product.main_img}`)
-                    : ""
-                }
+                src={mainImage}
                 alt="main"
               />
 
@@ -74,13 +118,16 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
                 {/* Map and render additional images */}
                 {Object.keys(product).length !== 0 &&
                   product.images &&
-                  product.images[colorSelected] &&
+                  product.images[colorSelected] !== undefined &&
                   product.images[colorSelected].map((image, index) => (
                     <img
                       key={index}
                       className="w-20 h-20 object-cover rounded-lg mr-2"
                       src={require(`../images/${image}`)}
                       alt={`${product.name} - ${index}`}
+                      onClick={() =>
+                        setMainImage(require(`../images/${image}`))
+                      }
                     />
                   ))}
               </div>
@@ -91,7 +138,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               {product.name}
             </h2>
 
-            <div className="flex justify-end items-center gap-2 mt-2 mb-2 font-bold">
+            {/* <div className="flex justify-end items-center gap-2 mt-2 mb-2 font-bold">
               <Stack spacing={1}>
                 <Rating
                   name="controlled-rating"
@@ -106,7 +153,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               >
                 ({product.reviews_count})
               </Typography>
-            </div>
+            </div> */}
 
             <div className="flex flex-row-reverse mb-4 mt-10">
               <div className="ms-4">
@@ -145,6 +192,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
                         key={size}
                         onClick={() => {
                           setSelectedSize(size);
+                          setColorSelected(null);
                         }}
                       >
                         {size}
@@ -167,38 +215,40 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               </div> */}
                 <div className="flex flex-row-reverse items-center mt-2">
                   <ButtonGroup variant="outlined" color="black" size="lg">
-                    {product.stocks[selectedSize].map((color) =>
-                      color.quantity > 0 ? (
-                        <Button
-                          className={
-                            colorSelected === color.color_name
-                              ? "text-white bg-mainColor py-2 px-4 rounded-full font-bold mr-2 hover:bg-mainColor/90"
-                              : "text-black  py-2 px-4 rounded-full font-bold mr-2 hover:bg-mainColor hover:text-white "
-                          }
-                          key={color.color_name}
-                          onClick={() => {
-                            setColorSelected(color.color_name);
-                            setCountInStock(color.quantity);
-                          }}
-                        >
-                          {color.color_name}
-                        </Button>
-                      ) : (
-                        <Button
-                          className="text-black line-through decoration-red-900 decoration-2 decoration-solid  py-2 px-4 rounded-full font-bold mr-2"
-                          disabled
-                          key={color.color_name}
-                        >
-                          {color.color_name}
-                        </Button>
-                      )
-                    )}
+                    {product.stocks[selectedSize] !== undefined &&
+                      product.stocks[selectedSize].map((color) =>
+                        color.quantity > 0 ? (
+                          <Button
+                            className={
+                              colorSelected === color.color_name
+                                ? "text-white bg-mainColor py-2 px-4 rounded-full font-bold mr-2 hover:bg-mainColor/90"
+                                : "text-black  py-2 px-4 rounded-full font-bold mr-2 hover:bg-mainColor hover:text-white "
+                            }
+                            key={color.color_name}
+                            onClick={() => {
+                              setColorSelected(color.color_name);
+                              setCountInStock(color.quantity);
+                            }}
+                          >
+                            {color.color_name}
+                          </Button>
+                        ) : (
+                          <Button
+                            className="text-black line-through decoration-red-900 decoration-2 decoration-solid  py-2 px-4 rounded-full font-bold mr-2"
+                            disabled
+                            key={color.color_name}
+                          >
+                            {color.color_name}
+                          </Button>
+                        )
+                      )}
                   </ButtonGroup>
                 </div>
               </div>
             )}
             <div className="my-3">
-              {((noSizeSelected && !selectedSize) || (noColorSelected && !colorSelected)) && (
+              {((noSizeSelected && !selectedSize) ||
+                (noColorSelected && !colorSelected)) && (
                 <Alert
                   className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
                   color="red"
@@ -209,7 +259,7 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
             <div className="flex -mx-2 mb-4">
               <div className="w-full px-2 mt-10">
                 <button
-                  className="w-full text-2xl bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700"
+                  className="w-full text-2xl bg-mainColor text-white py-2 px-4 rounded-full font-bold hover:bg-mainColor/90 active:bg-mainColor/80"
                   onClick={() => {
                     handleAddToCart();
                     setSelectedSize(null);
@@ -222,6 +272,18 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
               </div>
             </div>
           </div>
+        </div>
+        <div>
+          <DisplayProducts
+            product={product}
+            toggleShoppingCartVisibility={toggleShoppingCartVisibility}
+            header={categoryProducts.length > 1 && "المنتجات المشابهة"}
+            products={categoryProducts}
+            link={`/products?category=${category}`}
+            key={category}
+            seeMore={false}
+            next={categoryProducts.length > 1}
+          />
         </div>
       </div>
     </div>

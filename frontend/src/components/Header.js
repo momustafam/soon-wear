@@ -365,7 +365,7 @@ function Header({ toggleShoppingCartVisibility }) {
                   {categories.map((category) => (
                     <Link
                       onClick={() => window.scrollTo(0, 0)}
-                      to={`/products?category=${category.id}`}
+                      to={`/products?category=${category.name}`}
                       key={category.id}
                     >
                       <MenuItem

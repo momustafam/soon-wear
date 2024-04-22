@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
+  category: "",
   categories: [],
   categoryProducts: [],
   next: "",
@@ -12,6 +13,9 @@ const categorySlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
+      .addCase(getCategory.fulfilled, (state, { payload }) => {
+        state.category = payload.name;
+      })
       .addCase(getCategories.fulfilled, (state, { payload }) => {
         state.categories = payload;
         state.loading = false;
@@ -49,6 +53,24 @@ const categorySlice = createSlice({
   },
 });
 
+export const getCategory = createAsyncThunk("category/get", async (id) => {
+  try {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
+    const { data } = await axios.get(
+      `http://localhost:8000/api/v1/categories/${id}`,
+      config
+    );
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+});
+
 export const getCategories = createAsyncThunk("categories/get", async () => {
   try {
     const config = {
@@ -78,7 +100,7 @@ export const getProductByCategory = createAsyncThunk(
       };
 
       let query = "";
-      if (name) query = `name=${name}`;
+      if (name) query = `search=${name}`;
       else if (category_id) query = `category=${category_id}`;
       else if (feature) query = `feature=${feature}`;
 
@@ -86,10 +108,8 @@ export const getProductByCategory = createAsyncThunk(
         options = "&" + options;
       }
 
-      const { data } = await axios.get(
-        `http://localhost:8000/api/v1/products?${query + options}`,
-        config
-      );
+      const url = `http://localhost:8000/api/v1/products?${query + options}`;
+      const { data } = await axios.get(url, config);
 
       return data;
     } catch (error) {

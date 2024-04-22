@@ -1,7 +1,6 @@
 import footerLogo from "../images/logos/footer-logo.jpg";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import React from "react";
 
 /**
  * @returns The standard footer of all pages of soon wear website

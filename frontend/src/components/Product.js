@@ -35,34 +35,39 @@ function Product({ product, toggleShoppingCartVisibility }) {
     if (!colorSelected) setNoColorSelected(true);
   };
 
+  const getImageSource = () => {
+    try {
+      if (changeSize) {
+        return require(`../images/${product.main_img}`);
+      } else if (colorSelected && product.images[colorSelected]) {
+        const imagesExist = product.images[colorSelected].length > 0;
+        if (imagesExist)
+          return require(`../images/${product.images[colorSelected][0]}`); // if there an image for the color
+        else return require(`../images/${product.main_img}`); // if there is no image for the color show main image
+      } else {
+        return require(`../images/${product.main_img}`);
+      }
+    } catch (error) {
+      // Handle error case (e.g., log the error or return a placeholder image)
+      console.error("Error loading image:", error);
+      return ""; // Return an empty image source or a placeholder
+    }
+  };
+
   return (
     product && (
       <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <Link to={`/products/${product.id}`} className="m-auto">
           <img
             className="h-[35rem] w-full object-cover p-4 pb-1 rounded-2xl"
-            src={(() => {
-              try {
-                // Attempt to load the image dynamically
-                if (changeSize) {
-                  return require(`../images/${product.main_img}`);
-                } else if (colorSelected) {
-                  return require(`../images/${product.images[colorSelected][0]}`);
-                } else {
-                  return require(`../images/${product.main_img}`);
-                }
-              } catch (error) {
-                // Return a placeholder image or handle the error case
-                return ""; // return empty image
-              }
-            })()}
+            src={getImageSource()}
             alt="Product"
           />
         </Link>
 
         <div className="px-5 pb-5">
           <div className="flex items-center gap-2 mt-2 mb-2 font-bold">
-            <Stack spacing={1}>
+            {/* <Stack spacing={1}>
               <Rating
                 name="half-rating"
                 defaultValue={parseFloat(product.rating)}
@@ -75,7 +80,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
               className="text-sm font-semibold text-blue-gray-500"
             >
               ({product.reviews_count})
-            </Typography>
+            </Typography> */}
             <Link to={`/products/${product.id}`} className="ml-auto">
               <h5 className="text-l font-semibold tracking-tight text-gray-900 dark:text-white">
                 {product.name}
@@ -95,8 +100,8 @@ function Product({ product, toggleShoppingCartVisibility }) {
                   <Button
                     className={
                       selectedSize === size
-                        ? "text-white bg-mainColor"
-                        : "text-black bg-white"
+                        ? "text-white bg-mainColor hover:bg-mainColor/90"
+                        : "text-black bg-white hover:bg-white/5"
                     }
                     key={size}
                     onClick={() => {
@@ -124,8 +129,8 @@ function Product({ product, toggleShoppingCartVisibility }) {
                     <Button
                       className={
                         colorSelected === color.color_name
-                          ? "text-white bg-mainColor"
-                          : "text-black bg-white"
+                          ? "text-white bg-mainColor hover:bg-mainColor/90"
+                          : "text-black bg-white hover:bg-white/5"
                       }
                       key={color.color_name}
                       onClick={() => {
@@ -150,7 +155,8 @@ function Product({ product, toggleShoppingCartVisibility }) {
             </div>
           )}
           <div className="my-3">
-            {((noSizeSelected && !selectedSize) || (noColorSelected && !colorSelected)) && (
+            {((noSizeSelected && !selectedSize) ||
+              (noColorSelected && !colorSelected)) && (
               <Alert
                 className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
                 color="red"
@@ -172,7 +178,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
               </span>
             )}
             <button
-              className="text-white font-bold bg-mainColor focus:outline-none focus:bg-mainColor  rounded-lg text-l px-3 py-3 text-center"
+              className="bg-mainColor text-white py-2 px-4 rounded-full font-bold hover:bg-mainColor/90 active:bg-mainColor/80"
               onClick={() => {
                 handleAddToCart();
                 setSelectedSize(null);

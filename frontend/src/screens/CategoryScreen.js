@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { Spinner } from "@material-tailwind/react";
+import { Alert, Spinner } from "@material-tailwind/react";
 import DisplayProducts from "../components/DisplayProducts";
 import { getProductByCategory } from "../slices/categorySlice";
 import CategoryFilter from "../components/CategoryFilter";
@@ -20,14 +20,15 @@ function CategoryScreen({ toggleShoppingCartVisibility }) {
   const { next } = useSelector((state) => state.category);
 
   useEffect(() => {
-    dispatch(getProductByCategory({ category_id, feature, name }));
+    if (category_id || feature || name)
+      dispatch(getProductByCategory({ category_id, feature, name }));
   }, [dispatch, category_id, feature, name]);
 
   return loading ? (
     <div className="flex justify-center items-center">
       <Spinner className="h-[250px] w-[250px] mt-[3rem]" />
     </div>
-  ) : (
+  ) : products.length > 0 ? (
     <div>
       <CategoryFilter
         feature={feature}
@@ -43,6 +44,15 @@ function CategoryScreen({ toggleShoppingCartVisibility }) {
           />
         }
       />
+    </div>
+  ) : (
+    <div className="h-screen">
+      <Alert
+        color="blue"
+        className="bg-mainColor text-3xl font-bold text-center flex justify-center"
+      >
+        لا توجد منتجات
+      </Alert>
     </div>
   );
 }
