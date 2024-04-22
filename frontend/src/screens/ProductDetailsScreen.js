@@ -1,14 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import { Spinner } from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getProductDetails } from "../slices/productDetailsSlice";
-import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
-import { Rating, Stack } from "@mui/material";
+
+import {
+  Spinner,
+  Button,
+  ButtonGroup,
+  // Typography,
+} from "@material-tailwind/react";
+// import { Rating, Stack } from "@mui/material";
+
 import { addToCart } from "../slices/cartSlice";
-import Alert from "../components/AlertError";
-import DisplayProducts from "../components/DisplayProducts";
 import { getCategory, getProductByCategory } from "../slices/categorySlice";
+import { getProductDetails } from "../slices/productDetailsSlice";
+
+import { AlertError as Alert, DisplayProducts } from "../components";
 
 function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
   const { id } = useParams();

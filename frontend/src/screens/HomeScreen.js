@@ -1,12 +1,11 @@
 import { useEffect } from "react";
-import BannersCarousel from "../components/BannersCarousel";
-import DisplayProducts from "../components/DisplayProducts";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getLandingPageData } from "../slices/landingPageSlice";
 import { Spinner } from "@material-tailwind/react";
-import ThankYou from "../components/ThankYou";
 import { resetCartItems } from "../slices/cartSlice";
+import { getLandingPageData } from "../slices/landingPageSlice";
+
+import { BannersCarousel, DisplayProducts, ThankYou } from "../components";
 
 function HomeScreen({ toggleShoppingCartVisibility }) {
   const dispatch = useDispatch();

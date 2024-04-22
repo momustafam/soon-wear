@@ -29,7 +29,13 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
   useEffect(() => {
     cartItems.forEach((product) => {
       try {
-        require(`../images/${product.images[product.color][0]}`);
+        let url = "";
+        try {
+          url = product.images[product.color][0];
+        } catch {
+          url = product.main_img;
+        }
+        require(`../images/${url}`);
       } catch {
         dispatch(
           removeFromCart({
@@ -53,6 +59,14 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
   const handleShoppingCart = (e) => {
     setOpen(e);
     toggleShoppingCartVisibility();
+  };
+
+  const getImage = (product) => {
+    try {
+      return require(`../images/${product.images[product.color][0]}`);
+    } catch {
+      return require(`../images/${product.main_img}`);
+    }
   };
 
   return (
@@ -125,20 +139,15 @@ export default function ShoppingCart({ toggleShoppingCartVisibility }) {
                                     key={`${product.id}-${product.size}-${product.color}`}
                                     className="flex py-6"
                                   >
-                                    {product.images[product.color].length >
-                                      0 && (
-                                      <div className="h-30 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                        <Link to={`/products/${product.id}`}>
-                                          <img
-                                            src={require(`../images/${
-                                              product.images[product.color][0]
-                                            }`)}
-                                            alt="Product"
-                                            className="h-full w-full object-fill object-center"
-                                          />
-                                        </Link>
-                                      </div>
-                                    )}
+                                    <div className="h-30 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                      <Link to={`/products/${product.id}`}>
+                                        <img
+                                          src={getImage(product)}
+                                          alt="Product"
+                                          className="h-full w-full object-fill object-center"
+                                        />
+                                      </Link>
+                                    </div>
 
                                     <div className="ml-4 flex flex-1 flex-col">
                                       <div>
