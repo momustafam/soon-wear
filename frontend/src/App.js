@@ -1,13 +1,12 @@
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomeScreen from "./screens/HomeScreen";
-import CategoryScreen from "./screens/CategoryScreen";
-import PlaceOrderScreen from "./screens/PlaceOrderScreen";
-import ShoppingCart from "./components/ShoppingCart";
 import { useState } from "react";
-import ProductDetailsScreen from "./screens/ProductDetailsScreen";
-import ScrollToTop from "./components/ScrollToTop";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Header, Footer, ShoppingCart, ScrollToTop } from "./components";
+import {
+  HomeScreen,
+  CategoryScreen,
+  PlaceOrderScreen,
+  ProductDetailsScreen,
+} from "./screens";
 
 function App() {
   const [isShoppingCartVisible, setShoppingCartVisible] = useState(false);
