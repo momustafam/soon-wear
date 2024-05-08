@@ -246,6 +246,14 @@ export default function PlaceOrderScreen() {
     setSelectedPaymentMethod(event.target.value);
   };
 
+  const getImage = (product) => {
+    try {
+      return require(`../images/${product.images[product.color][0]}`);
+    } catch {
+      return require(`../images/${product.main_img}`);
+    }
+  };
+
   return (
     <div className="bg-gray-50">
       <main className="max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
@@ -425,9 +433,7 @@ export default function PlaceOrderScreen() {
                       <div className="flex-shrink-0">
                         <Link to={`/products/${product.id}`}>
                           <img
-                            src={require(`../images/${
-                              product.images[product.color][0]
-                            }`)}
+                            src={getImage(product)}
                             alt={`${product.name}`}
                             className="w-20 rounded-md"
                           />

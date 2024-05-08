@@ -1,9 +1,10 @@
 from pathlib import Path
 from configurations import Configuration, values
 
+
 class Dev(Configuration):
     # The directory of uploaded media files of the project
-    MEDIA_ROOT = r'D:\Work\Soon Wear\soon-wear\frontend\src\images'
+    MEDIA_ROOT = r'C:\soonwear\soon-wear\frontend\src\images\products'
     # MEDIA_ROOT = r'C:\soonwear\soon-wear\frontend\src\images'
 
     # The URL prefix for media files
@@ -11,7 +12,6 @@ class Dev(Configuration):
 
     # Build paths inside the project like this: BASE_DIR / 'subdir'.
     BASE_DIR = Path(__file__).resolve().parent.parent
-
 
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -22,7 +22,6 @@ class Dev(Configuration):
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = values.BooleanValue(True)
     ALLOWED_HOSTS = ["*", "127.0.0.1", "localhost", "192.168.1.9"]
-
 
     # Application definition
 
@@ -75,14 +74,12 @@ class Dev(Configuration):
 
     WSGI_APPLICATION = 'backend.wsgi.application'
 
-
     # Database
     # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
     # A full list of schematat for other DBMS here
     # https://github.com/kennethreitz/dj-database-url#url-schema
     DATABASES = values.DatabaseURLValue(f"sqlite:///{BASE_DIR}/db.sqlite3")
-
 
     # Password validation
     # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -102,7 +99,6 @@ class Dev(Configuration):
         },
     ]
 
-
     # Internationalization
     # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -113,7 +109,6 @@ class Dev(Configuration):
     USE_I18N = True
 
     USE_TZ = True
-
 
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -139,13 +134,13 @@ class Dev(Configuration):
         'PAGE_SIZE': 12,
     }
 
-
     CORS_ALLOW_ALL_ORIGINS = True
 
     INTERNAL_IPS = [
         '127.0.0.1'
     ]
-    
+
+
 class Prod(Dev):
     DEBUG = False
     SECRET_KEY = values.SecretValue()

@@ -1,0 +1,11 @@
+export { default as Header } from "./Header";
+export { default as Footer } from "./Footer";
+export { default as AlertError } from "./AlertError";
+export { default as BannersCarousel } from "./BannersCarousel";
+export { default as CategoryFilter } from "./CategoryFilter";
+export { default as DisplayProducts } from "./DisplayProducts";
+export { default as Product } from "./Product";
+export { default as ScrollToTop } from "./ScrollToTop";
+export { default as SeeMoreButton } from "./SeeMoreButton";
+export { default as ShoppingCart } from "./ShoppingCart";
+export { default as ThankYou } from "./ThankYou";
