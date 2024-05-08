@@ -36,6 +36,7 @@ class Dev(Configuration):
         'django.contrib.staticfiles',
         'corsheaders',
         'inventory',
+        'orders',
         'rest_framework',
         'debug_toolbar',
     ]

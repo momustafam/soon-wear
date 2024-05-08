@@ -111,10 +111,10 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row-reverse -mx-4">
           <div className="md:flex-1 px-4">
-            <div className="rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+            <div className="rounded-lg dark:bg-gray-700 mb-4">
               {/* Main Product Image */}
               <img
-                className="w-full h-full object-fill rounded-lg"
+                className="object-fill w-full h-full rounded-lg"
                 src={mainImage}
                 alt="main"
               />
@@ -264,12 +264,12 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
             <div className="my-3">
               {((noSizeSelected && !selectedSize) ||
                 (noColorSelected && !colorSelected)) && (
-                <Alert
-                  className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
-                  color="red"
-                  message="يجب اختيار اللون و المقاس"
-                />
-              )}
+                  <Alert
+                    className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
+                    color="red"
+                    message="يجب اختيار اللون و المقاس"
+                  />
+                )}
             </div>
             <div className="flex -mx-2 mb-4">
               <div className="w-full px-2 mt-10">
