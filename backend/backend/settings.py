@@ -4,7 +4,7 @@ from configurations import Configuration, values
 
 class Dev(Configuration):
     # The directory of uploaded media files of the project
-    MEDIA_ROOT = r'C:\soonwear\soon-wear\frontend\src\images\products'
+    MEDIA_ROOT = r'C:\soonwear\soon-wear\frontend\src\images'
     # MEDIA_ROOT = r'C:\soonwear\soon-wear\frontend\src\images'
 
     # The URL prefix for media files

@@ -128,7 +128,11 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
                   product.images[colorSelected].map((image, index) => (
                     <img
                       key={index}
-                      className="w-20 h-20 object-cover rounded-lg mr-2"
+                      className={`w-20 h-20 object-cover rounded-lg mr-2 ${
+                        mainImage === require(`../images/${image}`)
+                          ? "border-2 border-red-600"
+                          : ""
+                      }`}
                       src={require(`../images/${image}`)}
                       alt={`${product.name} - ${index}`}
                       onClick={() =>
@@ -163,12 +167,21 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
 
             <div className="flex flex-row-reverse mb-4 mt-10">
               <div className="ms-4">
-                <span className="font-bold text-2xl text-gray-700 dark:text-gray-300">
+                <span className="font-bold text-lg text-gray-700 dark:text-gray-300">
                   السعر:{" "}
                 </span>
-                <span className="text-2xl text-gray-600 dark:text-gray-300">
-                  £{product.price}
-                </span>
+                {product.discount > 0 ? (
+                  <span className="text-xl font-semibold text-gray-90 me-3">
+                    £{product.price - product.discount}
+                    <span className="text-sm font-bold text-gray-900 line-through decoration-red-900 decoration-2 decoration-solid me-3">
+                      £{product.price}
+                    </span>
+                  </span>
+                ) : (
+                  <span className="text-2xl font-semibold text-gray-90">
+                    £{product.price}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -255,12 +268,12 @@ function ProductDetailsScreen({ toggleShoppingCartVisibility }) {
             <div className="my-3">
               {((noSizeSelected && !selectedSize) ||
                 (noColorSelected && !colorSelected)) && (
-                  <Alert
-                    className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
-                    color="red"
-                    message="يجب اختيار اللون و المقاس"
-                  />
-                )}
+                <Alert
+                  className="flex flex-row-reverse mt-5 bg-red-700 ms-auto font-bold"
+                  color="red"
+                  message="يجب اختيار اللون و المقاس"
+                />
+              )}
             </div>
             <div className="flex -mx-2 mb-4">
               <div className="w-full px-2 mt-10">

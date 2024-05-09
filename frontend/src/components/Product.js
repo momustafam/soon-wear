@@ -164,7 +164,7 @@ function Product({ product, toggleShoppingCartVisibility }) {
               />
             )}
           </div>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap gap-3 items-center justify-between">
             {product.discount > 0 ? (
               <span className="text-2xl font-bold text-gray-90">
                 £{product.price - product.discount}
