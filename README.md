@@ -101,15 +101,19 @@
 Authentication
 * POST /api/auth/login/ – Login user
 * POST /api/auth/register/ – Register new user
+  
 Products
 * GET /api/products/ – Get all products
 * POST /api/products/ – Add a new product (Admin only)
+  
 Orders
 * POST /api/orders/ – Place a new order
 * GET /api/orders/{id}/ – Get order details
+
 Inventory
 * GET /api/inventory/ – Get current stock levels
 * POST /api/inventory/update/ – Update inventory after a purchase
-Contributors
-Backend Development: [Mohammed Mustafa](https://www.linkedin.com/in/momustafam/)
-Frontend Development: [Yousef Ayman](https://github.com/yousefayman2003)
+
+### Contributors
+- Backend Development: [Mohammed Mustafa](https://www.linkedin.com/in/momustafam/)
+- Frontend Development: [Yousef Ayman](https://github.com/yousefayman2003)
